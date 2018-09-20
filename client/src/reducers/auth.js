@@ -9,7 +9,8 @@ const initialState = {
   user: {},
   isAuth: false,
   loginMsg: "",
-  registerMsg: ""
+  registerMsg: "",
+  redirectTo: ""
 };
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -17,7 +18,8 @@ export default function(state = initialState, action) {
       if (action.payload.id) {
         return {
           user: action.payload,
-          isAuth: true
+          isAuth: true,
+          redirectTo: "/posts"
         };
       } else {
         return {

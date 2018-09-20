@@ -3,7 +3,9 @@ import {
   LOGIN_USER,
   REGISTER_USER,
   LOGOUT_USER,
-  RESET_MESSAGE
+  RESET_MESSAGE,
+  GET_PREVIEW,
+  RESET_PREVIEW
 } from "../constants/action-types";
 import history from "../history";
 
@@ -24,8 +26,6 @@ export const loginUser = data => dispatch => {
         : dispatch({ type: LOGIN_USER, payload: response.data });
       if (!response.data.message && response.data.id) {
         localStorage.setItem("Auth", JSON.stringify(response.data.id));
-        localStorage.removeItem("Redirect");
-        history.push("/");
       }
     })
     .catch(error => {
@@ -71,4 +71,12 @@ export const logout = () => dispatch => {
 
 export const resetMsg = () => dispatch => {
   dispatch({ type: RESET_MESSAGE, payload: "" });
+};
+
+export const getPreview = image => dispatch => {
+  dispatch({ type: GET_PREVIEW, payload: image });
+};
+
+export const resetPreview = () => dispatch => {
+  dispatch({ type: RESET_PREVIEW, payload: "" });
 };

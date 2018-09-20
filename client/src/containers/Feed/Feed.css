@@ -1,0 +1,31 @@
+.feedCard {
+  width: 625px;
+}
+
+.feedIcons {
+  font-size: 30px;
+}
+
+.feedLinks {
+  font-size: 14px;
+  color: #262626;
+  font-weight: 600;
+}
+
+.feedLinks:hover {
+  text-decoration: none;
+  color: #262626;
+}
+
+.postDate {
+  font-size: 10px;
+  letter-spacing: 0.2px;
+  color: #999;
+}
+
+.msgCircle {
+  transform: scaleX(-1);
+  -moz-transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+  -ms-transform: scaleX(-1);
+}

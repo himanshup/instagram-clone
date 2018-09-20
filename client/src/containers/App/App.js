@@ -1,19 +1,24 @@
 import React, { Component } from "react";
-import { Router, Route, Link } from "react-router-dom";
-import Login from "../Login/Login";
-import Register from "../Register/Register";
+import { Router, Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import "./App.css";
 import history from "../../history";
-import { FaInstagram } from "react-icons/fa";
+import Navbar from "../Navbar/Navbar";
+import Login from "../Login/Login";
+import Register from "../Register/Register";
+import Feed from "../Feed/Feed";
+import NewPost from "../NewPost/NewPost";
 
 const mapStateToProps = state => {
   return {
     isAuth: state.auth.isAuth,
     user: state.auth.user,
-    msg: state.auth.msg
+    redirect: state.auth.redirectTo
   };
+};
+
+const renderRedirect = () => {
+  return <Redirect to="/posts" />;
 };
 
 class App extends Component {
@@ -29,38 +34,22 @@ class App extends Component {
   render() {
     return (
       <Router history={history}>
-        {localStorage.Auth ? (
-          <div>
-            <nav className="navbar navbar-light bg-white border-bottom">
-              <div className="container d-flex justify-content-start">
-                <Link to="/">
-                  <FaInstagram className="logo" />
-                </Link>
-                <div className="ml-4 mr-4 verticalLine" />
-                <Link className="navbar-brand" to="/">
-                  Instagram
-                </Link>
-              </div>
-            </nav>
-            <button onClick={this.handleLogout}>Logout</button>
-          </div>
-        ) : (
-          <div>
-            <nav className="navbar navbar-light bg-white border-bottom">
-              <div className="container d-flex justify-content-start">
-                <Link to="/">
-                  <FaInstagram className="logo" />
-                </Link>
-                <div className="ml-4 mr-4 verticalLine" />
-                <Link className="navbar-brand" to="/">
-                  Instagram
-                </Link>
-              </div>
-            </nav>
-            <Route exact path="/" component={Login} />
-            <Route path="/register" component={Register} />
-          </div>
-        )}
+        <div>
+          <Navbar />
+          {localStorage.Auth ? (
+            <div>
+              <Route exact path="/" component={renderRedirect} />
+              <Route exact path="/posts" component={Feed} />
+              <Route path="/posts/new" component={NewPost} />
+            </div>
+          ) : (
+            <div>
+              {this.props.redirect && <Redirect to="/posts" />}
+              <Route exact path="/" component={Login} />
+              <Route path="/register" component={Register} />
+            </div>
+          )}
+        </div>
       </Router>
     );
   }
