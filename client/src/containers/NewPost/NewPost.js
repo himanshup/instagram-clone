@@ -100,7 +100,7 @@ PostForm = reduxForm({
 class NewPost extends Component {
   handleSubmit = data => {
     console.log(data);
-    // this.props.createPost(data);
+    this.props.createPost(data);
   };
 
   onValues = image => {
@@ -108,7 +108,7 @@ class NewPost extends Component {
   };
 
   componentWillMount() {
-    this.props.resetPreview();
+    this.props.reset();
   }
 
   render() {

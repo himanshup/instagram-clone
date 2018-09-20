@@ -5,8 +5,12 @@ let postSchema = new mongoose.Schema({
   imageId: String,
   description: String,
   author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User"
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    },
+    username: String,
+    avatar: String
   },
   tags: [],
   timePosted: { type: Date, default: Date.now },

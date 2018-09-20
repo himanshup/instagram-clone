@@ -2,24 +2,23 @@ import {
   LOGIN_USER,
   REGISTER_USER,
   LOGOUT_USER,
-  RESET_MESSAGE
+  RESET_VALUE
 } from "../constants/action-types";
 
 const initialState = {
   user: {},
   isAuth: false,
   loginMsg: "",
-  registerMsg: "",
-  redirectTo: ""
+  registerMsg: ""
 };
+
 export default function(state = initialState, action) {
   switch (action.type) {
     case LOGIN_USER:
       if (action.payload.id) {
         return {
           user: action.payload,
-          isAuth: true,
-          redirectTo: "/posts"
+          isAuth: true
         };
       } else {
         return {
@@ -35,7 +34,7 @@ export default function(state = initialState, action) {
       return {
         isAuth: false
       };
-    case RESET_MESSAGE:
+    case RESET_VALUE:
       return {
         loginMsg: action.payload,
         registerMsg: action.payload

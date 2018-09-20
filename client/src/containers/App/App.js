@@ -23,8 +23,8 @@ const renderRedirect = () => {
 
 class App extends Component {
   componentDidMount() {
-    console.log(localStorage.Auth);
-    console.log(this.props);
+    console.log(JSON.parse(localStorage.getItem("Auth")));
+    console.log("from App", this.props);
   }
 
   handleLogout = () => {
@@ -41,10 +41,10 @@ class App extends Component {
               <Route exact path="/" component={renderRedirect} />
               <Route exact path="/posts" component={Feed} />
               <Route path="/posts/new" component={NewPost} />
+              <button onClick={this.handleLogout}>Logout</button>
             </div>
           ) : (
             <div>
-              {this.props.redirect && <Redirect to="/posts" />}
               <Route exact path="/" component={Login} />
               <Route path="/register" component={Register} />
             </div>

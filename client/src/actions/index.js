@@ -3,9 +3,10 @@ import {
   LOGIN_USER,
   REGISTER_USER,
   LOGOUT_USER,
-  RESET_MESSAGE,
+  RESET_VALUE,
   GET_PREVIEW,
-  RESET_PREVIEW
+  CREATE_POST,
+  GET_FEED
 } from "../constants/action-types";
 import history from "../history";
 
@@ -21,11 +22,17 @@ export const loginUser = data => dispatch => {
       console.log("post req to login success");
       console.log(response.data);
       console.log(response.data.message);
-      response.data.message
-        ? dispatch({ type: LOGIN_USER, payload: response.data.message })
-        : dispatch({ type: LOGIN_USER, payload: response.data });
-      if (!response.data.message && response.data.id) {
-        localStorage.setItem("Auth", JSON.stringify(response.data.id));
+      if (response.data.message) {
+        dispatch({ type: LOGIN_USER, payload: response.data.message });
+      } else if (!response.data.message && response.data.id) {
+        const user = {
+          id: response.data.id,
+          username: response.data.username,
+          avatar: response.data.avatar
+        };
+        localStorage.setItem("Auth", JSON.stringify(user));
+        dispatch({ type: LOGIN_USER, payload: response.data });
+        history.push("/posts");
       }
     })
     .catch(error => {
@@ -61,22 +68,53 @@ export const logout = () => dispatch => {
     .then(response => {
       console.log(response.data);
       localStorage.removeItem("Auth");
-      history.push("/");
       dispatch({ type: LOGOUT_USER, payload: response.data });
+      history.push("/");
     })
     .catch(error => {
       console.log(error);
     });
 };
 
-export const resetMsg = () => dispatch => {
-  dispatch({ type: RESET_MESSAGE, payload: "" });
+export const reset = () => dispatch => {
+  dispatch({ type: RESET_VALUE, payload: "" });
 };
 
 export const getPreview = image => dispatch => {
   dispatch({ type: GET_PREVIEW, payload: image });
 };
 
-export const resetPreview = () => dispatch => {
-  dispatch({ type: RESET_PREVIEW, payload: "" });
+export const createPost = data => dispatch => {
+  console.log("printing from createPost fn", data);
+  const user = JSON.parse(localStorage.getItem("Auth"));
+  const formData = new FormData();
+  formData.append("file", data.image[0]);
+  formData.append("caption", data.caption);
+  formData.append("authorId", user.id);
+  formData.append("username", user.username);
+  formData.append("avatar", user.avatar);
+
+  axios
+    .post("/api/posts", formData)
+    .then(post => {
+      console.log(post.data);
+      dispatch({ type: CREATE_POST, payload: post.data });
+      history.push("/posts");
+    })
+    .catch(error => {
+      console.log("error creating post");
+      console.log(error);
+    });
+};
+
+export const getFeed = () => dispatch => {
+  axios
+    .get("/api/posts")
+    .then(posts => {
+      // console.log(posts.data);
+      dispatch({ type: GET_FEED, payload: posts.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
 };

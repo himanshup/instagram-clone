@@ -28,19 +28,47 @@ cloudinary.config({
 });
 
 module.exports = router => {
-  router.post("/post", upload.single("file"), (req, res) => {
-    if (req.file) {
-      console.log(req.file);
-      const file = req.file.path;
-    }
-    console.log(req.body);
+  router.get("/posts", (req, res) => {
+    Post.find({}, (err, posts) => {
+      if (err) {
+        return res.send(err);
+      }
+      res.send(posts);
+    });
+  });
 
-    // cloudinary.v2.uploader.upload(file, (error, result) => {
-    //   if (error) {
-    //     res.send(error);
-    //   } else {
-    //     res.send(result);
-    //   }
-    // });
+  router.post("/posts", upload.single("file"), (req, res) => {
+    console.log(req.file);
+    console.log(req.body);
+    const file = req.file.path;
+
+    cloudinary.v2.uploader.upload(
+      file,
+      { width: 1000, height: 1000, crop: "scale" },
+      (error, result) => {
+        if (error) {
+          return res.send(error);
+        }
+        const { caption, authorId, username, avatar } = req.body;
+        const public_id = result.public_id;
+        const secure_url = result.secure_url;
+        const newPost = {
+          image: secure_url,
+          imageId: public_id,
+          description: caption,
+          author: {
+            id: authorId,
+            username: username,
+            avatar: avatar
+          }
+        };
+        Post.create(newPost, (err, post) => {
+          if (err) {
+            return res.send(err);
+          }
+          res.send(post);
+        });
+      }
+    );
   });
 };

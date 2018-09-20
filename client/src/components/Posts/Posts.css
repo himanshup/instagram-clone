@@ -23,6 +23,11 @@
   color: #999;
 }
 
+.postDate:hover {
+  color: #999;
+  text-decoration: none;
+}
+
 .msgCircle {
   transform: scaleX(-1);
   -moz-transform: scaleX(-1);

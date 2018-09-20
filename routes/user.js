@@ -40,7 +40,7 @@ module.exports = router => {
         if (error) {
           res.send(error);
         } else {
-          let public_id = result.public_id;
+          const public_id = result.public_id;
           const secure_url = result.secure_url;
           User.findOne({ username: username }, (err, user) => {
             if (err) {

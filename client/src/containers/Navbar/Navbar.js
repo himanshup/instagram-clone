@@ -19,18 +19,21 @@ const Navbar = () => {
         </Link>
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ml-auto">
-            <li className="nav-item active mr-3">
+            <li className="nav-item active">
               <Link className="nav-link" to="/posts/new">
                 <FiEdit className="navIcons" />
               </Link>
             </li>
-            <li className="nav-item active mr-3">
+            <li className="nav-item active ml-3 mr-3">
               <span className="nav-link" href="#">
                 <FiHeart className="navIcons" />
               </span>
             </li>
             <li className="nav-item active">
-              <Link className="nav-link" to="/user">
+              <Link
+                className="nav-link"
+                to={`/user${JSON.parse(localStorage.getItem("Auth")).id}`}
+              >
                 <FiUser className="navIcons" />
               </Link>
             </li>
