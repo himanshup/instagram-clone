@@ -47,7 +47,7 @@ module.exports = router => {
               console.log("User.js post error: ", err);
             } else if (user) {
               res.json({
-                error: `Sorry, already a user with the username: ${username}`
+                error: "Username taken"
               });
             } else {
               const newUser = new User({
@@ -70,7 +70,7 @@ module.exports = router => {
           console.log("User.js post error: ", err);
         } else if (user) {
           res.json({
-            error: `Sorry, already a user with the username: ${username}`
+            error: "Username taken"
           });
         } else {
           const newUser = new User({
@@ -94,7 +94,7 @@ module.exports = router => {
         return next(err);
       }
       if (!user) {
-        return res.json({ message: info.message, isAuth: false });
+        return res.json({ message: info.message });
       }
 
       const userInfo = {
@@ -104,6 +104,16 @@ module.exports = router => {
       };
       res.send(userInfo);
     })(req, res, next);
+  });
+
+  router.get("/user", (req, res, next) => {
+    console.log("===== user!!======");
+    console.log(req.user);
+    if (req.user) {
+      res.json({ user: req.user });
+    } else {
+      res.json({ user: null });
+    }
   });
 
   router.post("/logout", (req, res) => {

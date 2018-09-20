@@ -11,7 +11,9 @@ const strategy = new LocalStrategy(
         console.log;
       }
       if (!user) {
-        return done(null, false, { message: "Incorrect username" });
+        return done(null, false, {
+          message: "Account with username doesn't exist"
+        });
       }
       if (!user.checkPassword(password)) {
         return done(null, false, { message: "Incorrect password" });

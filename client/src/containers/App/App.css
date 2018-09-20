@@ -1,0 +1,16 @@
+@import url("https://fonts.googleapis.com/css?family=Pacifico");
+
+.navbar-brand {
+  font-family: "Pacifico", cursive;
+  font-size: 28px !important;
+}
+
+.verticalLine {
+  border-left: 1px solid #aaaaaa;
+  height: 34px;
+}
+
+.logo {
+  font-size: 35px;
+  color: #000000;
+}

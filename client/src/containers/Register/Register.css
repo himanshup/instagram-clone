@@ -1,0 +1,28 @@
+.avatarText {
+  font-size: 14px;
+}
+
+.drop {
+  position: relative;
+  height: 65px;
+  border-width: 1px;
+  border-color: #ced4da;
+  background: #fafafa;
+  border-style: dashed;
+}
+
+.infoCards {
+  width: 350px;
+}
+
+.insta {
+  font-family: "Pacifico", cursive;
+}
+
+.inputBg {
+  background-color: #fafafa !important;
+}
+
+.camera {
+  font-size: 25px;
+}

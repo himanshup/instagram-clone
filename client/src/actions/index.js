@@ -2,7 +2,8 @@ import axios from "axios";
 import {
   LOGIN_USER,
   REGISTER_USER,
-  LOGOUT_USER
+  LOGOUT_USER,
+  RESET_MESSAGE
 } from "../constants/action-types";
 import history from "../history";
 
@@ -11,16 +12,19 @@ export const loginUser = data => dispatch => {
 
   axios
     .post("/api/login", {
-      username: username.toLowerCase(),
+      username: username,
       password: password
     })
     .then(response => {
       console.log("post req to login success");
       console.log(response.data);
-      dispatch({ type: LOGIN_USER, payload: response.data });
-      if (response.data.isAuth !== false) {
+      console.log(response.data.message);
+      response.data.message
+        ? dispatch({ type: LOGIN_USER, payload: response.data.message })
+        : dispatch({ type: LOGIN_USER, payload: response.data });
+      if (!response.data.message && response.data.id) {
         localStorage.setItem("Auth", JSON.stringify(response.data.id));
-        localStorage.setItem("Redirect", JSON.stringify("/"));
+        localStorage.removeItem("Redirect");
         history.push("/");
       }
     })
@@ -35,13 +39,15 @@ export const registerUser = data => dispatch => {
   if (data.image) {
     formData.append("file", data.image[0]);
   }
-  formData.append("username", data.username.toLowerCase());
+  formData.append("username", data.username);
   formData.append("password", data.password);
   axios
     .post("/api/register", formData)
     .then(response => {
       console.log(response.data);
-      dispatch({ type: REGISTER_USER, payload: response.data });
+      response.data.error
+        ? dispatch({ type: REGISTER_USER, payload: response.data.error })
+        : dispatch({ type: REGISTER_USER, payload: response.data });
     })
     .catch(error => {
       console.log("error uploading image");
@@ -61,4 +67,8 @@ export const logout = () => dispatch => {
     .catch(error => {
       console.log(error);
     });
+};
+
+export const resetMsg = () => dispatch => {
+  dispatch({ type: RESET_MESSAGE, payload: "" });
 };
