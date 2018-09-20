@@ -36,34 +36,43 @@ module.exports = router => {
     if (req.file) {
       const file = req.file.path;
 
-      cloudinary.v2.uploader.upload(file, (error, result) => {
-        if (error) {
-          res.send(error);
-        } else {
-          const public_id = result.public_id;
-          const secure_url = result.secure_url;
-          User.findOne({ username: username }, (err, user) => {
-            if (err) {
-              console.log("User.js post error: ", err);
-            } else if (user) {
-              res.json({
-                error: "Username taken"
-              });
-            } else {
-              const newUser = new User({
-                username: username,
-                password: password,
-                avatar: secure_url,
-                avatarId: public_id
-              });
-              newUser.save((err, savedUser) => {
-                if (err) return res.json(err);
-                res.json(savedUser);
-              });
-            }
-          });
+      cloudinary.v2.uploader.upload(
+        file,
+        {
+          width: 150,
+          height: 150,
+          gravity: "center",
+          crop: "scale"
+        },
+        (error, result) => {
+          if (error) {
+            res.send(error);
+          } else {
+            const public_id = result.public_id;
+            const secure_url = result.secure_url;
+            User.findOne({ username: username }, (err, user) => {
+              if (err) {
+                console.log("User.js post error: ", err);
+              } else if (user) {
+                res.json({
+                  error: "Username taken"
+                });
+              } else {
+                const newUser = new User({
+                  username: username,
+                  password: password,
+                  avatar: secure_url,
+                  avatarId: public_id
+                });
+                newUser.save((err, savedUser) => {
+                  if (err) return res.json(err);
+                  res.json(savedUser);
+                });
+              }
+            });
+          }
         }
-      });
+      );
     } else {
       User.findOne({ username: username }, (err, user) => {
         if (err) {
@@ -106,14 +115,24 @@ module.exports = router => {
     })(req, res, next);
   });
 
-  router.get("/user", (req, res, next) => {
+  router.get("/users/:user_id", (req, res) => {
     console.log("===== user!!======");
-    console.log(req.user);
-    if (req.user) {
-      res.json({ user: req.user });
-    } else {
-      res.json({ user: null });
-    }
+    User.findOne({ _id: req.params.user_id }, (err, user) => {
+      if (err) {
+        console.log("User.js post error: ");
+        return res.send(err);
+      }
+      const userInfo = {
+        id: user._id,
+        avatar: user.avatar,
+        avatarId: user.avatarId,
+        bookmarks: user.bookmarks,
+        followers: user.followers,
+        following: user.following,
+        username: user.username
+      };
+      res.send(userInfo);
+    });
   });
 
   router.post("/logout", (req, res) => {

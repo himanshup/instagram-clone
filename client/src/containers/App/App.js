@@ -8,6 +8,7 @@ import Login from "../Login/Login";
 import Register from "../Register/Register";
 import Feed from "../Feed/Feed";
 import NewPost from "../NewPost/NewPost";
+import UserProfile from "../UserProfile/UserProfile";
 
 const mapStateToProps = state => {
   return {
@@ -41,6 +42,10 @@ class App extends Component {
               <Route exact path="/" component={renderRedirect} />
               <Route exact path="/posts" component={Feed} />
               <Route path="/posts/new" component={NewPost} />
+              <Route
+                path="/user/:id"
+                render={({ match }) => <UserProfile params={match.params} />}
+              />
               <button onClick={this.handleLogout}>Logout</button>
             </div>
           ) : (

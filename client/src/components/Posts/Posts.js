@@ -5,7 +5,6 @@ import moment from "moment";
 import "./Posts.css";
 
 const Posts = ({ posts }) => {
-  console.log("from posts", posts);
   return (
     <div className="container">
       <div className="row">

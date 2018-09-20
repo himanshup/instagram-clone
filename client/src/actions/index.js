@@ -6,7 +6,8 @@ import {
   RESET_VALUE,
   GET_PREVIEW,
   CREATE_POST,
-  GET_FEED
+  GET_FEED,
+  USER_PROFILE
 } from "../constants/action-types";
 import history from "../history";
 
@@ -113,6 +114,17 @@ export const getFeed = () => dispatch => {
     .then(posts => {
       // console.log(posts.data);
       dispatch({ type: GET_FEED, payload: posts.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const getUserProfile = id => dispatch => {
+  axios
+    .get(`/api/users/${id}`)
+    .then(user => {
+      dispatch({ type: USER_PROFILE, payload: user.data });
     })
     .catch(error => {
       console.log(error);
