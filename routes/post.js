@@ -1,5 +1,3 @@
-const express = require("express");
-const router = express.Router();
 const Post = require("../models/post");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
@@ -10,8 +8,17 @@ const storage = multer.diskStorage({
   }
 });
 
+const imageFilter = function(req, file, cb) {
+  // accept image files only
+  if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return cb(new Error("Only image files are allowed!"), false);
+  }
+  cb(null, true);
+};
+
 const upload = multer({
-  storage: storage
+  storage: storage,
+  fileFilter: imageFilter
 });
 
 cloudinary.config({
@@ -20,17 +27,20 @@ cloudinary.config({
   api_secret: process.env.API_SECRET
 });
 
-router.post("/post", upload.single("file"), (req, res) => {
-  console.log(req.file);
-  const file = req.file.path;
-
-  cloudinary.v2.uploader.upload(file, (error, result) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log(result);
+module.exports = router => {
+  router.post("/post", upload.single("file"), (req, res) => {
+    if (req.file) {
+      console.log(req.file);
+      const file = req.file.path;
     }
-  });
-});
+    console.log(req.body);
 
-module.exports = router;
+    // cloudinary.v2.uploader.upload(file, (error, result) => {
+    //   if (error) {
+    //     res.send(error);
+    //   } else {
+    //     res.send(result);
+    //   }
+    // });
+  });
+};

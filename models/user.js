@@ -3,20 +3,21 @@ const bcrypt = require("bcryptjs");
 
 let userSchema = new mongoose.Schema({
   username: String,
-  password: String
-  // avatar: String,
-  // followers: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "User"
-  //   }
-  // ],
-  // following: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: "User"
-  //   }
-  // ]
+  password: String,
+  avatar: String,
+  avatarId: String,
+  followers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+  following: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ]
 });
 
 // use bcrypt to hash password before saving to database

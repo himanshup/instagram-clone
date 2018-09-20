@@ -4,7 +4,7 @@ import auth from "./auth";
 import post from "./post";
 
 export default combineReducers({
-  auth: auth,
+  auth,
   form: formReducer,
-  post: post
+  post
 });

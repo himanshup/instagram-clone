@@ -1,91 +1,90 @@
 import React, { Component } from "react";
 import { Redirect } from "react-router-dom";
-import axios from "axios";
-import Home from "./Home";
+import { reduxForm, Field } from "redux-form";
 import { connect } from "react-redux";
 import * as actions from "./actions";
 
+let SignInForm = props => {
+  const { handleSubmit } = props;
+  return (
+    <form onSubmit={handleSubmit} className="form">
+      <div className="field">
+        <div className="control">
+          <Field
+            name="username"
+            component={renderField}
+            type="text"
+            label="username"
+          />
+        </div>
+      </div>
+
+      <div className="field">
+        <div className="control">
+          <Field
+            name="password"
+            component={renderField}
+            type="password"
+            label="password"
+          />
+        </div>
+      </div>
+
+      <div className="field">
+        <div className="control">
+          <button className="button is-link">Submit</button>
+        </div>
+      </div>
+    </form>
+  );
+};
+
+const validate = val => {
+  const errors = {};
+  if (!val.username) {
+    errors.username = "Required";
+  }
+  if (!val.password) {
+    errors.password = "Required";
+  }
+  return errors;
+};
+
+const renderField = ({
+  input,
+  label,
+  type,
+  meta: { touched, error, warning }
+}) => (
+  <div>
+    <div className="control">
+      <label className="field">{label}</label>
+      <input className="input" {...input} placeholder={label} type={type} />
+      {touched &&
+        ((error && <span>{error}</span>) ||
+          (warning && <span>{warning}</span>))}
+    </div>
+  </div>
+);
+
+SignInForm = reduxForm({
+  form: "signIn",
+  validate
+})(SignInForm);
+
 class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      password: "",
-      redirectTo: null
-    };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    console.log("handleSubmit");
-    this.props.fetchUser(this.state.username, this.state.password);
-  }
+  handleSubmit = data => {
+    console.log(data);
+    this.props.loginUser(data);
+  };
 
   render() {
-    if (this.state.redirectTo) {
-      return <Redirect to={this.state.redirectTo} />;
-    } else {
-      return (
-        <div>
-          <h4>Login</h4>
-          <form className="form-horizontal">
-            <div className="form-group">
-              <div className="col-1 col-ml-auto">
-                <label className="form-label" htmlFor="username">
-                  Username
-                </label>
-              </div>
-              <div className="col-3 col-mr-auto">
-                <input
-                  className="form-input"
-                  type="text"
-                  id="username"
-                  name="username"
-                  placeholder="Username"
-                  value={this.state.username}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="form-group">
-              <div className="col-1 col-ml-auto">
-                <label className="form-label" htmlFor="password">
-                  Password:{" "}
-                </label>
-              </div>
-              <div className="col-3 col-mr-auto">
-                <input
-                  className="form-input"
-                  placeholder="password"
-                  type="password"
-                  name="password"
-                  value={this.state.password}
-                  onChange={this.handleChange}
-                />
-              </div>
-            </div>
-            <div className="form-group ">
-              <div className="col-7" />
-              <button
-                className="btn btn-primary col-1 col-mr-auto"
-                onClick={this.handleSubmit}
-                type="submit"
-              >
-                Login
-              </button>
-            </div>
-          </form>
-        </div>
-      );
-    }
+    return (
+      <div>
+        <h4>Login</h4>
+        <SignInForm onSubmit={this.handleSubmit} />
+      </div>
+    );
   }
 }
 

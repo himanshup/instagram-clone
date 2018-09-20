@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Pacifico");
+
 .drop {
   position: relative;
   width: 200px;
@@ -6,4 +8,9 @@
   border-color: rgb(102, 102, 102);
   border-style: dashed;
   border-radius: 5px;
+}
+
+.navbar-brand {
+  font-family: "Pacifico", cursive;
+  font-size: 28px !important;
 }
