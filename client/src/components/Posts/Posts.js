@@ -23,7 +23,7 @@ const Posts = ({ posts }) => {
                     width="30px"
                     height="30px"
                   />
-                  <Link to={`/user/${post.author.id}`} className="feedLinks">
+                  <Link to={`/users/${post.author.id}`} className="feedLinks">
                     {post.author.username}
                   </Link>
                 </div>
@@ -44,7 +44,7 @@ const Posts = ({ posts }) => {
                     </Link>
                   </div>
                   <div className="mt-1">
-                    <Link to={`/user/${post.author.id}`} className="feedLinks">
+                    <Link to={`/users/${post.author.id}`} className="feedLinks">
                       {post.author.username}
                     </Link>{" "}
                     {post.description}

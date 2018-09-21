@@ -33,7 +33,7 @@ const Navbar = () => {
               <li className="nav-item active">
                 <Link
                   className="nav-link"
-                  to={`/user/${JSON.parse(localStorage.getItem("Auth")).id}`}
+                  to={`/users/${JSON.parse(localStorage.getItem("Auth")).id}`}
                 >
                   <FiUser className="navIcons" />
                 </Link>

@@ -6,6 +6,8 @@ let userSchema = new mongoose.Schema({
   password: String,
   avatar: String,
   avatarId: String,
+  name: String,
+  bio: String,
   followers: [
     {
       type: mongoose.Schema.Types.ObjectId,

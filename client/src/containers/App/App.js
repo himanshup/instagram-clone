@@ -43,7 +43,7 @@ class App extends Component {
               <Route exact path="/posts" component={Feed} />
               <Route path="/posts/new" component={NewPost} />
               <Route
-                path="/user/:id"
+                path="/users/:id"
                 render={({ match }) => <UserProfile params={match.params} />}
               />
               <button onClick={this.handleLogout}>Logout</button>

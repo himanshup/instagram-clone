@@ -97,23 +97,24 @@ module.exports = router => {
     }
   });
 
-  router.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return res.json({ message: info.message });
-      }
-
+  router.post(
+    "/login",
+    (req, res, next) => {
+      console.log(req.body);
+      console.log("==========");
+      next();
+    },
+    passport.authenticate("local"),
+    (req, res) => {
+      console.log("POST to /login");
       const userInfo = {
-        id: user._id,
-        username: user.username,
-        avatar: user.avatar
+        id: req.user._id,
+        username: req.user.username,
+        avatar: req.user.avatar
       };
       res.send(userInfo);
-    })(req, res, next);
-  });
+    }
+  );
 
   router.get("/users/:user_id", (req, res) => {
     console.log("===== user!!======");
@@ -126,6 +127,8 @@ module.exports = router => {
         id: user._id,
         avatar: user.avatar,
         avatarId: user.avatarId,
+        name: user.name,
+        bio: user.bio,
         bookmarks: user.bookmarks,
         followers: user.followers,
         following: user.following,
@@ -136,7 +139,11 @@ module.exports = router => {
   });
 
   router.post("/logout", (req, res) => {
-    req.logout();
-    res.send({ msg: "logging out" });
+    if (req.user) {
+      req.logout();
+      res.send({ msg: "logging out" });
+    } else {
+      res.send({ msg: "no user to logout" });
+    }
   });
 };
