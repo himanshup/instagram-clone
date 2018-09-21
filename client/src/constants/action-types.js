@@ -6,3 +6,5 @@ export const GET_PREVIEW = "GET_PREVIEW";
 export const CREATE_POST = "CREATE_POST";
 export const GET_FEED = "GET_FEED";
 export const USER_PROFILE = "USER_PROFILE";
+export const DELETE_POST = "DELETE_POST";
+export const GET_POST = "GET_POST";

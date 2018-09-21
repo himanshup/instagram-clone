@@ -1,5 +1,11 @@
 import React from "react";
-import { FiHeart, FiMessageCircle, FiBookmark } from "react-icons/fi";
+import {
+  FiHeart,
+  FiMessageCircle,
+  FiBookmark,
+  FiEdit2,
+  FiTrash2
+} from "react-icons/fi";
 import { Link } from "react-router-dom";
 import moment from "moment";
 import "./Posts.css";
@@ -36,7 +42,17 @@ const Posts = ({ posts }) => {
                   <div>
                     <FiHeart className="mr-2 feedIcons" />
                     <FiMessageCircle className="mr-2 feedIcons msgCircle" />
-                    <FiBookmark className="feedIcons float-right" />
+                    {post.author.id ===
+                    JSON.parse(localStorage.getItem("Auth")).id ? (
+                      <span>
+                        <FiTrash2 className="feedIcons float-right" />
+                        <Link to={`/edit/${post._id}`}>
+                          <FiEdit2 className="feedIcons text-dark float-right mr-2" />
+                        </Link>
+                      </span>
+                    ) : (
+                      <FiBookmark className="feedIcons float-right" />
+                    )}
                   </div>
                   <div className="mt-2">
                     <Link to="/" className="feedLinks">

@@ -7,7 +7,8 @@ import {
   GET_PREVIEW,
   CREATE_POST,
   GET_FEED,
-  USER_PROFILE
+  USER_PROFILE,
+  GET_POST
 } from "../constants/action-types";
 import history from "../history";
 
@@ -112,8 +113,19 @@ export const getFeed = () => dispatch => {
   axios
     .get("/api/posts")
     .then(posts => {
-      // console.log(posts.data);
       dispatch({ type: GET_FEED, payload: posts.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const getPost = id => dispatch => {
+  axios
+    .get(`/api/posts/${id}`)
+    .then(post => {
+      console.log(post.data);
+      dispatch({ type: GET_POST, payload: post.data });
     })
     .catch(error => {
       console.log(error);

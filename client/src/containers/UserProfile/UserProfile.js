@@ -11,12 +11,12 @@ const mapStateToProps = state => {
 
 class UserProfile extends Component {
   componentDidMount() {
-    this.props.getUserProfile(this.props.params.id);
+    this.props.getUserProfile(this.props.match.params.userId);
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.params.id !== prevProps.params.id) {
-      this.props.getUserProfile(this.props.params.id);
+    if (this.props.match.params.userId !== prevProps.match.params.userId) {
+      this.props.getUserProfile(this.props.match.params.userId);
     }
   }
 

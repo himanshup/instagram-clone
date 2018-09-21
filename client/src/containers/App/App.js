@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Router, Route, Redirect } from "react-router-dom";
+import { Router, Route, Redirect, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import history from "../../history";
@@ -9,7 +9,8 @@ import Register from "../Register/Register";
 import Feed from "../Feed/Feed";
 import NewPost from "../NewPost/NewPost";
 import UserProfile from "../UserProfile/UserProfile";
-
+import Post from "../Post/Post";
+import Edit from "../Edit/Edit";
 const mapStateToProps = state => {
   return {
     isAuth: state.auth.isAuth,
@@ -22,37 +23,45 @@ const renderRedirect = () => {
   return <Redirect to="/posts" />;
 };
 
+const redirectForNotLoggedIn = () => {
+  return <Redirect to="/" />;
+};
+
+const NoMatch = ({ location }) => (
+  <div className="container mt-4">
+    <h3>
+      No match for <code>{location.pathname}</code>
+    </h3>
+  </div>
+);
+
 class App extends Component {
   componentDidMount() {
     console.log(JSON.parse(localStorage.getItem("Auth")));
     console.log("from App", this.props);
   }
 
-  handleLogout = () => {
-    this.props.logout();
-  };
-
   render() {
     return (
       <Router history={history}>
         <div>
-          <Navbar />
+          <Route path="/" component={Navbar} />
           {localStorage.Auth ? (
-            <div>
+            <Switch>
               <Route exact path="/" component={renderRedirect} />
               <Route exact path="/posts" component={Feed} />
               <Route path="/posts/new" component={NewPost} />
-              <Route
-                path="/users/:id"
-                render={({ match }) => <UserProfile params={match.params} />}
-              />
-              <button onClick={this.handleLogout}>Logout</button>
-            </div>
+              <Route path="/users/:userId" component={UserProfile} />
+              <Route path="/posts/:postId" component={Post} />
+              <Route path="/edit/:postId" component={Edit} />
+              <Route component={NoMatch} />
+            </Switch>
           ) : (
-            <div>
+            <Switch>
               <Route exact path="/" component={Login} />
               <Route path="/register" component={Register} />
-            </div>
+              <Route component={redirectForNotLoggedIn} />
+            </Switch>
           )}
         </div>
       </Router>

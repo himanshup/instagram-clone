@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Posts from "../../components/Posts/Posts";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import _ from "lodash";
 
 const mapStateToProps = state => {
   return {
@@ -15,7 +14,7 @@ class Feed extends Component {
     this.props.getFeed();
   }
   render() {
-    return <Posts posts={_.values(this.props.posts)} />;
+    return <Posts posts={this.props.posts} />;
   }
 }
 

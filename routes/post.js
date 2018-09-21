@@ -29,14 +29,16 @@ cloudinary.config({
 
 module.exports = router => {
   router.get("/posts", (req, res) => {
-    Post.find({}, (err, posts) => {
-      if (err) {
-        return res.send(err);
-      }
-      res.send(posts);
-    });
+    Post.find({})
+      .sort({ timePosted: -1 })
+      .exec((err, posts) => {
+        if (err) {
+          return res.send(err);
+        }
+        res.send(posts);
+      });
   });
-
+  // create new post
   router.post("/posts", upload.single("file"), (req, res) => {
     console.log(req.file);
     console.log(req.body);
@@ -70,5 +72,17 @@ module.exports = router => {
         });
       }
     );
+  });
+
+  router.get("/posts/:post_id", (req, res) => {
+    Post.findById(req.params.post_id)
+      .populate("comments")
+      .exec((err, post) => {
+        if (err || !post) {
+          console.log(err);
+          return res.send(err);
+        }
+        res.send(post);
+      });
   });
 };

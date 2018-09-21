@@ -4,7 +4,7 @@ import { reduxForm, Field } from "redux-form";
 import Dropzone from "react-dropzone";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import { FaCamera } from "react-icons/fa";
+import { FiCamera } from "react-icons/fi";
 import "./Register.css";
 
 const mapStateToProps = state => {
@@ -37,11 +37,13 @@ const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
         accept="image/*"
         onDrop={filesToUpload => input.onChange(filesToUpload)}
       >
-        <div className="text-center">
-          <div>
+        <div className="d-flex justify-content-center h-100">
+          <div className="text-center align-self-center">
             <span className="text-muted avatarText">Profile Picture</span>
+            <div>
+              <FiCamera className="text-muted camera" />
+            </div>
           </div>
-          <FaCamera className="text-muted camera" />
         </div>
       </Dropzone>
       {dirty && (error && <small className="text-danger">{error}</small>)}

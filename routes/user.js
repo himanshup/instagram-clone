@@ -97,24 +97,23 @@ module.exports = router => {
     }
   });
 
-  router.post(
-    "/login",
-    (req, res, next) => {
-      console.log(req.body);
-      console.log("==========");
-      next();
-    },
-    passport.authenticate("local"),
-    (req, res) => {
-      console.log("POST to /login");
+  router.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        return next(err);
+      }
+      if (!user) {
+        return res.json({ message: info.message });
+      }
+
       const userInfo = {
-        id: req.user._id,
-        username: req.user.username,
-        avatar: req.user.avatar
+        id: user._id,
+        username: user.username,
+        avatar: user.avatar
       };
       res.send(userInfo);
-    }
-  );
+    })(req, res, next);
+  });
 
   router.get("/users/:user_id", (req, res) => {
     console.log("===== user!!======");
@@ -139,11 +138,7 @@ module.exports = router => {
   });
 
   router.post("/logout", (req, res) => {
-    if (req.user) {
-      req.logout();
-      res.send({ msg: "logging out" });
-    } else {
-      res.send({ msg: "no user to logout" });
-    }
+    req.logout();
+    res.send({ msg: "logging out" });
   });
 };

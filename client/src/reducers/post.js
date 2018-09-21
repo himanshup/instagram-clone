@@ -2,11 +2,13 @@ import {
   GET_PREVIEW,
   RESET_VALUE,
   CREATE_POST,
-  GET_FEED
+  GET_FEED,
+  GET_POST
 } from "../constants/action-types";
 
 const initialState = {
-  posts: {},
+  posts: [],
+  post: {},
   prevew: ""
 };
 
@@ -22,6 +24,10 @@ export default function(state = initialState, action) {
       };
     case CREATE_POST:
       return action.payload;
+    case GET_POST:
+      return {
+        post: action.payload
+      };
     case GET_FEED:
       return {
         posts: action.payload
