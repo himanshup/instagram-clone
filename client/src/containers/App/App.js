@@ -11,6 +11,8 @@ import NewPost from "../NewPost/NewPost";
 import UserProfile from "../UserProfile/UserProfile";
 import Post from "../Post/Post";
 import Edit from "../Edit/Edit";
+import ErrorPage from "../../components/ErrorPage/ErrorPage";
+
 const mapStateToProps = state => {
   return {
     isAuth: state.auth.isAuth,
@@ -19,21 +21,9 @@ const mapStateToProps = state => {
   };
 };
 
-const renderRedirect = () => {
-  return <Redirect to="/posts" />;
-};
-
-const redirectForNotLoggedIn = () => {
+const redirectIfNotLoggedIn = () => {
   return <Redirect to="/" />;
 };
-
-const NoMatch = ({ location }) => (
-  <div className="container mt-4">
-    <h3>
-      No match for <code>{location.pathname}</code>
-    </h3>
-  </div>
-);
 
 class App extends Component {
   componentDidMount() {
@@ -48,19 +38,18 @@ class App extends Component {
           <Route path="/" component={Navbar} />
           {localStorage.Auth ? (
             <Switch>
-              <Route exact path="/" component={renderRedirect} />
-              <Route exact path="/posts" component={Feed} />
+              <Route exact path="/" component={Feed} />
               <Route path="/posts/new" component={NewPost} />
               <Route path="/users/:userId" component={UserProfile} />
               <Route path="/posts/:postId" component={Post} />
               <Route path="/edit/:postId" component={Edit} />
-              <Route component={NoMatch} />
+              <Route component={ErrorPage} />
             </Switch>
           ) : (
             <Switch>
               <Route exact path="/" component={Login} />
               <Route path="/register" component={Register} />
-              <Route component={redirectForNotLoggedIn} />
+              <Route component={redirectIfNotLoggedIn} />
             </Switch>
           )}
         </div>

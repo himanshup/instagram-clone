@@ -22,11 +22,8 @@ let postSchema = new mongoose.Schema({
   ],
   comments: [
     {
-      author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-      },
-      text: String
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Comment"
     }
   ]
 });

@@ -14,14 +14,11 @@ class Navbar extends Component {
     return (
       <nav className="navbar navbar-expand-sm navbar-light bg-white border-bottom">
         <div className="container d-flex justify-content-start">
-          <Link to={`${localStorage.Auth ? "/posts" : "/"}`}>
+          <Link to="/">
             <FiInstagram className="logo" />
           </Link>
           <div className="ml-4 mr-4 verticalLine" />
-          <Link
-            className="navbar-brand"
-            to={`${localStorage.Auth ? "/posts" : "/"}`}
-          >
+          <Link className="navbar-brand" to="/">
             Instagram
           </Link>
           {localStorage.Auth && (

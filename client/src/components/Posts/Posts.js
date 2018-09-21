@@ -7,6 +7,7 @@ import {
   FiTrash2
 } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import Comment from "../../containers/Comment/Comment";
 import moment from "moment";
 import "./Posts.css";
 
@@ -20,7 +21,7 @@ const Posts = ({ posts }) => {
               key={post._id}
               className="col-12 d-flex justify-content-center"
             >
-              <div className="card feedCard rounded-0 mt-5">
+              <div className="card feedCard mt-5">
                 <div className="card-header bg-white p-3">
                   <img
                     src={post.author.avatar}
@@ -38,7 +39,7 @@ const Posts = ({ posts }) => {
                   alt=""
                   className="card-img-top rounded-0"
                 />
-                <div className="card-body">
+                <div className="p-3">
                   <div>
                     <FiHeart className="mr-2 feedIcons" />
                     <FiMessageCircle className="mr-2 feedIcons msgCircle" />
@@ -73,6 +74,8 @@ const Posts = ({ posts }) => {
                       {moment(post.timePosted).fromNow()}
                     </Link>
                   </div>
+                  <hr />
+                  <Comment postId={post._id} />
                 </div>
               </div>
             </div>

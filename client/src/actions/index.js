@@ -8,7 +8,8 @@ import {
   CREATE_POST,
   GET_FEED,
   USER_PROFILE,
-  GET_POST
+  GET_POST,
+  ADD_COMMENT
 } from "../constants/action-types";
 import history from "../history";
 
@@ -34,7 +35,6 @@ export const loginUser = data => dispatch => {
         };
         localStorage.setItem("Auth", JSON.stringify(user));
         dispatch({ type: LOGIN_USER, payload: response.data });
-        history.push("/posts");
       }
     })
     .catch(error => {
@@ -78,12 +78,24 @@ export const logout = () => dispatch => {
     });
 };
 
+// for image preview
+export const getPreview = image => dispatch => {
+  dispatch({ type: GET_PREVIEW, payload: image });
+};
+// resets image preview
 export const reset = () => dispatch => {
   dispatch({ type: RESET_VALUE, payload: "" });
 };
 
-export const getPreview = image => dispatch => {
-  dispatch({ type: GET_PREVIEW, payload: image });
+export const getFeed = () => dispatch => {
+  axios
+    .get("/api/posts")
+    .then(posts => {
+      dispatch({ type: GET_FEED, payload: posts.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
 };
 
 export const createPost = data => dispatch => {
@@ -101,21 +113,10 @@ export const createPost = data => dispatch => {
     .then(post => {
       console.log(post.data);
       dispatch({ type: CREATE_POST, payload: post.data });
-      history.push("/posts");
+      history.push("/");
     })
     .catch(error => {
       console.log("error creating post");
-      console.log(error);
-    });
-};
-
-export const getFeed = () => dispatch => {
-  axios
-    .get("/api/posts")
-    .then(posts => {
-      dispatch({ type: GET_FEED, payload: posts.data });
-    })
-    .catch(error => {
       console.log(error);
     });
 };
@@ -137,6 +138,18 @@ export const getUserProfile = id => dispatch => {
     .get(`/api/users/${id}`)
     .then(user => {
       dispatch({ type: USER_PROFILE, payload: user.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const comment = (data, id) => dispatch => {
+  axios
+    .post(`/api/posts/${id}/comments`, data)
+    .then(response => {
+      console.log(response.data);
+      dispatch({ type: ADD_COMMENT, payload: response.data });
     })
     .catch(error => {
       console.log(error);

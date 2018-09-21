@@ -51,7 +51,7 @@ const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
 };
 
 let PostForm = props => {
-  const { handleSubmit, onValues } = props;
+  const { handleSubmit, onValues, preview } = props;
   return (
     <form onSubmit={handleSubmit} className="mt-4">
       <Field
@@ -66,8 +66,13 @@ let PostForm = props => {
         type="text"
         label="Write a caption..."
       />
-
-      <button className="btn btn-primary btn-sm btn-block mt-3">Post</button>
+      {preview ? (
+        <button className="btn btn-primary btn-sm btn-block mt-3">Post</button>
+      ) : (
+        <button className="btn btn-primary btn-sm btn-block mt-3" disabled>
+          Post
+        </button>
+      )}
     </form>
   );
 };
@@ -127,7 +132,11 @@ class NewPost extends Component {
                 />
               </div>
             )}
-            <PostForm onSubmit={this.handleSubmit} onValues={this.onValues} />
+            <PostForm
+              onSubmit={this.handleSubmit}
+              onValues={this.onValues}
+              preview={this.props.imgPreview}
+            />
           </div>
         </div>
       </div>
