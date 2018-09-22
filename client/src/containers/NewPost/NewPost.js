@@ -99,22 +99,18 @@ const renderField = ({
 
 PostForm = reduxForm({
   form: "createPost",
+  destroyOnUnmount: true,
   validate
 })(PostForm);
 
 class NewPost extends Component {
   handleSubmit = data => {
-    console.log(data);
     this.props.createPost(data);
   };
 
   onValues = image => {
     this.props.getPreview(image[0].preview);
   };
-
-  componentWillMount() {
-    this.props.resetInput();
-  }
 
   render() {
     return (

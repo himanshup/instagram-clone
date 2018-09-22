@@ -113,16 +113,12 @@ const renderField = ({
 
 RegisterForm = reduxForm({
   form: "signUp",
+  destroyOnUnmount: true,
   validate
 })(RegisterForm);
 
 class Register extends Component {
-  componentWillUnmount() {
-    this.props.resetInput();
-  }
-
   handleSubmit = data => {
-    console.log(data);
     this.props.registerUser(data);
   };
 

@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  FiHeart,
-  FiMessageCircle,
-  FiBookmark,
-  FiEdit2,
-  FiTrash2
-} from "react-icons/fi";
+
 import { Link } from "react-router-dom";
 import Comment from "../../containers/Comment/Comment";
+import Icons from "../../containers/Icons/Icons";
 import moment from "moment";
 import "./Posts.css";
 
-const Posts = ({ posts }) => {
+const Posts = ({ posts, props }) => {
   return (
     <div className="container">
       <div className="row">
@@ -40,21 +35,7 @@ const Posts = ({ posts }) => {
                   className="card-img-top rounded-0"
                 />
                 <div className="p-3">
-                  <div>
-                    <FiHeart className="mr-2 feedIcons" />
-                    <FiMessageCircle className="mr-2 feedIcons msgCircle" />
-                    {post.author.id ===
-                    JSON.parse(localStorage.getItem("Auth")).id ? (
-                      <span>
-                        <FiTrash2 className="feedIcons float-right" />
-                        <Link to={`/edit/${post._id}`}>
-                          <FiEdit2 className="feedIcons text-dark float-right mr-2" />
-                        </Link>
-                      </span>
-                    ) : (
-                      <FiBookmark className="feedIcons float-right" />
-                    )}
-                  </div>
+                  <Icons authorId={post.author.id} postId={post._id} />
                   <div className="mt-2">
                     <Link to="/" className="feedLinks">
                       {post.likes.length} likes

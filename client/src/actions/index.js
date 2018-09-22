@@ -9,7 +9,8 @@ import {
   GET_FEED,
   USER_PROFILE,
   GET_POST,
-  ADD_COMMENT
+  ADD_COMMENT,
+  LIKE_POST
 } from "../constants/action-types";
 import history from "../history";
 
@@ -22,23 +23,20 @@ export const loginUser = data => dispatch => {
       password: password
     })
     .then(response => {
-      console.log("post req to login success");
-      console.log(response.data);
-      console.log(response.data.message);
       if (response.data.message) {
         dispatch({ type: LOGIN_USER, payload: response.data.message });
-      } else if (!response.data.message && response.data._id) {
+      } else if (!response.data.message && response.data.id) {
         localStorage.setItem("Auth", JSON.stringify(response.data));
         dispatch({ type: LOGIN_USER, payload: response.data });
       }
     })
     .catch(error => {
       console.log(error);
+      dispatch({ type: LOGIN_USER, payload: error });
     });
 };
 
 export const registerUser = data => dispatch => {
-  console.log("printing from actions", data);
   const formData = new FormData();
   if (data.image) {
     formData.append("file", data.image[0]);
@@ -48,13 +46,11 @@ export const registerUser = data => dispatch => {
   axios
     .post("/api/register", formData)
     .then(response => {
-      console.log(response.data);
       response.data.error
         ? dispatch({ type: REGISTER_USER, payload: response.data.error })
         : dispatch({ type: REGISTER_USER, payload: response.data });
     })
     .catch(error => {
-      console.log("error uploading image");
       console.log(error);
     });
 };
@@ -63,7 +59,6 @@ export const logout = () => dispatch => {
   axios
     .post("/api/logout")
     .then(response => {
-      console.log(response.data);
       localStorage.removeItem("Auth");
       dispatch({ type: LOGOUT_USER, payload: response.data });
       history.push("/");
@@ -106,7 +101,6 @@ export const createPost = data => dispatch => {
   axios
     .post("/api/posts", formData)
     .then(post => {
-      console.log(post.data);
       dispatch({ type: CREATE_POST, payload: post.data });
       history.push("/");
     })
@@ -120,8 +114,18 @@ export const getPost = id => dispatch => {
   axios
     .get(`/api/posts/${id}`)
     .then(post => {
-      console.log(post.data);
       dispatch({ type: GET_POST, payload: post.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const likePost = id => dispatch => {
+  axios
+    .post(`/api/posts/${id}/like`)
+    .then(response => {
+      console.log(response);
     })
     .catch(error => {
       console.log(error);
@@ -145,7 +149,6 @@ export const comment = (text, id) => dispatch => {
       comment: text.comment
     })
     .then(response => {
-      console.log(response.data);
       dispatch({ type: ADD_COMMENT, payload: response.data });
     })
     .catch(error => {

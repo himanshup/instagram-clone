@@ -12,6 +12,7 @@ export const GET_FEED = "GET_FEED";
 export const GET_POST = "GET_POST";
 export const CREATE_POST = "CREATE_POST";
 export const DELETE_POST = "DELETE_POST";
+export const LIKE_POST = "LIKE_POST";
 
 // comments
 export const ADD_COMMENT = "ADD_COMMENT";

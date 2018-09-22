@@ -15,7 +15,7 @@ class Feed extends Component {
   }
 
   render() {
-    return <Posts posts={this.props.posts} />;
+    return <Posts posts={this.props.posts} props={this.props} />;
   }
 }
 

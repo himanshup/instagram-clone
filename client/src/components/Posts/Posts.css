@@ -4,6 +4,7 @@
 
 .feedIcons {
   font-size: 25px;
+  cursor: pointer;
 }
 
 .feedLinks {

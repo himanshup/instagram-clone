@@ -37,19 +37,9 @@ const renderField = ({ input, label, type }) => (
   </div>
 );
 
-CommentForm = reduxForm({})(CommentForm);
+CommentForm = reduxForm({ enableReinitialize: true })(CommentForm);
 
 class Comment extends Component {
-  componentWillUnmount() {
-    this.props.resetInput();
-  }
-
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.postId !== prevProps.postId) {
-  //     this.props.comment(data, this.props.postId);
-  //   }
-  // }
-
   handleSubmit = data => {
     if (Object.keys(data).length !== 0) {
       this.props.comment(data, this.props.postId);
@@ -62,6 +52,7 @@ class Comment extends Component {
     );
   }
 }
+
 export default connect(
   mapStateToProps,
   actions

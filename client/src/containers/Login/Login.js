@@ -76,7 +76,6 @@ class Login extends Component {
   }
 
   handleSubmit = data => {
-    console.log(data);
     this.props.loginUser(data);
   };
 

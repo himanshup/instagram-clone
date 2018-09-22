@@ -101,29 +101,32 @@ module.exports = router => {
     console.log("===== user!!======");
     console.log(req.user);
     if (req.user) {
-      return res.json(req.user);
+      return res.json({ user: req.user });
     } else {
-      return res.json(null);
+      return res.json({ user: null });
     }
   });
 
-  router.post(
-    "/login",
-    (req, res, next) => {
-      console.log(req.body);
-      next();
-    },
-    passport.authenticate("local"),
-    (req, res) => {
-      console.log("post to /login");
-      const user = JSON.parse(JSON.stringify(req.user));
-      const cleanUser = Object.assign({}, user);
-      if (cleanUser.password) {
-        delete cleanUser.password;
+  router.post("/login", (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        return next(err);
       }
-      res.json(cleanUser);
-    }
-  );
+      if (!user) {
+        return res.json({ message: info.message });
+      }
+      req.login(user, loginErr => {
+        if (loginErr) {
+          return next(loginErr);
+        }
+        const userInfo = {
+          id: req.user._id,
+          username: req.user.username
+        };
+        return res.json(userInfo);
+      });
+    })(req, res, next);
+  });
 
   router.get("/users/:user_id", (req, res) => {
     console.log("===== user!!======");

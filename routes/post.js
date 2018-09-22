@@ -28,6 +28,7 @@ cloudinary.config({
 });
 
 module.exports = router => {
+  // get all posts
   router.get("/posts", (req, res) => {
     Post.find({})
       .sort({ timePosted: -1 })
@@ -75,6 +76,7 @@ module.exports = router => {
     );
   });
 
+  // get post by id
   router.get("/posts/:post_id", (req, res) => {
     Post.findById(req.params.post_id)
       .populate("comments")
@@ -86,4 +88,39 @@ module.exports = router => {
         res.json(post);
       });
   });
+
+  router.post("/posts/:post_id/like", (req, res) => {
+    Post.findById(req.params.post_id)
+      .populate("comments")
+      .exec()
+      .then(post => {});
+  });
+
+  // router.post("/posts/:post_id/comments", (req, res) => {
+  //   let newComment = {};
+  //   Post.findById(req.params.post_id)
+  //     .exec()
+  //     .then(post => {
+  //       console.log(post);
+  //     })
+  //     .then(comment => {
+  //       comment.author.id = req.user._id;
+  //       comment.author.username = req.user.username;
+  //       comment.save();
+  //       return (newComment = comment);
+  //     })
+  //     .then(result => {
+  //       return Post.findById(req.params.post_id)
+  //         .populate("comments")
+  //         .exec();
+  //     })
+  //     .then(post => {
+  //       post.comments.push(newComment);
+  //       post.save();
+  //       return res.json(post);
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // });
 };
