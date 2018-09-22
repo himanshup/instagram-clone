@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-mongoose.set("useCreateIndex", true);
 let MONGO_URL;
 
 const MONGO_LOCAL_URL = "mongodb://localhost:27017/instagram";

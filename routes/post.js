@@ -1,6 +1,8 @@
 const Post = require("../models/post");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
+const Like = require("../models/like");
+const User = require("../models/user");
 
 const storage = multer.diskStorage({
   filename: function(req, file, callback) {
@@ -33,6 +35,7 @@ module.exports = router => {
     Post.find({})
       .sort({ timePosted: -1 })
       .populate("comments")
+      .populate("likes")
       .exec((err, posts) => {
         if (err) {
           return res.json(err);
@@ -90,37 +93,34 @@ module.exports = router => {
   });
 
   router.post("/posts/:post_id/like", (req, res) => {
+    let newLike = {};
     Post.findById(req.params.post_id)
-      .populate("comments")
       .exec()
-      .then(post => {});
+      .then(post => {
+        return User.findById(req.user._id);
+      })
+      .then(user => {
+        return Like.create({
+          author: req.user,
+          avatar: user.avatar
+        });
+      })
+      .then(like => {
+        return (newLike = like);
+      })
+      .then(result => {
+        return Post.findById(req.params.post_id)
+          .populate("likes")
+          .populate("comments")
+          .exec();
+      })
+      .then(post => {
+        post.likes.push(newLike);
+        post.save();
+        return res.json(post);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   });
-
-  // router.post("/posts/:post_id/comments", (req, res) => {
-  //   let newComment = {};
-  //   Post.findById(req.params.post_id)
-  //     .exec()
-  //     .then(post => {
-  //       console.log(post);
-  //     })
-  //     .then(comment => {
-  //       comment.author.id = req.user._id;
-  //       comment.author.username = req.user.username;
-  //       comment.save();
-  //       return (newComment = comment);
-  //     })
-  //     .then(result => {
-  //       return Post.findById(req.params.post_id)
-  //         .populate("comments")
-  //         .exec();
-  //     })
-  //     .then(post => {
-  //       post.comments.push(newComment);
-  //       post.save();
-  //       return res.json(post);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // });
 };

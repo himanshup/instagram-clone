@@ -3,12 +3,6 @@ import { reduxForm, Field } from "redux-form";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 
-const mapStateToProps = state => {
-  return {
-    registerMsg: state.auth.registerMsg
-  };
-};
-
 let CommentForm = props => {
   const { handleSubmit } = props;
   return (
@@ -54,6 +48,6 @@ class Comment extends Component {
 }
 
 export default connect(
-  mapStateToProps,
+  null,
   actions
 )(Comment);

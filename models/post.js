@@ -16,11 +16,8 @@ let postSchema = new mongoose.Schema({
   timePosted: { type: Date, default: Date.now },
   likes: [
     {
-      id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User"
-      },
-      username: String
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Like"
     }
   ],
   comments: [

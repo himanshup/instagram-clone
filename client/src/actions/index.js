@@ -124,8 +124,8 @@ export const getPost = id => dispatch => {
 export const likePost = id => dispatch => {
   axios
     .post(`/api/posts/${id}/like`)
-    .then(response => {
-      console.log(response);
+    .then(post => {
+      dispatch({ type: LIKE_POST, payload: post.data });
     })
     .catch(error => {
       console.log(error);

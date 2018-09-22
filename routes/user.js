@@ -121,7 +121,8 @@ module.exports = router => {
         }
         const userInfo = {
           id: req.user._id,
-          username: req.user.username
+          username: req.user.username,
+          avatar: req.user.avatar
         };
         return res.json(userInfo);
       });

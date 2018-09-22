@@ -4,7 +4,8 @@ import {
   CREATE_POST,
   GET_FEED,
   GET_POST,
-  ADD_COMMENT
+  ADD_COMMENT,
+  LIKE_POST
 } from "../constants/action-types";
 
 const initialState = {
@@ -42,6 +43,16 @@ export default function(state = initialState, action) {
       });
       return {
         posts: updatedPosts
+      };
+    case LIKE_POST:
+      const newPosts = state.posts.map(post => {
+        if (post._id === action.payload._id) {
+          post.likes = action.payload.likes.slice(0);
+        }
+        return post;
+      });
+      return {
+        posts: newPosts
       };
     default:
       return state;
