@@ -46,7 +46,7 @@ module.exports = router => {
         },
         (error, result) => {
           if (error) {
-            res.send(error);
+            res.json(error);
           } else {
             const public_id = result.public_id;
             const secure_url = result.secure_url;
@@ -97,30 +97,40 @@ module.exports = router => {
     }
   });
 
-  router.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return res.json({ message: info.message });
-      }
-
-      const userInfo = {
-        id: user._id,
-        username: user.username,
-        avatar: user.avatar
-      };
-      res.send(userInfo);
-    })(req, res, next);
+  router.get("/user", (req, res) => {
+    console.log("===== user!!======");
+    console.log(req.user);
+    if (req.user) {
+      return res.json(req.user);
+    } else {
+      return res.json(null);
+    }
   });
+
+  router.post(
+    "/login",
+    (req, res, next) => {
+      console.log(req.body);
+      next();
+    },
+    passport.authenticate("local"),
+    (req, res) => {
+      console.log("post to /login");
+      const user = JSON.parse(JSON.stringify(req.user));
+      const cleanUser = Object.assign({}, user);
+      if (cleanUser.password) {
+        delete cleanUser.password;
+      }
+      res.json(cleanUser);
+    }
+  );
 
   router.get("/users/:user_id", (req, res) => {
     console.log("===== user!!======");
     User.findOne({ _id: req.params.user_id }, (err, user) => {
       if (err) {
         console.log("User.js post error: ");
-        return res.send(err);
+        return res.json(err);
       }
       const userInfo = {
         id: user._id,
@@ -133,12 +143,12 @@ module.exports = router => {
         following: user.following,
         username: user.username
       };
-      res.send(userInfo);
+      res.json(userInfo);
     });
   });
 
   router.post("/logout", (req, res) => {
     req.logout();
-    res.send({ msg: "logging out" });
+    res.json({ msg: "logging out" });
   });
 };

@@ -31,11 +31,12 @@ module.exports = router => {
   router.get("/posts", (req, res) => {
     Post.find({})
       .sort({ timePosted: -1 })
+      .populate("comments")
       .exec((err, posts) => {
         if (err) {
-          return res.send(err);
+          return res.json(err);
         }
-        res.send(posts);
+        res.json(posts);
       });
   });
   // create new post
@@ -49,7 +50,7 @@ module.exports = router => {
       { width: 1000, height: 1000, crop: "scale" },
       (error, result) => {
         if (error) {
-          return res.send(error);
+          return res.json(error);
         }
         const { caption, authorId, username, avatar } = req.body;
         const public_id = result.public_id;
@@ -66,9 +67,9 @@ module.exports = router => {
         };
         Post.create(newPost, (err, post) => {
           if (err) {
-            return res.send(err);
+            return res.json(err);
           }
-          res.send(post);
+          res.json(post);
         });
       }
     );
@@ -80,9 +81,9 @@ module.exports = router => {
       .exec((err, post) => {
         if (err || !post) {
           console.log(err);
-          return res.send(err);
+          return res.json(err);
         }
-        res.send(post);
+        res.json(post);
       });
   });
 };

@@ -10,6 +10,10 @@ class Navbar extends Component {
     this.props.logout();
   };
 
+  handleUser = () => {
+    this.props.getUser();
+  };
+
   render() {
     return (
       <nav className="navbar navbar-expand-sm navbar-light bg-white border-bottom">
@@ -43,6 +47,7 @@ class Navbar extends Component {
                   </Link>
                 </li>
                 <button onClick={this.handleLogout}>Logout</button>
+                <button onClick={this.handleUser}>user</button>
               </ul>
             </div>
           )}

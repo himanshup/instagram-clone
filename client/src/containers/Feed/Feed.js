@@ -13,6 +13,7 @@ class Feed extends Component {
   componentDidMount() {
     this.props.getFeed();
   }
+
   render() {
     return <Posts posts={this.props.posts} />;
   }

@@ -66,6 +66,18 @@ const Posts = ({ posts }) => {
                     </Link>{" "}
                     {post.description}
                   </div>
+                  {post.comments &&
+                    post.comments.map(comment => (
+                      <div key={comment._id}>
+                        <Link
+                          to={`/users/${comment.author.id}`}
+                          className="feedLinks"
+                        >
+                          {comment.author.username}
+                        </Link>{" "}
+                        {comment.text}
+                      </div>
+                    ))}
                   <div>
                     <Link
                       to={`/posts/${post._id}`}

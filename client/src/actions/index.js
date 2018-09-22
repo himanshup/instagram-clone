@@ -27,13 +27,8 @@ export const loginUser = data => dispatch => {
       console.log(response.data.message);
       if (response.data.message) {
         dispatch({ type: LOGIN_USER, payload: response.data.message });
-      } else if (!response.data.message && response.data.id) {
-        const user = {
-          id: response.data.id,
-          username: response.data.username,
-          avatar: response.data.avatar
-        };
-        localStorage.setItem("Auth", JSON.stringify(user));
+      } else if (!response.data.message && response.data._id) {
+        localStorage.setItem("Auth", JSON.stringify(response.data));
         dispatch({ type: LOGIN_USER, payload: response.data });
       }
     })
@@ -83,7 +78,7 @@ export const getPreview = image => dispatch => {
   dispatch({ type: GET_PREVIEW, payload: image });
 };
 // resets image preview
-export const reset = () => dispatch => {
+export const resetInput = () => dispatch => {
   dispatch({ type: RESET_VALUE, payload: "" });
 };
 
@@ -144,14 +139,28 @@ export const getUserProfile = id => dispatch => {
     });
 };
 
-export const comment = (data, id) => dispatch => {
+export const comment = (text, id) => dispatch => {
   axios
-    .post(`/api/posts/${id}/comments`, data)
+    .post(`/api/posts/${id}/comments`, {
+      comment: text.comment
+    })
     .then(response => {
       console.log(response.data);
       dispatch({ type: ADD_COMMENT, payload: response.data });
     })
     .catch(error => {
       console.log(error);
+    });
+};
+
+export const getUser = () => dispatch => {
+  axios
+    .get("/api/user")
+    .then(response => {
+      console.log(response.data);
+      dispatch({ type: "GET_USERINFO", payload: response.data });
+    })
+    .catch(err => {
+      console.log(err);
     });
 };

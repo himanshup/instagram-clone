@@ -20,23 +20,12 @@ let CommentForm = props => {
         label="Add a comment..."
       />
 
-      {/* <button className="btn btn-primary btn-sm btn-block mt-3">Sign up</button> */}
+      {/* <button className="btn btn-primary btn-sm btn-block mt-3">Comment</button> */}
     </form>
   );
 };
 
-const validate = val => {
-  const errors = {};
-
-  return errors;
-};
-
-const renderField = ({
-  input,
-  label,
-  type,
-  meta: { touched, error, warning }
-}) => (
+const renderField = ({ input, label, type }) => (
   <div>
     <input
       className="form-control form-control-sm border-0"
@@ -45,19 +34,14 @@ const renderField = ({
       type={type}
       autoComplete="off"
     />
-    {touched &&
-      ((error && <small className="text-danger">{error}</small>) ||
-        (warning && <small className="text-danger">{warning}</small>))}
   </div>
 );
 
-CommentForm = reduxForm({
-  validate
-})(CommentForm);
+CommentForm = reduxForm({})(CommentForm);
 
 class Comment extends Component {
   componentWillUnmount() {
-    this.props.reset();
+    this.props.resetInput();
   }
 
   // componentDidUpdate(prevProps) {

@@ -3,7 +3,8 @@ import {
   RESET_VALUE,
   CREATE_POST,
   GET_FEED,
-  GET_POST
+  GET_POST,
+  ADD_COMMENT
 } from "../constants/action-types";
 
 const initialState = {
@@ -31,6 +32,16 @@ export default function(state = initialState, action) {
     case GET_FEED:
       return {
         posts: action.payload
+      };
+    case ADD_COMMENT:
+      const updatedPosts = state.posts.map(post => {
+        if (post._id === action.payload._id) {
+          post.comments = action.payload.comments.slice(0);
+        }
+        return post;
+      });
+      return {
+        posts: updatedPosts
       };
     default:
       return state;

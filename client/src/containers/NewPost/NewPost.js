@@ -113,7 +113,7 @@ class NewPost extends Component {
   };
 
   componentWillMount() {
-    this.props.reset();
+    this.props.resetInput();
   }
 
   render() {
