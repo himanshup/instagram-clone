@@ -36,11 +36,11 @@ module.exports = router => {
       .sort({ timePosted: -1 })
       .populate("comments")
       .populate("likes")
-      .exec((err, posts) => {
-        if (err) {
-          return res.json(err);
-        }
+      .then(posts => {
         res.json(posts);
+      })
+      .catch(err => {
+        res.json(err);
       });
   });
   // create new post
@@ -52,9 +52,9 @@ module.exports = router => {
     cloudinary.v2.uploader.upload(
       file,
       { width: 1000, height: 1000, crop: "scale" },
-      (error, result) => {
-        if (error) {
-          return res.json(error);
+      (err, result) => {
+        if (err) {
+          return res.json(err);
         }
         const { caption, authorId, username, avatar } = req.body;
         const public_id = result.public_id;
@@ -69,12 +69,13 @@ module.exports = router => {
             avatar: avatar
           }
         };
-        Post.create(newPost, (err, post) => {
-          if (err) {
-            return res.json(err);
-          }
-          res.json(post);
-        });
+        Post.create(newPost)
+          .then(post => {
+            res.json(post);
+          })
+          .catch(err => {
+            res.json(err);
+          });
       }
     );
   });
@@ -83,16 +84,18 @@ module.exports = router => {
   router.get("/posts/:post_id", (req, res) => {
     Post.findById(req.params.post_id)
       .populate("comments")
-      .exec((err, post) => {
-        if (err || !post) {
-          console.log(err);
-          return res.json(err);
+      .then(post => {
+        if (post) {
+          res.json(post);
         }
-        res.json(post);
+      })
+      .catch(err => {
+        res.json(err);
       });
   });
 
-  router.post("/posts/:post_id/like", (req, res) => {
+  // like a post
+  router.post("/posts/:post_id/likes", (req, res) => {
     let newLike = {};
     Post.findById(req.params.post_id)
       .exec()
@@ -101,7 +104,10 @@ module.exports = router => {
       })
       .then(user => {
         return Like.create({
-          author: req.user,
+          author: {
+            id: req.user._id,
+            username: req.user.username
+          },
           avatar: user.avatar
         });
       })
@@ -117,10 +123,29 @@ module.exports = router => {
       .then(post => {
         post.likes.push(newLike);
         post.save();
-        return res.json(post);
+        res.json(post);
       })
-      .catch(error => {
-        console.log(error);
+      .catch(err => {
+        res.json(err);
+      });
+  });
+
+  // dislike a post
+  router.delete("/posts/:post_id/likes/:like_id", (req, res) => {
+    Like.findByIdAndRemove(req.params.like_id)
+      .then(response => {
+        return Post.findByIdAndUpdate(req.params.post_id, {
+          $pull: { likes: { $in: [req.params.like_id] } }
+        });
+      })
+      .then(post => {
+        return Post.findById(post._id);
+      })
+      .then(newPost => {
+        res.json(newPost);
+      })
+      .catch(err => {
+        res.json(err);
       });
   });
 };

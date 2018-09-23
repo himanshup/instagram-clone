@@ -5,13 +5,16 @@ import {
   GET_FEED,
   GET_POST,
   ADD_COMMENT,
-  LIKE_POST
+  LIKE_POST,
+  DISLIKE_POST,
+  EDIT_POST_VALUES
 } from "../constants/action-types";
 
 const initialState = {
   posts: [],
   post: {},
-  prevew: ""
+  prevew: "",
+  editData: {}
 };
 
 export default function(state = initialState, action) {
@@ -30,29 +33,43 @@ export default function(state = initialState, action) {
       return {
         post: action.payload
       };
+    case EDIT_POST_VALUES:
+      return {
+        editData: action.payload
+      };
     case GET_FEED:
       return {
         posts: action.payload
       };
     case ADD_COMMENT:
-      const updatedPosts = state.posts.map(post => {
-        if (post._id === action.payload._id) {
-          post.comments = action.payload.comments.slice(0);
+      const newPostsComment = state.posts.map(post => {
+        if (post._id === action.payload.postId) {
+          post.comments.push(action.payload.comment);
         }
         return post;
       });
       return {
-        posts: updatedPosts
+        posts: newPostsComment
       };
     case LIKE_POST:
-      const newPosts = state.posts.map(post => {
+      const newPostsLike = state.posts.map(post => {
         if (post._id === action.payload._id) {
           post.likes = action.payload.likes.slice(0);
         }
         return post;
       });
       return {
-        posts: newPosts
+        posts: newPostsLike
+      };
+    case DISLIKE_POST:
+      const newPostsDislike = state.posts.map(post => {
+        if (post._id === action.payload._id) {
+          post.likes = action.payload.likes.slice(0);
+        }
+        return post;
+      });
+      return {
+        posts: newPostsDislike
       };
     default:
       return state;

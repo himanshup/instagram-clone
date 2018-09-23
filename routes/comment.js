@@ -25,7 +25,11 @@ module.exports = router => {
       .then(post => {
         post.comments.push(newComment);
         post.save();
-        return res.json(post);
+        const data = {
+          postId: post._id,
+          comment: newComment
+        };
+        return res.json(data);
       })
       .catch(error => {
         console.log(error);

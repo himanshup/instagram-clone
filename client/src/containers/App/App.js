@@ -16,7 +16,6 @@ import ErrorPage from "../../components/ErrorPage/ErrorPage";
 const mapStateToProps = state => {
   return {
     isAuth: state.auth.isAuth,
-    user: state.auth.user,
     redirect: state.auth.redirectTo
   };
 };

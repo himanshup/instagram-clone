@@ -50,14 +50,13 @@ module.exports = router => {
           } else {
             const public_id = result.public_id;
             const secure_url = result.secure_url;
-            User.findOne({ username: username }, (err, user) => {
-              if (err) {
-                console.log("User.js post error: ", err);
-              } else if (user) {
-                res.json({
-                  error: "Username taken"
-                });
-              } else {
+            User.findOne({ username: username })
+              .then(user => {
+                if (user) {
+                  return res.json({
+                    error: "Username taken"
+                  });
+                }
                 const newUser = new User({
                   username: username,
                   password: password,
@@ -68,20 +67,19 @@ module.exports = router => {
                   if (err) return res.json(err);
                   res.json(savedUser);
                 });
-              }
-            });
+              })
+              .catch(err => {
+                res.json(err);
+              });
           }
         }
       );
     } else {
-      User.findOne({ username: username }, (err, user) => {
-        if (err) {
-          console.log("User.js post error: ", err);
-        } else if (user) {
-          res.json({
-            error: "Username taken"
-          });
-        } else {
+      User.findOne({ username: username })
+        .then(user => {
+          if (user) {
+            return res.json({ error: "Username taken" });
+          }
           const newUser = new User({
             username: username,
             password: password,
@@ -92,14 +90,14 @@ module.exports = router => {
             if (err) return res.json(err);
             res.json(savedUser);
           });
-        }
-      });
+        })
+        .catch(err => {
+          res.json(err);
+        });
     }
   });
 
   router.get("/user", (req, res) => {
-    console.log("===== user!!======");
-    console.log(req.user);
     if (req.user) {
       return res.json({ user: req.user });
     } else {
@@ -130,25 +128,26 @@ module.exports = router => {
   });
 
   router.get("/users/:user_id", (req, res) => {
-    console.log("===== user!!======");
-    User.findOne({ _id: req.params.user_id }, (err, user) => {
-      if (err) {
-        console.log("User.js post error: ");
-        return res.json(err);
-      }
-      const userInfo = {
-        id: user._id,
-        avatar: user.avatar,
-        avatarId: user.avatarId,
-        name: user.name,
-        bio: user.bio,
-        bookmarks: user.bookmarks,
-        followers: user.followers,
-        following: user.following,
-        username: user.username
-      };
-      res.json(userInfo);
-    });
+    User.findOne({ _id: req.params.user_id })
+      .then(user => {
+        if (user) {
+          const userInfo = {
+            id: user._id,
+            avatar: user.avatar,
+            avatarId: user.avatarId,
+            name: user.name,
+            bio: user.bio,
+            bookmarks: user.bookmarks,
+            followers: user.followers,
+            following: user.following,
+            username: user.username
+          };
+          res.json(userInfo);
+        }
+      })
+      .catch(err => {
+        res.json(err);
+      });
   });
 
   router.post("/logout", (req, res) => {

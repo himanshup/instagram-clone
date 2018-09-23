@@ -6,7 +6,7 @@ import Icons from "../../containers/Icons/Icons";
 import moment from "moment";
 import "./Posts.css";
 
-const Posts = ({ posts, props }) => {
+const Posts = ({ posts }) => {
   return (
     <div className="container">
       <div className="row">
@@ -35,7 +35,11 @@ const Posts = ({ posts, props }) => {
                   className="card-img-top rounded-0"
                 />
                 <div className="p-3">
-                  <Icons authorId={post.author.id} postId={post._id} />
+                  <Icons
+                    authorId={post.author.id}
+                    postId={post._id}
+                    likes={post.likes}
+                  />
                   <div className="mt-2">
                     <Link to="/" className="feedLinks">
                       {post.likes.length} likes

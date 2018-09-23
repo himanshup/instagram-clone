@@ -6,11 +6,14 @@ import {
   RESET_VALUE,
   GET_PREVIEW,
   CREATE_POST,
+  EDIT_POST,
   GET_FEED,
   USER_PROFILE,
   GET_POST,
   ADD_COMMENT,
-  LIKE_POST
+  LIKE_POST,
+  DISLIKE_POST,
+  EDIT_POST_VALUES
 } from "../constants/action-types";
 import history from "../history";
 
@@ -89,7 +92,6 @@ export const getFeed = () => dispatch => {
 };
 
 export const createPost = data => dispatch => {
-  console.log("printing from createPost fn", data);
   const user = JSON.parse(localStorage.getItem("Auth"));
   const formData = new FormData();
   formData.append("file", data.image[0]);
@@ -110,6 +112,17 @@ export const createPost = data => dispatch => {
     });
 };
 
+export const editPost = data => dispatch => {
+  console.log(data);
+  const user = JSON.parse(localStorage.getItem("Auth"));
+  const formData = new FormData();
+  formData.append("file", data.image[0]);
+  formData.append("caption", data.caption);
+  formData.append("authorId", user.id);
+  formData.append("username", user.username);
+  formData.append("avatar", user.avatar);
+};
+
 export const getPost = id => dispatch => {
   axios
     .get(`/api/posts/${id}`)
@@ -121,11 +134,38 @@ export const getPost = id => dispatch => {
     });
 };
 
+export const getEditFormValues = id => dispatch => {
+  axios
+    .get(`/api/posts/${id}`)
+    .then(post => {
+      dispatch({ type: EDIT_POST_VALUES, payload: post.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
 export const likePost = id => dispatch => {
   axios
-    .post(`/api/posts/${id}/like`)
+    .post(`/api/posts/${id}/likes`)
     .then(post => {
-      dispatch({ type: LIKE_POST, payload: post.data });
+      dispatch({
+        type: LIKE_POST,
+        payload: post.data
+      });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const dislikePost = (postId, likeId) => dispatch => {
+  axios
+    .delete(`/api/posts/${postId}/likes/${likeId}`)
+    .then(post => {
+      dispatch({
+        type: DISLIKE_POST,
+        payload: post.data
+      });
     })
     .catch(error => {
       console.log(error);
@@ -149,7 +189,13 @@ export const comment = (text, id) => dispatch => {
       comment: text.comment
     })
     .then(response => {
-      dispatch({ type: ADD_COMMENT, payload: response.data });
+      dispatch({
+        type: ADD_COMMENT,
+        payload: {
+          postId: response.data.postId,
+          comment: response.data.comment
+        }
+      });
     })
     .catch(error => {
       console.log(error);

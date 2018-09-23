@@ -11,8 +11,11 @@ export const RESET_VALUE = "RESET_VALUE";
 export const GET_FEED = "GET_FEED";
 export const GET_POST = "GET_POST";
 export const CREATE_POST = "CREATE_POST";
+export const EDIT_POST = "EDIT_POST";
 export const DELETE_POST = "DELETE_POST";
 export const LIKE_POST = "LIKE_POST";
+export const DISLIKE_POST = "DISLIKE_POST";
+export const EDIT_POST_VALUES = "EDIT_POST_VALUES";
 
 // comments
 export const ADD_COMMENT = "ADD_COMMENT";
