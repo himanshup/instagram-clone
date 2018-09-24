@@ -37,7 +37,7 @@ class App extends Component {
           <Route path="/" component={Navbar} />
           {localStorage.Auth ? (
             <Switch>
-              <Route exact path="/" component={Feed} />
+              <Route exact path="/posts" component={Feed} />
               <Route path="/posts/new" component={NewPost} />
               <Route path="/users/:userId" component={UserProfile} />
               <Route path="/posts/:postId" component={Post} />

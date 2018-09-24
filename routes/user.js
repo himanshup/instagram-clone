@@ -65,7 +65,7 @@ module.exports = router => {
                 });
                 newUser.save((err, savedUser) => {
                   if (err) return res.json(err);
-                  res.json(savedUser);
+                  res.json({ success: "Successfully registered" });
                 });
               })
               .catch(err => {
@@ -88,7 +88,7 @@ module.exports = router => {
           });
           newUser.save((err, savedUser) => {
             if (err) return res.json(err);
-            res.json(savedUser);
+            res.json({ success: "Successfully registered" });
           });
         })
         .catch(err => {

@@ -4,12 +4,13 @@ import { reduxForm, Field } from "redux-form";
 import Dropzone from "react-dropzone";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import { FiCamera } from "react-icons/fi";
+import * as Icon from "react-feather";
 import "./Register.css";
 
 const mapStateToProps = state => {
   return {
-    registerMsg: state.auth.registerMsg
+    registerMsg: state.auth.registerMsg,
+    imgPreview: state.post.preview
   };
 };
 
@@ -28,7 +29,7 @@ const validateImage = imageList => {
   }
 };
 
-const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
+const renderDropzoneField = ({ input, name, meta: { dirty, error } }) => {
   return (
     <div>
       <Dropzone
@@ -41,7 +42,7 @@ const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
           <div className="text-center align-self-center">
             <span className="text-muted avatarText">Profile Picture</span>
             <div>
-              <FiCamera className="text-muted camera" />
+              <Icon.Plus className="text-muted camera" />
             </div>
           </div>
         </div>
@@ -52,7 +53,7 @@ const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
 };
 
 let RegisterForm = props => {
-  const { handleSubmit } = props;
+  const { handleSubmit, onValues, submitting, pristine } = props;
   return (
     <form onSubmit={handleSubmit} className="mt-4">
       <Field
@@ -73,9 +74,15 @@ let RegisterForm = props => {
         name="image"
         validate={validateImage}
         component={renderDropzoneField}
+        onChange={onValues}
       />
 
-      <button className="btn btn-primary btn-sm btn-block mt-3">Sign up</button>
+      <button
+        className="btn btn-primary btn-sm btn-block mt-3"
+        disabled={pristine || submitting}
+      >
+        Sign up
+      </button>
     </form>
   );
 };
@@ -122,13 +129,31 @@ class Register extends Component {
     this.props.registerUser(data);
   };
 
+  onValues = image => {
+    this.props.getPreview(image[0].preview);
+  };
+
   render() {
     return (
       <div>
         <div className="container d-flex justify-content-center mt-5">
           <div className="card p-5 infoCards rounded-0">
             <h1 className="insta text-center">Instagram</h1>
-            <RegisterForm onSubmit={this.handleSubmit} />
+            {this.props.imgPreview && (
+              <div className="text-center mt-4">
+                <img
+                  src={this.props.imgPreview}
+                  className="imgPreview"
+                  alt=""
+                  width="100%"
+                />
+              </div>
+            )}
+            <RegisterForm
+              onSubmit={this.handleSubmit}
+              onValues={this.onValues}
+              preview={this.props.imgPreview}
+            />
             <div className="text-center mt-3">
               <small className="text-danger">
                 {this.props.registerMsg && this.props.registerMsg}

@@ -9,6 +9,7 @@
   border-color: #ced4da;
   background: #fafafa;
   border-style: dashed;
+  cursor: pointer;
 }
 
 .camera {

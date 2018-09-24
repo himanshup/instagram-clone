@@ -13,7 +13,7 @@ import {
   ADD_COMMENT,
   LIKE_POST,
   DISLIKE_POST,
-  EDIT_POST_VALUES
+  UPDATE_POST
 } from "../constants/action-types";
 import history from "../history";
 
@@ -31,6 +31,7 @@ export const loginUser = data => dispatch => {
       } else if (!response.data.message && response.data.id) {
         localStorage.setItem("Auth", JSON.stringify(response.data));
         dispatch({ type: LOGIN_USER, payload: response.data });
+        history.push("/posts");
       }
     })
     .catch(error => {
@@ -49,9 +50,8 @@ export const registerUser = data => dispatch => {
   axios
     .post("/api/register", formData)
     .then(response => {
-      response.data.error
-        ? dispatch({ type: REGISTER_USER, payload: response.data.error })
-        : dispatch({ type: REGISTER_USER, payload: response.data });
+      dispatch({ type: REGISTER_USER, payload: response.data });
+      history.push("/");
     })
     .catch(error => {
       console.log(error);
@@ -64,7 +64,6 @@ export const logout = () => dispatch => {
     .then(response => {
       localStorage.removeItem("Auth");
       dispatch({ type: LOGOUT_USER, payload: response.data });
-      history.push("/");
     })
     .catch(error => {
       console.log(error);
@@ -95,7 +94,9 @@ export const createPost = data => dispatch => {
   const user = JSON.parse(localStorage.getItem("Auth"));
   const formData = new FormData();
   formData.append("file", data.image[0]);
-  formData.append("caption", data.caption);
+  if (data.caption) {
+    formData.append("caption", data.caption);
+  }
   formData.append("authorId", user.id);
   formData.append("username", user.username);
   formData.append("avatar", user.avatar);
@@ -104,7 +105,7 @@ export const createPost = data => dispatch => {
     .post("/api/posts", formData)
     .then(post => {
       dispatch({ type: CREATE_POST, payload: post.data });
-      history.push("/");
+      history.push("/posts");
     })
     .catch(error => {
       console.log("error creating post");
@@ -112,20 +113,36 @@ export const createPost = data => dispatch => {
     });
 };
 
-export const editPost = data => dispatch => {
-  console.log(data);
-  const user = JSON.parse(localStorage.getItem("Auth"));
+export const editPost = (data, postId) => dispatch => {
+  if (typeof data.image === "object" && data.image.length > 1) {
+    console.log("more than 1 image");
+    return dispatch({
+      type: EDIT_POST,
+      payload: { error: "Only 1 image allowed" }
+    });
+  }
   const formData = new FormData();
-  formData.append("file", data.image[0]);
-  formData.append("caption", data.caption);
-  formData.append("authorId", user.id);
-  formData.append("username", user.username);
-  formData.append("avatar", user.avatar);
+  if (typeof data.image === "object") {
+    formData.append("file", data.image[0]);
+  }
+  if (data.caption !== "" && data.caption !== undefined) {
+    formData.append("caption", data.caption);
+  }
+
+  axios
+    .put(`/api/posts/${postId}`, formData)
+    .then(post => {
+      dispatch({ type: EDIT_POST, payload: post.data });
+      history.push(`/posts/${post.data._id}`);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 };
 
-export const getPost = id => dispatch => {
+export const getPost = postId => dispatch => {
   axios
-    .get(`/api/posts/${id}`)
+    .get(`/api/posts/${postId}`)
     .then(post => {
       dispatch({ type: GET_POST, payload: post.data });
     })
@@ -134,20 +151,11 @@ export const getPost = id => dispatch => {
     });
 };
 
-export const getEditFormValues = id => dispatch => {
+export const likePost = postId => dispatch => {
   axios
-    .get(`/api/posts/${id}`)
+    .post(`/api/posts/${postId}/likes`)
     .then(post => {
-      dispatch({ type: EDIT_POST_VALUES, payload: post.data });
-    })
-    .catch(error => {
-      console.log(error);
-    });
-};
-export const likePost = id => dispatch => {
-  axios
-    .post(`/api/posts/${id}/likes`)
-    .then(post => {
+      console.log(post.data);
       dispatch({
         type: LIKE_POST,
         payload: post.data
@@ -162,6 +170,7 @@ export const dislikePost = (postId, likeId) => dispatch => {
   axios
     .delete(`/api/posts/${postId}/likes/${likeId}`)
     .then(post => {
+      console.log("dislike post function", post.data);
       dispatch({
         type: DISLIKE_POST,
         payload: post.data
@@ -212,4 +221,8 @@ export const getUser = () => dispatch => {
     .catch(err => {
       console.log(err);
     });
+};
+
+export const updatePosts = posts => dispatch => {
+  dispatch({ type: UPDATE_POST, payload: posts });
 };

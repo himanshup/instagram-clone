@@ -7,7 +7,8 @@ import {
   ADD_COMMENT,
   LIKE_POST,
   DISLIKE_POST,
-  EDIT_POST_VALUES
+  EDIT_POST_VALUES,
+  UPDATE_POST
 } from "../constants/action-types";
 
 const initialState = {
@@ -52,16 +53,20 @@ export default function(state = initialState, action) {
         posts: newPostsComment
       };
     case LIKE_POST:
+      // handle case for when liking post on post page not feed page.
+      console.log(state.posts);
       const newPostsLike = state.posts.map(post => {
         if (post._id === action.payload._id) {
           post.likes = action.payload.likes.slice(0);
         }
         return post;
       });
+      console.log(newPostsLike);
       return {
         posts: newPostsLike
       };
     case DISLIKE_POST:
+      console.log(state.posts);
       const newPostsDislike = state.posts.map(post => {
         if (post._id === action.payload._id) {
           post.likes = action.payload.likes.slice(0);
@@ -70,6 +75,10 @@ export default function(state = initialState, action) {
       });
       return {
         posts: newPostsDislike
+      };
+    case UPDATE_POST:
+      return {
+        posts: action.payload
       };
     default:
       return state;

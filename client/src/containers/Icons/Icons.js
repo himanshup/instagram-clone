@@ -5,54 +5,66 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 class Icons extends Component {
+  componentDidMount() {
+    this.props.updatePosts(this.props.posts);
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.posts !== prevProps.posts) {
+      console.log("detected change in posts");
+      this.props.updatePosts(this.props.posts);
+    }
+  }
+
   handleLike = () => {
     this.props.likePost(this.props.postId);
   };
 
-  handleDislike = () => {
-    const user = JSON.parse(localStorage.getItem("Auth"));
-    for (const like of this.props.likes) {
-      if (like.author.id === user.id) {
-        return this.props.dislikePost(this.props.postId, like._id);
-      }
-    }
+  handleDislike = likeId => {
+    this.props.dislikePost(this.props.postId, likeId);
   };
 
   renderHeart = () => {
     const user = JSON.parse(localStorage.getItem("Auth"));
-    if (this.props.likes.length === 0) {
+
+    if (this.props.likes.length !== 0) {
+      for (const like of this.props.likes) {
+        if (like.author.id === user.id) {
+          console.log("youive liked");
+          return (
+            <span>
+              <Icon.Heart
+                className="mr-2 feedIcons"
+                color="red"
+                fill="red"
+                onClick={() => this.handleDislike(like._id)}
+              />
+            </span>
+          );
+        }
+      }
+      for (const like of this.props.likes) {
+        if (like.author.id !== user.id) {
+          console.log("you havent liked");
+          return (
+            <span>
+              <Icon.Heart
+                className="mr-2 feedIcons"
+                onClick={() => this.handleLike()}
+              />
+            </span>
+          );
+        }
+      }
+    } else if (this.props.likes.length === 0) {
+      console.log("no likes");
       return (
         <span>
           <Icon.Heart
             className="mr-2 feedIcons"
-            color="black"
             onClick={() => this.handleLike()}
           />
         </span>
       );
-    }
-    for (const like of this.props.likes) {
-      if (like.author.id === user.id) {
-        return (
-          <span>
-            <Icon.Heart
-              className="mr-2 feedIcons"
-              color="red"
-              fill="red"
-              onClick={() => this.handleDislike()}
-            />
-          </span>
-        );
-      } else {
-        return (
-          <span>
-            <Icon.Heart
-              className="mr-2 feedIcons"
-              onClick={() => this.handleLike()}
-            />
-          </span>
-        );
-      }
     }
   };
 

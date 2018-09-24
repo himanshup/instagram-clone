@@ -43,14 +43,14 @@ module.exports = router => {
         res.json(err);
       });
   });
+
   // create new post
   router.post("/posts", upload.single("file"), (req, res) => {
     console.log(req.file);
     console.log(req.body);
-    const file = req.file.path;
 
     cloudinary.v2.uploader.upload(
-      file,
+      req.file.path,
       { width: 1000, height: 1000, crop: "scale" },
       (err, result) => {
         if (err) {
@@ -62,7 +62,7 @@ module.exports = router => {
         const newPost = {
           image: secure_url,
           imageId: public_id,
-          description: caption,
+          description: caption ? caption : "",
           author: {
             id: authorId,
             username: username,
@@ -80,10 +80,35 @@ module.exports = router => {
     );
   });
 
+  router.put("/posts/:post_id", upload.single("file"), (req, res) => {
+    const caption = req.body.caption ? req.body.caption : "";
+    Post.findByIdAndUpdate(req.params.post_id, { description: caption }).then(
+      async post => {
+        if (req.file) {
+          try {
+            await cloudinary.v2.uploader.destroy(post.imageId);
+            const result = await cloudinary.v2.uploader.upload(req.file.path, {
+              width: 1000,
+              height: 1000,
+              crop: "scale"
+            });
+            post.imageId = result.public_id;
+            post.image = result.secure_url;
+          } catch (err) {
+            return res.json(err);
+          }
+        }
+        post.save();
+        res.json(post);
+      }
+    );
+  });
+
   // get post by id
   router.get("/posts/:post_id", (req, res) => {
     Post.findById(req.params.post_id)
       .populate("comments")
+      .populate("likes")
       .then(post => {
         if (post) {
           res.json(post);
@@ -139,7 +164,9 @@ module.exports = router => {
         });
       })
       .then(post => {
-        return Post.findById(post._id);
+        return Post.findById(post._id)
+          .populate("comments")
+          .populate("likes");
       })
       .then(newPost => {
         res.json(newPost);

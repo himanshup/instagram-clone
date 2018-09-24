@@ -7,12 +7,13 @@ import "./Login.css";
 
 const mapStateToProps = state => {
   return {
-    loginMsg: state.auth.loginMsg
+    loginError: state.auth.loginError,
+    registerSuccess: state.auth.registerSuccess
   };
 };
 
 let SignInForm = props => {
-  const { handleSubmit } = props;
+  const { handleSubmit, submitting, pristine } = props;
   return (
     <form onSubmit={handleSubmit} className="mt-4">
       <Field
@@ -29,7 +30,12 @@ let SignInForm = props => {
         label="Password"
       />
 
-      <button className="btn btn-primary btn-sm btn-block mt-3">Log In</button>
+      <button
+        className="btn btn-primary btn-sm btn-block mt-3"
+        disabled={pristine || submitting}
+      >
+        Log In
+      </button>
     </form>
   );
 };
@@ -86,11 +92,16 @@ class Login extends Component {
           <div className="card p-5 infoCards rounded-0">
             <h1 className="insta text-center">Instagram</h1>
             <SignInForm onSubmit={this.handleSubmit} />
-            <div className="text-center mt-3">
-              <small className="text-danger">
-                {this.props.loginMsg && this.props.loginMsg}
+            {this.props.loginError && (
+              <small className="text-danger text-center mt-3">
+                {this.props.loginError}
               </small>
-            </div>
+            )}
+            {this.props.registerSuccess && (
+              <small className="text-success text-center mt-3">
+                {this.props.registerSuccess}
+              </small>
+            )}
           </div>
         </div>
         <div className="container d-flex justify-content-center mt-2">

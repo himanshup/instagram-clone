@@ -1,12 +1,6 @@
 import React from "react";
-import {
-  FiHeart,
-  FiMessageCircle,
-  FiBookmark,
-  FiEdit2,
-  FiTrash2
-} from "react-icons/fi";
 import { Link } from "react-router-dom";
+import Icons from "../../containers/Icons/Icons";
 import moment from "moment";
 import "./DisplayPost.css";
 
@@ -56,12 +50,17 @@ const DisplayPost = ({ post }) => {
                     {post.author.username}
                   </Link>
                   <hr />
-                  <div>
-                    <Link to={`/users/${post.author.id}`} className="feedLinks">
-                      {post.author.username}
-                    </Link>{" "}
-                    {post.description}
-                  </div>
+                  {post.description && (
+                    <div className="mt-1">
+                      <Link
+                        to={`/users/${post.author.id}`}
+                        className="feedLinks"
+                      >
+                        {post.author.username}
+                      </Link>{" "}
+                      {post.description}
+                    </div>
+                  )}
                   {post.comments &&
                     post.comments.map(comment => (
                       <div key={comment._id}>
@@ -76,21 +75,11 @@ const DisplayPost = ({ post }) => {
                     ))}
                 </div>
                 <div className="p-3">
-                  <div>
-                    <FiHeart className="mr-2 feedIcons" />
-                    <FiMessageCircle className="mr-2 feedIcons msgCircle" />
-                    {post.author.id ===
-                    JSON.parse(localStorage.getItem("Auth")).id ? (
-                      <span>
-                        <FiTrash2 className="feedIcons float-right" />
-                        <Link to={`/edit/${post._id}`}>
-                          <FiEdit2 className="feedIcons text-dark float-right mr-2" />
-                        </Link>
-                      </span>
-                    ) : (
-                      <FiBookmark className="feedIcons float-right" />
-                    )}
-                  </div>
+                  <Icons
+                    authorId={post.author.id}
+                    postId={post._id}
+                    likes={post.likes}
+                  />
                   <div>
                     <Link to="/" className="feedLinks">
                       {post.likes.length} likes

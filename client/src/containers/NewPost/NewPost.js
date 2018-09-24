@@ -3,7 +3,7 @@ import { reduxForm, Field } from "redux-form";
 import Dropzone from "react-dropzone";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import { FiCamera } from "react-icons/fi";
+import * as Icon from "react-feather";
 import "./NewPost.css";
 
 const mapStateToProps = state => {
@@ -27,7 +27,7 @@ const validateImage = imageList => {
   }
 };
 
-const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
+const renderDropzoneField = ({ input, name, meta: { dirty, error } }) => {
   return (
     <div>
       <Dropzone
@@ -40,7 +40,7 @@ const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
           <div className="text-center align-self-center">
             <span className="text-muted avatarText">Upload Image</span>
             <div>
-              <FiCamera className="text-muted camera" />
+              <Icon.Plus className="text-muted camera" />
             </div>
           </div>
         </div>
@@ -77,18 +77,7 @@ let PostForm = props => {
   );
 };
 
-const validate = val => {
-  const errors = {};
-
-  return errors;
-};
-
-const renderField = ({
-  input,
-  label,
-  type,
-  meta: { touched, error, warning }
-}) => (
+const renderField = ({ input, label, type }) => (
   <textarea
     className="form-control form-control-sm mt-1 inputBg"
     {...input}
@@ -99,8 +88,7 @@ const renderField = ({
 
 PostForm = reduxForm({
   form: "createPost",
-  destroyOnUnmount: true,
-  validate
+  destroyOnUnmount: true
 })(PostForm);
 
 class NewPost extends Component {

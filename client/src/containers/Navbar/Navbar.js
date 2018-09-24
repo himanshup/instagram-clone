@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { FiInstagram, FiEdit, FiHeart, FiUser } from "react-icons/fi";
+import * as Icon from "react-feather";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 import "./Navbar.css";
@@ -18,11 +18,14 @@ class Navbar extends Component {
     return (
       <nav className="navbar navbar-expand-sm navbar-light bg-white border-bottom">
         <div className="container d-flex justify-content-start">
-          <Link to="/">
-            <FiInstagram className="logo" />
+          <Link to={localStorage.Auth ? "/posts" : "/"}>
+            <Icon.Instagram className="logo" size={34} />
           </Link>
           <div className="ml-4 mr-4 verticalLine" />
-          <Link className="navbar-brand" to="/">
+          <Link
+            className="navbar-brand"
+            to={localStorage.Auth ? "/posts" : "/"}
+          >
             Instagram
           </Link>
           {localStorage.Auth && (
@@ -30,12 +33,12 @@ class Navbar extends Component {
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item active">
                   <Link className="nav-link" to="/posts/new">
-                    <FiEdit className="navIcons" />
+                    <Icon.Edit className="navIcons" size={25} />
                   </Link>
                 </li>
                 <li className="nav-item active ml-3 mr-3">
                   <span className="nav-link" href="#">
-                    <FiHeart className="navIcons" />
+                    <Icon.Heart className="navIcons" size={25} />
                   </span>
                 </li>
                 <li className="nav-item active">
@@ -43,7 +46,7 @@ class Navbar extends Component {
                     className="nav-link"
                     to={`/users/${JSON.parse(localStorage.getItem("Auth")).id}`}
                   >
-                    <FiUser className="navIcons" />
+                    <Icon.User className="navIcons" size={25} />
                   </Link>
                 </li>
                 <button onClick={this.handleLogout}>Logout</button>
