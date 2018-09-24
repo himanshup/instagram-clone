@@ -5,16 +5,6 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 class Icons extends Component {
-  componentDidMount() {
-    this.props.updatePosts(this.props.posts);
-  }
-  componentDidUpdate(prevProps) {
-    if (this.props.posts !== prevProps.posts) {
-      console.log("detected change in posts");
-      this.props.updatePosts(this.props.posts);
-    }
-  }
-
   handleLike = () => {
     this.props.likePost(this.props.postId);
   };
