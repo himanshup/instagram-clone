@@ -13,6 +13,10 @@ class Icons extends Component {
     this.props.dislikePost(this.props.postId, likeId);
   };
 
+  handleDeletePost = () => {
+    this.props.deletePost(this.props.postId);
+  };
+
   renderHeart = () => {
     const user = JSON.parse(localStorage.getItem("Auth"));
 
@@ -62,7 +66,10 @@ class Icons extends Component {
         <Icon.MessageCircle className="mr-2 feedIcons msgCircle" />
         {this.props.authorId === JSON.parse(localStorage.getItem("Auth")).id ? (
           <span>
-            <Icon.Trash2 className="feedIcons float-right" />
+            <Icon.Trash2
+              className="feedIcons float-right"
+              onClick={() => this.handleDeletePost()}
+            />
             <Link to={`/edit/${this.props.postId}`}>
               <Icon.Edit2 className="feedIcons text-dark float-right mr-2" />
             </Link>

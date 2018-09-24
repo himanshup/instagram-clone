@@ -14,12 +14,6 @@ class Feed extends Component {
     this.props.getFeed();
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.posts !== prevProps.posts) {
-      this.props.updatePosts(this.props.posts);
-    }
-  }
-
   render() {
     return <Posts posts={this.props.posts} />;
   }

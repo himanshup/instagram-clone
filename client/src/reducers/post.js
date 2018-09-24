@@ -10,7 +10,8 @@ import {
   LIKE_POST,
   DISLIKE_POST,
   UPDATE_SINGLE_POST,
-  UPDATE_POSTS
+  UPDATE_POSTS,
+  DELETE_POST
 } from "../constants/action-types";
 
 const initialState = {
@@ -18,7 +19,8 @@ const initialState = {
   post: {},
   prevew: "",
   newPostError: "",
-  editError: ""
+  editError: "",
+  deletePostMsg: ""
 };
 
 export default function(state = initialState, action) {
@@ -41,6 +43,10 @@ export default function(state = initialState, action) {
     case EDIT_POST:
       return {
         editError: action.payload
+      };
+    case DELETE_POST:
+      return {
+        deletePostMsg: action.payload
       };
     case GET_FEED:
       return {

@@ -1,8 +1,9 @@
 const Post = require("../models/post");
-const multer = require("multer");
-const cloudinary = require("cloudinary");
+const Comment = require("../models/comment");
 const Like = require("../models/like");
 const User = require("../models/user");
+const multer = require("multer");
+const cloudinary = require("cloudinary");
 
 const storage = multer.diskStorage({
   filename: function(req, file, callback) {
@@ -80,6 +81,21 @@ module.exports = router => {
     );
   });
 
+  // get post by id
+  router.get("/posts/:post_id", (req, res) => {
+    Post.findById(req.params.post_id)
+      .populate("comments")
+      .populate("likes")
+      .then(post => {
+        if (post) {
+          res.json(post);
+        }
+      })
+      .catch(err => {
+        res.json(err);
+      });
+  });
+
   // update post
   router.put("/posts/:post_id", upload.single("file"), (req, res) => {
     const caption = req.body.caption ? req.body.caption : "";
@@ -105,14 +121,23 @@ module.exports = router => {
     );
   });
 
-  // get post by id
-  router.get("/posts/:post_id", (req, res) => {
+  // delete a post
+  router.delete("/posts/:post_id", (req, res) => {
     Post.findById(req.params.post_id)
-      .populate("comments")
-      .populate("likes")
-      .then(post => {
-        if (post) {
-          res.json(post);
+      .then(async post => {
+        await Comment.remove({ _id: { $in: post.comments } });
+        await Like.remove({ _id: { $in: post.likes } });
+        return post;
+      })
+      .then(async post => {
+        try {
+          await cloudinary.v2.uploader.destroy(post.imageId);
+          post.remove();
+          return res.json({ message: "Successfully deleted your post!" });
+        } catch (err) {
+          if (err) {
+            return res.json({ message: "Error deleting your post" });
+          }
         }
       })
       .catch(err => {

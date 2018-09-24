@@ -8,6 +8,7 @@ import {
   GET_PREVIEW,
   CREATE_POST,
   EDIT_POST,
+  DELETE_POST,
   GET_FEED,
   GET_POST,
   ADD_COMMENT,
@@ -92,6 +93,18 @@ export const getFeed = () => dispatch => {
     });
 };
 
+export const getPost = postId => dispatch => {
+  axios
+    .get(`/api/posts/${postId}`)
+    .then(post => {
+      console.log(post.data);
+      dispatch({ type: GET_POST, payload: post.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 export const createPost = data => dispatch => {
   const user = JSON.parse(localStorage.getItem("Auth"));
   if (typeof data.image === "object" && data.image.length > 1) {
@@ -147,12 +160,15 @@ export const editPost = (data, postId) => dispatch => {
     });
 };
 
-export const getPost = postId => dispatch => {
+export const deletePost = postId => dispatch => {
   axios
-    .get(`/api/posts/${postId}`)
-    .then(post => {
-      console.log(post.data);
-      dispatch({ type: GET_POST, payload: post.data });
+    .delete(`/api/posts/${postId}`)
+    .then(response => {
+      dispatch({
+        type: DELETE_POST,
+        payload: response.data.message
+      });
+      history.push("/posts");
     })
     .catch(error => {
       console.log(error);
