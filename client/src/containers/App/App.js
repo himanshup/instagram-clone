@@ -35,22 +35,24 @@ class App extends Component {
       <Router history={history}>
         <div>
           <Route path="/" component={Navbar} />
-          {localStorage.Auth ? (
-            <Switch>
-              <Route exact path="/posts" component={Feed} />
-              <Route path="/posts/new" component={NewPost} />
-              <Route path="/users/:userId" component={UserProfile} />
-              <Route path="/posts/:postId" component={Post} />
-              <Route path="/edit/:postId" component={Edit} />
-              <Route component={ErrorPage} />
-            </Switch>
-          ) : (
-            <Switch>
-              <Route exact path="/" component={Login} />
-              <Route path="/register" component={Register} />
-              <Route component={redirectIfNotLoggedIn} />
-            </Switch>
-          )}
+          <div className="mb-5">
+            {localStorage.Auth ? (
+              <Switch>
+                <Route exact path="/posts" component={Feed} />
+                <Route path="/posts/new" component={NewPost} />
+                <Route path="/users/:userId" component={UserProfile} />
+                <Route path="/posts/:postId" component={Post} />
+                <Route path="/edit/:postId" component={Edit} />
+                <Route component={ErrorPage} />
+              </Switch>
+            ) : (
+              <Switch>
+                <Route exact path="/" component={Login} />
+                <Route path="/register" component={Register} />
+                <Route component={redirectIfNotLoggedIn} />
+              </Switch>
+            )}
+          </div>
         </div>
       </Router>
     );

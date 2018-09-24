@@ -7,7 +7,7 @@ import {
   ADD_COMMENT,
   LIKE_POST,
   DISLIKE_POST,
-  EDIT_POST_VALUES,
+  EDIT_POST,
   UPDATE_POST
 } from "../constants/action-types";
 
@@ -15,7 +15,8 @@ const initialState = {
   posts: [],
   post: {},
   prevew: "",
-  editData: {}
+  newPostError: "",
+  editError: ""
 };
 
 export default function(state = initialState, action) {
@@ -29,14 +30,19 @@ export default function(state = initialState, action) {
         preview: action.payload
       };
     case CREATE_POST:
+      if (action.payload.error) {
+        return {
+          newPostError: action.payload.error
+        };
+      }
       return action.payload;
     case GET_POST:
       return {
         post: action.payload
       };
-    case EDIT_POST_VALUES:
+    case EDIT_POST:
       return {
-        editData: action.payload
+        editError: action.payload
       };
     case GET_FEED:
       return {

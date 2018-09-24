@@ -35,15 +35,15 @@ const renderDropzoneField = ({ input, name, meta: { dirty, error } }) => {
       <Dropzone
         name={name}
         className="drop mt-1 rounded"
-        accept="image/*"
+        accept="image/jpeg, image/jpg, image/png"
         onDrop={filesToUpload => input.onChange(filesToUpload)}
       >
         <div className="d-flex justify-content-center h-100">
           <div className="text-center align-self-center">
-            <span className="text-muted avatarText">Profile Picture</span>
             <div>
               <Icon.Plus className="text-muted camera" />
             </div>
+            <span className="text-muted avatarText">Profile Picture</span>
           </div>
         </div>
       </Dropzone>

@@ -92,6 +92,12 @@ export const getFeed = () => dispatch => {
 
 export const createPost = data => dispatch => {
   const user = JSON.parse(localStorage.getItem("Auth"));
+  if (typeof data.image === "object" && data.image.length > 1) {
+    return dispatch({
+      type: CREATE_POST,
+      payload: { error: "Only 1 image allowed" }
+    });
+  }
   const formData = new FormData();
   formData.append("file", data.image[0]);
   if (data.caption) {
@@ -115,10 +121,9 @@ export const createPost = data => dispatch => {
 
 export const editPost = (data, postId) => dispatch => {
   if (typeof data.image === "object" && data.image.length > 1) {
-    console.log("more than 1 image");
     return dispatch({
       type: EDIT_POST,
-      payload: { error: "Only 1 image allowed" }
+      payload: "Only 1 image allowed"
     });
   }
   const formData = new FormData();

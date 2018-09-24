@@ -8,7 +8,8 @@ import * as Icon from "react-feather";
 const mapStateToProps = state => {
   return {
     imgPreview: state.post.preview,
-    image: state.post.post && state.post.post.image
+    image: state.post.post && state.post.post.image,
+    error: state.post.editError
   };
 };
 
@@ -33,15 +34,15 @@ const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
       <Dropzone
         name={name}
         className="drop mt-1 rounded"
-        accept="image/*"
+        accept="image/jpeg, image/jpg, image/png"
         onDrop={filesToUpload => input.onChange(filesToUpload)}
       >
         <div className="d-flex justify-content-center h-100">
           <div className="text-center align-self-center">
-            <span className="text-muted avatarText">Upload Image</span>
             <div>
               <Icon.Plus className="text-muted camera" />
             </div>
+            <span className="text-muted avatarText">Upload Image</span>
           </div>
         </div>
       </Dropzone>
@@ -51,9 +52,14 @@ const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
 };
 
 let EditPostForm = props => {
-  const { handleSubmit, onValues, pristine, submitting } = props;
+  const { handleSubmit, onValues, pristine, submitting, errorMsg } = props;
   return (
     <form onSubmit={handleSubmit} className="mt-4">
+      {errorMsg && (
+        <div className="text-center mt-1">
+          <small className="text-danger">{errorMsg}</small>
+        </div>
+      )}
       <Field name="image" component={renderDropzoneField} onChange={onValues} />
       <Field
         name="caption"
@@ -98,32 +104,35 @@ class Edit extends Component {
     return (
       <div>
         <div className="container d-flex justify-content-center mt-5">
-          <div className="card p-5 postCard rounded-0">
-            <h1 className="insta text-center">Instagram</h1>
-            {this.props.imgPreview ? (
-              <div className="text-center mt-4">
-                <img
-                  src={this.props.imgPreview}
-                  className="imgPreview"
-                  alt=""
-                  width="100%"
-                />
-              </div>
-            ) : (
-              <div className="text-center mt-4">
-                <img
-                  src={this.props.image}
-                  className="imgPreview"
-                  alt=""
-                  width="100%"
-                />
-              </div>
-            )}
-            <EditPostForm
-              onSubmit={this.handleSubmit}
-              onValues={this.onValues}
-              preview={this.props.imgPreview}
-            />
+          <div className="card p-2 postCard rounded-0">
+            <div className="card-body">
+              <h1 className="insta text-center">Instagram</h1>
+              {this.props.imgPreview ? (
+                <div className="text-center mt-4">
+                  <img
+                    src={this.props.imgPreview}
+                    className="imgPreview"
+                    alt=""
+                    width="100%"
+                  />
+                </div>
+              ) : (
+                <div className="text-center mt-4">
+                  <img
+                    src={this.props.image}
+                    className="imgPreview"
+                    alt=""
+                    width="100%"
+                  />
+                </div>
+              )}
+              <EditPostForm
+                onSubmit={this.handleSubmit}
+                onValues={this.onValues}
+                preview={this.props.imgPreview}
+                errorMsg={this.props.editError}
+              />
+            </div>
           </div>
         </div>
       </div>

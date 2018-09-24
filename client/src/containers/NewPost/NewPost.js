@@ -8,24 +8,25 @@ import "./NewPost.css";
 
 const mapStateToProps = state => {
   return {
-    imgPreview: state.post.preview
+    imgPreview: state.post.preview,
+    newPostError: state.post.newPostError
   };
 };
 
-const validateImage = imageList => {
-  if (imageList) {
-    if (imageList.length > 1) {
-      return "You can upload one image at a time";
-    } else if (imageList.length === 1) {
-      let selectedImage = imageList[0];
-      if (!selectedImage.type.match("image.*")) {
-        return "Only image files are allowed";
-      } else if (selectedImage.size > 1048576) {
-        return "Maximum file size exceeded";
-      }
-    }
-  }
-};
+// const validateImage = imageList => {
+//   if (imageList) {
+//     if (imageList.length > 1) {
+//       return "Only 1 image allowed";
+//     } else if (imageList.length === 1) {
+//       let selectedImage = imageList[0];
+//       if (!selectedImage.type.match("image.*")) {
+//         return "Only image files are allowed";
+//       } else if (selectedImage.size > 1048576) {
+//         return "Maximum file size exceeded";
+//       }
+//     }
+//   }
+// };
 
 const renderDropzoneField = ({ input, name, meta: { dirty, error } }) => {
   return (
@@ -33,33 +34,32 @@ const renderDropzoneField = ({ input, name, meta: { dirty, error } }) => {
       <Dropzone
         name={name}
         className="drop mt-1 rounded"
-        accept="image/*"
+        accept="image/jpeg, image/jpg, image/png"
         onDrop={filesToUpload => input.onChange(filesToUpload)}
       >
         <div className="d-flex justify-content-center h-100">
           <div className="text-center align-self-center">
-            <span className="text-muted avatarText">Upload Image</span>
             <div>
               <Icon.Plus className="text-muted camera" />
             </div>
+            <span className="text-muted avatarText">Upload Image</span>
           </div>
         </div>
       </Dropzone>
-      {dirty && (error && <small className="text-danger">{error}</small>)}
     </div>
   );
 };
 
 let PostForm = props => {
-  const { handleSubmit, onValues, preview } = props;
+  const { handleSubmit, onValues, preview, errorMsg } = props;
   return (
     <form onSubmit={handleSubmit} className="mt-4">
-      <Field
-        name="image"
-        validate={validateImage}
-        component={renderDropzoneField}
-        onChange={onValues}
-      />
+      {errorMsg && (
+        <div className="text-center mt-1">
+          <small className="text-danger">{errorMsg}</small>
+        </div>
+      )}
+      <Field name="image" component={renderDropzoneField} onChange={onValues} />
       <Field
         name="caption"
         component={renderField}
@@ -97,6 +97,7 @@ class NewPost extends Component {
   };
 
   onValues = image => {
+    console.log(image);
     this.props.getPreview(image[0].preview);
   };
 
@@ -104,23 +105,26 @@ class NewPost extends Component {
     return (
       <div>
         <div className="container d-flex justify-content-center mt-5">
-          <div className="card p-5 postCard rounded-0">
-            <h1 className="insta text-center">Instagram</h1>
-            {this.props.imgPreview && (
-              <div className="text-center mt-4">
-                <img
-                  src={this.props.imgPreview}
-                  className="imgPreview"
-                  alt=""
-                  width="100%"
-                />
-              </div>
-            )}
-            <PostForm
-              onSubmit={this.handleSubmit}
-              onValues={this.onValues}
-              preview={this.props.imgPreview}
-            />
+          <div className="card p-2 postCard rounded-0">
+            <div className="card-body">
+              <h1 className="insta text-center">Instagram</h1>
+              {this.props.imgPreview && (
+                <div className="text-center mt-4">
+                  <img
+                    src={this.props.imgPreview}
+                    className="imgPreview"
+                    alt=""
+                    width="100%"
+                  />
+                </div>
+              )}
+              <PostForm
+                onSubmit={this.handleSubmit}
+                onValues={this.onValues}
+                preview={this.props.imgPreview}
+                errorMsg={this.props.newPostError}
+              />
+            </div>
           </div>
         </div>
       </div>
