@@ -14,13 +14,8 @@ class Post extends Component {
     this.props.getPost(this.props.match.params.postId);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.match.params.postId !== prevProps.match.params.postId) {
-      this.props.getPost(this.props.match.params.postId);
-    }
-  }
   render() {
-    return <DisplayPost post={this.props.post && this.props.post} />;
+    return <DisplayPost post={this.props.post} />;
   }
 }
 

@@ -1,19 +1,20 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Comment from "../../containers/Comment/Comment";
 import Icons from "../../containers/Icons/Icons";
 import moment from "moment";
 import "./DisplayPost.css";
 
-const DisplayPost = ({ post }) => {
+const DisplayPost = props => {
   return (
     <div className="container mt-5">
-      {post &&
-        post.author && (
+      {props.post &&
+        props.post.author && (
           <div className="row no-gutters d-flex justify-content-center">
-            <div className="col-12 col-sm-6 d-none d-sm-block">
+            <div className="col-12 col-sm-7 d-none d-sm-block">
               <div className="card d-flex justify-content-center rounded-0 border-right-0 h-100">
                 <img
-                  src={post.image}
+                  src={props.post.image}
                   alt=""
                   className="rounded-0 img-fluid align-self-center"
                 />
@@ -23,46 +24,52 @@ const DisplayPost = ({ post }) => {
               <div className="card rounded-0 displayCard h-100">
                 <div className="card-header bg-white p-3 d-block d-sm-none">
                   <img
-                    src={post.author.avatar}
+                    src={props.post.author.avatar}
                     alt=""
                     className="rounded-circle mr-2"
                     width="30px"
                     height="30px"
                   />
-                  <Link to={`/users/${post.author.id}`} className="feedLinks">
-                    {post.author.username}
+                  <Link
+                    to={`/users/${props.post.author.id}`}
+                    className="feedLinks"
+                  >
+                    {props.post.author.username}
                   </Link>
                 </div>
                 <img
-                  src={post.image}
+                  src={props.post.image}
                   alt=""
                   className="rounded-0 card-img-top d-block d-sm-none"
                 />
                 <div className="p-3 d-none d-sm-block">
                   <img
-                    src={post.author.avatar}
+                    src={props.post.author.avatar}
                     alt=""
                     className="rounded-circle mr-2"
                     width="30px"
                     height="30px"
                   />
-                  <Link to={`/users/${post.author.id}`} className="feedLinks">
-                    {post.author.username}
+                  <Link
+                    to={`/users/${props.post.author.id}`}
+                    className="feedLinks"
+                  >
+                    {props.post.author.username}
                   </Link>
                   <hr />
-                  {post.description && (
+                  {props.post.description && (
                     <div className="mt-1">
                       <Link
-                        to={`/users/${post.author.id}`}
+                        to={`/users/${props.post.author.id}`}
                         className="feedLinks"
                       >
-                        {post.author.username}
+                        {props.post.author.username}
                       </Link>{" "}
-                      {post.description}
+                      {props.post.description}
                     </div>
                   )}
-                  {post.comments &&
-                    post.comments.map(comment => (
+                  {props.post.comments &&
+                    props.post.comments.map(comment => (
                       <div key={comment._id}>
                         <Link
                           to={`/users/${comment.author.id}`}
@@ -76,32 +83,48 @@ const DisplayPost = ({ post }) => {
                 </div>
                 <div className="p-3">
                   <Icons
-                    authorId={post.author.id}
-                    postId={post._id}
-                    likes={post.likes}
+                    authorId={props.post.author.id}
+                    postId={props.post._id}
+                    likes={props.post.likes}
                   />
                   <div>
                     <Link to="/" className="feedLinks">
-                      {post.likes.length} likes
+                      {props.post.likes.length} likes
                     </Link>
                   </div>
                   <div className="d-block d-sm-none">
-                    <Link to={`/users/${post.author.id}`} className="feedLinks">
-                      {post.author.username}
+                    <Link
+                      to={`/users/${props.post.author.id}`}
+                      className="feedLinks"
+                    >
+                      {props.post.author.username}
                     </Link>{" "}
-                    {post.description}
+                    {props.post.description}
                   </div>
-
+                  <div className="d-block d-sm-none">
+                    {props.post.comments &&
+                      props.post.comments.map(comment => (
+                        <div key={comment._id}>
+                          <Link
+                            to={`/users/${comment.author.id}`}
+                            className="feedLinks"
+                          >
+                            {comment.author.username}
+                          </Link>{" "}
+                          {comment.text}
+                        </div>
+                      ))}
+                  </div>
                   <div>
                     <Link
-                      to={`/posts/${post._id}`}
+                      to={`/posts/${props.post._id}`}
                       className="text-uppercase postDate"
                     >
-                      {moment(post.timePosted).fromNow()}
+                      {moment(props.post.timePosted).fromNow()}
                     </Link>
                   </div>
                   <hr />
-                  <small className="text-muted">Add a comment..</small>
+                  <Comment postId={props.post._id} singlePost={true} />
                 </div>
               </div>
             </div>

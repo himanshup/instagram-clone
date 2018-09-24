@@ -2,13 +2,15 @@ import {
   GET_PREVIEW,
   RESET_VALUE,
   CREATE_POST,
+  EDIT_POST,
   GET_FEED,
   GET_POST,
   ADD_COMMENT,
+  ADD_COMMENT_SINGLE,
   LIKE_POST,
   DISLIKE_POST,
-  EDIT_POST,
-  UPDATE_POST
+  UPDATE_SINGLE_POST,
+  UPDATE_POSTS
 } from "../constants/action-types";
 
 const initialState = {
@@ -36,10 +38,6 @@ export default function(state = initialState, action) {
         };
       }
       return action.payload;
-    case GET_POST:
-      return {
-        post: action.payload
-      };
     case EDIT_POST:
       return {
         editError: action.payload
@@ -47,6 +45,15 @@ export default function(state = initialState, action) {
     case GET_FEED:
       return {
         posts: action.payload
+      };
+    case GET_POST:
+      console.log(action.payload);
+      return {
+        post: action.payload
+      };
+    case ADD_COMMENT_SINGLE:
+      return {
+        post: action.payload
       };
     case ADD_COMMENT:
       const newPostsComment = state.posts.map(post => {
@@ -59,20 +66,16 @@ export default function(state = initialState, action) {
         posts: newPostsComment
       };
     case LIKE_POST:
-      // handle case for when liking post on post page not feed page.
-      console.log(state.posts);
       const newPostsLike = state.posts.map(post => {
         if (post._id === action.payload._id) {
           post.likes = action.payload.likes.slice(0);
         }
         return post;
       });
-      console.log(newPostsLike);
       return {
         posts: newPostsLike
       };
     case DISLIKE_POST:
-      console.log(state.posts);
       const newPostsDislike = state.posts.map(post => {
         if (post._id === action.payload._id) {
           post.likes = action.payload.likes.slice(0);
@@ -82,10 +85,17 @@ export default function(state = initialState, action) {
       return {
         posts: newPostsDislike
       };
-    case UPDATE_POST:
+    case UPDATE_SINGLE_POST:
+      console.log(action.payload);
+      console.log(state.post);
+      return {
+        post: action.payload
+      };
+    case UPDATE_POSTS:
       return {
         posts: action.payload
       };
+
     default:
       return state;
   }

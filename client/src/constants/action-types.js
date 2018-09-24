@@ -16,10 +16,12 @@ export const DELETE_POST = "DELETE_POST";
 export const LIKE_POST = "LIKE_POST";
 export const DISLIKE_POST = "DISLIKE_POST";
 export const EDIT_POST_VALUES = "EDIT_POST_VALUES";
-export const UPDATE_POST = "UPDATE_POST";
+export const UPDATE_SINGLE_POST = "UPDATE_SINGLE_POST";
+export const UPDATE_POSTS = "UPDATE_POSTS";
 
 // comments
 export const ADD_COMMENT = "ADD_COMMENT";
+export const ADD_COMMENT_SINGLE = "ADD_COMMENT_SINGLE";
 
 // users
 export const USER_PROFILE = "USER_PROFILE";

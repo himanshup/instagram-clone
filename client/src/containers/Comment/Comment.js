@@ -31,12 +31,14 @@ const renderField = ({ input, label, type }) => (
   </div>
 );
 
-CommentForm = reduxForm({ enableReinitialize: true })(CommentForm);
+CommentForm = reduxForm({ destroyOnUnmount: true })(CommentForm);
 
 class Comment extends Component {
   handleSubmit = data => {
-    if (Object.keys(data).length !== 0) {
-      this.props.comment(data, this.props.postId);
+    if (Object.keys(data).length !== 0 && this.props.singlePost) {
+      this.props.comment(data, this.props.postId, true);
+    } else if (Object.keys(data).length !== 0) {
+      this.props.comment(data, this.props.postId, false);
     }
   };
 

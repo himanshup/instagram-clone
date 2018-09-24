@@ -16,7 +16,6 @@ class Feed extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.posts !== prevProps.posts) {
-      console.log("detected change in posts");
       this.props.updatePosts(this.props.posts);
     }
   }

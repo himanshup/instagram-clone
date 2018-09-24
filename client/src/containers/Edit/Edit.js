@@ -28,7 +28,7 @@ const mapStateToProps = state => {
 //   }
 // };
 
-const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
+const renderDropzoneField = ({ input, name }) => {
   return (
     <div>
       <Dropzone
@@ -46,7 +46,6 @@ const renderDropzoneField = ({ input, name, id, meta: { dirty, error } }) => {
           </div>
         </div>
       </Dropzone>
-      {dirty && (error && <small className="text-danger">{error}</small>)}
     </div>
   );
 };
@@ -106,7 +105,7 @@ class Edit extends Component {
         <div className="container d-flex justify-content-center mt-5">
           <div className="card p-2 postCard rounded-0">
             <div className="card-body">
-              <h1 className="insta text-center">Instagram</h1>
+              <h1 className="insta text-center">Edit Post</h1>
               {this.props.imgPreview ? (
                 <div className="text-center mt-4">
                   <img

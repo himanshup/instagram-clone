@@ -80,6 +80,7 @@ module.exports = router => {
     );
   });
 
+  // update post
   router.put("/posts/:post_id", upload.single("file"), (req, res) => {
     const caption = req.body.caption ? req.body.caption : "";
     Post.findByIdAndUpdate(req.params.post_id, { description: caption }).then(

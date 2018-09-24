@@ -19,7 +19,6 @@ class Icons extends Component {
     if (this.props.likes.length !== 0) {
       for (const like of this.props.likes) {
         if (like.author.id === user.id) {
-          console.log("youive liked");
           return (
             <span>
               <Icon.Heart
@@ -34,7 +33,6 @@ class Icons extends Component {
       }
       for (const like of this.props.likes) {
         if (like.author.id !== user.id) {
-          console.log("you havent liked");
           return (
             <span>
               <Icon.Heart
@@ -46,7 +44,6 @@ class Icons extends Component {
         }
       }
     } else if (this.props.likes.length === 0) {
-      console.log("no likes");
       return (
         <span>
           <Icon.Heart

@@ -28,7 +28,7 @@ const mapStateToProps = state => {
 //   }
 // };
 
-const renderDropzoneField = ({ input, name, meta: { dirty, error } }) => {
+const renderDropzoneField = ({ input, name }) => {
   return (
     <div>
       <Dropzone
@@ -97,7 +97,6 @@ class NewPost extends Component {
   };
 
   onValues = image => {
-    console.log(image);
     this.props.getPreview(image[0].preview);
   };
 
@@ -107,7 +106,7 @@ class NewPost extends Component {
         <div className="container d-flex justify-content-center mt-5">
           <div className="card p-2 postCard rounded-0">
             <div className="card-body">
-              <h1 className="insta text-center">Instagram</h1>
+              <h1 className="insta text-center">New Post</h1>
               {this.props.imgPreview && (
                 <div className="text-center mt-4">
                   <img

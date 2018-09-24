@@ -2,18 +2,20 @@ import axios from "axios";
 import {
   LOGIN_USER,
   REGISTER_USER,
+  USER_PROFILE,
   LOGOUT_USER,
   RESET_VALUE,
   GET_PREVIEW,
   CREATE_POST,
   EDIT_POST,
   GET_FEED,
-  USER_PROFILE,
   GET_POST,
   ADD_COMMENT,
   LIKE_POST,
   DISLIKE_POST,
-  UPDATE_POST
+  UPDATE_SINGLE_POST,
+  UPDATE_POSTS,
+  ADD_COMMENT_SINGLE
 } from "../constants/action-types";
 import history from "../history";
 
@@ -149,6 +151,7 @@ export const getPost = postId => dispatch => {
   axios
     .get(`/api/posts/${postId}`)
     .then(post => {
+      console.log(post.data);
       dispatch({ type: GET_POST, payload: post.data });
     })
     .catch(error => {
@@ -160,7 +163,6 @@ export const likePost = postId => dispatch => {
   axios
     .post(`/api/posts/${postId}/likes`)
     .then(post => {
-      console.log(post.data);
       dispatch({
         type: LIKE_POST,
         payload: post.data
@@ -175,7 +177,6 @@ export const dislikePost = (postId, likeId) => dispatch => {
   axios
     .delete(`/api/posts/${postId}/likes/${likeId}`)
     .then(post => {
-      console.log("dislike post function", post.data);
       dispatch({
         type: DISLIKE_POST,
         payload: post.data
@@ -197,19 +198,26 @@ export const getUserProfile = id => dispatch => {
     });
 };
 
-export const comment = (text, id) => dispatch => {
+export const comment = (text, id, singlePost) => dispatch => {
   axios
     .post(`/api/posts/${id}/comments`, {
       comment: text.comment
     })
     .then(response => {
-      dispatch({
-        type: ADD_COMMENT,
-        payload: {
-          postId: response.data.postId,
-          comment: response.data.comment
-        }
-      });
+      if (singlePost) {
+        return dispatch({
+          type: ADD_COMMENT_SINGLE,
+          payload: response.data.post
+        });
+      } else {
+        return dispatch({
+          type: ADD_COMMENT,
+          payload: {
+            postId: response.data.postId,
+            comment: response.data.comment
+          }
+        });
+      }
     })
     .catch(error => {
       console.log(error);
@@ -228,6 +236,11 @@ export const getUser = () => dispatch => {
     });
 };
 
+export const updatePost = post => dispatch => {
+  console.log(post);
+  dispatch({ type: UPDATE_SINGLE_POST, payload: post });
+};
+
 export const updatePosts = posts => dispatch => {
-  dispatch({ type: UPDATE_POST, payload: posts });
+  dispatch({ type: UPDATE_POSTS, payload: posts });
 };

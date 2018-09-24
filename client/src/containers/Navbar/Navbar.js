@@ -41,7 +41,7 @@ class Navbar extends Component {
                     <Icon.Heart className="navIcons" size={25} />
                   </span>
                 </li>
-                <li className="nav-item active">
+                <li className="nav-item active mr-3">
                   <Link
                     className="nav-link"
                     to={`/users/${JSON.parse(localStorage.getItem("Auth")).id}`}
@@ -49,8 +49,16 @@ class Navbar extends Component {
                     <Icon.User className="navIcons" size={25} />
                   </Link>
                 </li>
-                <button onClick={this.handleLogout}>Logout</button>
-                <button onClick={this.handleUser}>user</button>
+
+                <li className="nav-item active">
+                  <div className="nav-link">
+                    <Icon.LogOut
+                      className="navIcons"
+                      size={25}
+                      onClick={this.handleLogout}
+                    />
+                  </div>
+                </li>
               </ul>
             </div>
           )}

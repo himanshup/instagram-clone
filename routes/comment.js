@@ -20,6 +20,7 @@ module.exports = router => {
       .then(result => {
         return Post.findById(req.params.post_id)
           .populate("comments")
+          .populate("likes")
           .exec();
       })
       .then(post => {
@@ -27,7 +28,8 @@ module.exports = router => {
         post.save();
         const data = {
           postId: post._id,
-          comment: newComment
+          comment: newComment,
+          post: post
         };
         return res.json(data);
       })
