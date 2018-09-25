@@ -62,4 +62,24 @@ module.exports = router => {
         res.json({ message: "Error editing your comment" });
       });
   });
+
+  // delete comment
+  router.delete("/posts/:post_id/comments/:comment_id", (req, res) => {
+    Comment.findOneAndRemove({ _id: req.params.comment_id })
+      .then(comment => {
+        console.log(comment);
+        return Post.findOneAndUpdate(
+          { _id: req.params.post_id },
+          { $pull: { comments: comment._id } }
+        )
+          .populate("comments")
+          .populate("likes");
+      })
+      .then(post => {
+        res.json(post);
+      })
+      .catch(err => {
+        res.json({ message: "Error deleting your comment" });
+      });
+  });
 };

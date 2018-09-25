@@ -267,6 +267,21 @@ export const editComment = (postId, commentId, text) => dispatch => {
     });
 };
 
+export const deleteComment = (postId, commentId) => dispatch => {
+  axios
+    .delete(`/api/posts/${postId}/comments/${commentId}`)
+    .then(response => {
+      console.log(response.data);
+      dispatch({
+        type: DELETE_COMMENT,
+        payload: { postId: postId, commentId: commentId }
+      });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 export const getUser = () => dispatch => {
   axios
     .get("/api/user")
@@ -274,8 +289,8 @@ export const getUser = () => dispatch => {
       console.log(response.data);
       dispatch({ type: "GET_USERINFO", payload: response.data });
     })
-    .catch(err => {
-      console.log(err);
+    .catch(error => {
+      console.log(error);
     });
 };
 

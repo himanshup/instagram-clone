@@ -1,7 +1,7 @@
 import React, { Component } from "react";
+import DisplayPost from "../../components/DisplayPost/DisplayPost";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import DisplayPost from "../../components/DisplayPost/DisplayPost";
 
 const mapStateToProps = state => {
   return {

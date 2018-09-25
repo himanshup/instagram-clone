@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Comment from "../../containers/Comment/Comment";
+import Comments from "../../containers/Comments/Comments";
 import Icons from "../../containers/Icons/Icons";
 import moment from "moment";
 import "./DisplayPost.css";
@@ -68,18 +69,10 @@ const DisplayPost = props => {
                       {props.post.description}
                     </div>
                   )}
-                  {props.post.comments &&
-                    props.post.comments.map(comment => (
-                      <div key={comment._id}>
-                        <Link
-                          to={`/users/${comment.author.id}`}
-                          className="feedLinks"
-                        >
-                          {comment.author.username}
-                        </Link>{" "}
-                        {comment.text}
-                      </div>
-                    ))}
+                  <Comments
+                    postId={props.post._id}
+                    comments={props.post.comments}
+                  />
                 </div>
                 <div className="p-3">
                   <Icons
@@ -102,18 +95,10 @@ const DisplayPost = props => {
                     {props.post.description}
                   </div>
                   <div className="d-block d-sm-none">
-                    {props.post.comments &&
-                      props.post.comments.map(comment => (
-                        <div key={comment._id}>
-                          <Link
-                            to={`/users/${comment.author.id}`}
-                            className="feedLinks"
-                          >
-                            {comment.author.username}
-                          </Link>{" "}
-                          {comment.text}
-                        </div>
-                      ))}
+                    <Comments
+                      postId={props.post._id}
+                      comments={props.post.comments}
+                    />
                   </div>
                   <div>
                     <Link

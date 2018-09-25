@@ -1,0 +1,15 @@
+.feedIcons {
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.feedLinks {
+  font-size: 14px;
+  color: #262626;
+  font-weight: 600;
+}
+
+.feedLinks:hover {
+  text-decoration: none;
+  color: #262626;
+}

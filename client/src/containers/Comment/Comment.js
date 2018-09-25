@@ -11,8 +11,7 @@ let CommentForm = props => {
       <Field
         name="comment"
         className="form-control form-control-sm border-0 commentInput"
-        component="textarea"
-        rows="1"
+        component="input"
         type="text"
         placeholder="Add a comment..."
         autoComplete="off"

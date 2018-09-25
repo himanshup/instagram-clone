@@ -14,7 +14,6 @@ class Feed extends Component {
     this.props.getFeed();
   }
 
-  handleDeletePost = () => {};
   render() {
     return <Posts posts={this.props.posts} />;
   }

@@ -3,8 +3,10 @@ export const LOGIN_USER = "LOGIN_USER";
 export const REGISTER_USER = "REGISTER_USER";
 export const LOGOUT_USER = "LOGOUT_USER";
 
-// for  image preview
+// for image preview
 export const GET_PREVIEW = "GET_PREVIEW";
+
+// for reseting value in inputs
 export const RESET_VALUE = "RESET_VALUE";
 
 // posts
