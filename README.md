@@ -1,1 +1,1 @@
-Instagram clone built with React, Node.js, Express, & MongoDB.
+Instagram clone built with React, Redux, Node.js, Express, & MongoDB.
