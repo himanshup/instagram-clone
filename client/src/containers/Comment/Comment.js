@@ -5,32 +5,28 @@ import * as actions from "../../actions";
 import "./Comment.css";
 
 let CommentForm = props => {
-  const { handleSubmit } = props;
+  const { handleSubmit, pristine, submitting } = props;
   return (
     <form onSubmit={handleSubmit}>
       <Field
         name="comment"
-        component={renderField}
+        className="form-control form-control-sm border-0 commentInput"
+        component="textarea"
+        rows="1"
         type="text"
-        label="Add a comment..."
+        placeholder="Add a comment..."
+        autoComplete="off"
       />
 
-      {/* <button className="btn btn-primary btn-sm btn-block mt-3">Comment</button> */}
+      <button
+        className="btn btn-primary btn-sm btn-block mt-2 d-block d-sm-none"
+        disabled={pristine || submitting}
+      >
+        Post
+      </button>
     </form>
   );
 };
-
-const renderField = ({ input, label, type }) => (
-  <div>
-    <input
-      className="form-control form-control-sm border-0 commentInput"
-      {...input}
-      placeholder={label}
-      type={type}
-      autoComplete="off"
-    />
-  </div>
-);
 
 CommentForm = reduxForm({ destroyOnUnmount: true })(CommentForm);
 

@@ -12,11 +12,14 @@ import {
   GET_FEED,
   GET_POST,
   ADD_COMMENT,
+  EDIT_COMMENT,
+  DELETE_COMMENT,
   LIKE_POST,
   DISLIKE_POST,
   UPDATE_SINGLE_POST,
   UPDATE_POSTS,
-  ADD_COMMENT_SINGLE
+  ADD_COMMENT_SINGLE,
+  GET_COMMENT
 } from "../constants/action-types";
 import history from "../history";
 
@@ -97,7 +100,7 @@ export const getPost = postId => dispatch => {
   axios
     .get(`/api/posts/${postId}`)
     .then(post => {
-      console.log(post.data);
+      console.log(post);
       dispatch({ type: GET_POST, payload: post.data });
     })
     .catch(error => {
@@ -164,9 +167,10 @@ export const deletePost = postId => dispatch => {
   axios
     .delete(`/api/posts/${postId}`)
     .then(response => {
+      console.log(response);
       dispatch({
         type: DELETE_POST,
-        payload: response.data.message
+        payload: postId
       });
       history.push("/posts");
     })
@@ -178,10 +182,10 @@ export const deletePost = postId => dispatch => {
 export const likePost = postId => dispatch => {
   axios
     .post(`/api/posts/${postId}/likes`)
-    .then(post => {
+    .then(like => {
       dispatch({
         type: LIKE_POST,
-        payload: post.data
+        payload: { postId: postId, like: like.data }
       });
     })
     .catch(error => {
@@ -195,7 +199,7 @@ export const dislikePost = (postId, likeId) => dispatch => {
     .then(post => {
       dispatch({
         type: DISLIKE_POST,
-        payload: post.data
+        payload: { postId: postId, likeId: likeId }
       });
     })
     .catch(error => {
@@ -234,6 +238,29 @@ export const comment = (text, id, singlePost) => dispatch => {
           }
         });
       }
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const getComment = (postId, commentId) => dispatch => {
+  axios
+    .get(`/api/posts/${postId}/comments/${commentId}/edit`)
+    .then(comment => {
+      dispatch({ type: GET_COMMENT, payload: comment.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const editComment = (postId, commentId, text) => dispatch => {
+  axios
+    .put(`/api/posts/${postId}/comments/${commentId}`, { comment: text })
+    .then(response => {
+      dispatch({ type: EDIT_COMMENT, payload: response.data.message });
+      history.push("/posts");
     })
     .catch(error => {
       console.log(error);

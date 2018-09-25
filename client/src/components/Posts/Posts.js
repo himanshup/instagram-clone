@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import * as Icon from "react-feather";
 import Comment from "../../containers/Comment/Comment";
 import Icons from "../../containers/Icons/Icons";
 import moment from "moment";
@@ -64,7 +65,26 @@ const Posts = props => {
                         >
                           {comment.author.username}
                         </Link>{" "}
-                        {comment.text}
+                        {comment.text}{" "}
+                        {comment.author.id ===
+                          JSON.parse(localStorage.getItem("Auth")).id && (
+                          <span>
+                            <Link to="/" className="float-right feedLinks">
+                              <Icon.Trash2 size={14} className="feedIcons" />
+                            </Link>
+                            <Link
+                              to={`/edit/posts/${post._id}/comments/${
+                                comment._id
+                              }`}
+                              className="float-right feedLinks "
+                            >
+                              <Icon.Edit2
+                                size={14}
+                                className="feedIcons mr-2"
+                              />
+                            </Link>
+                          </span>
+                        )}
                       </div>
                     ))}
                   <div>

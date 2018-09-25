@@ -101,37 +101,35 @@ class Edit extends Component {
 
   render() {
     return (
-      <div>
-        <div className="container d-flex justify-content-center mt-5">
-          <div className="card p-2 postCard rounded-0">
-            <div className="card-body">
-              <h1 className="insta text-center">Edit Post</h1>
-              {this.props.imgPreview ? (
-                <div className="text-center mt-4">
-                  <img
-                    src={this.props.imgPreview}
-                    className="imgPreview"
-                    alt=""
-                    width="100%"
-                  />
-                </div>
-              ) : (
-                <div className="text-center mt-4">
-                  <img
-                    src={this.props.image}
-                    className="imgPreview"
-                    alt=""
-                    width="100%"
-                  />
-                </div>
-              )}
-              <EditPostForm
-                onSubmit={this.handleSubmit}
-                onValues={this.onValues}
-                preview={this.props.imgPreview}
-                errorMsg={this.props.editError}
-              />
-            </div>
+      <div className="container d-flex justify-content-center mt-5">
+        <div className="card p-2 postCard rounded-0">
+          <div className="card-body">
+            <h1 className="insta text-center">Edit Post</h1>
+            {this.props.imgPreview ? (
+              <div className="text-center mt-4">
+                <img
+                  src={this.props.imgPreview}
+                  className="imgPreview"
+                  alt=""
+                  width="100%"
+                />
+              </div>
+            ) : (
+              <div className="text-center mt-4">
+                <img
+                  src={this.props.image}
+                  className="imgPreview"
+                  alt=""
+                  width="100%"
+                />
+              </div>
+            )}
+            <EditPostForm
+              onSubmit={this.handleSubmit}
+              onValues={this.onValues}
+              preview={this.props.imgPreview}
+              errorMsg={this.props.editError}
+            />
           </div>
         </div>
       </div>

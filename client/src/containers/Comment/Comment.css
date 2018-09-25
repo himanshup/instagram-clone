@@ -1,4 +1,5 @@
 .commentInput {
+  resize: none;
   outline: none;
   border: none !important;
   -webkit-box-shadow: none !important;

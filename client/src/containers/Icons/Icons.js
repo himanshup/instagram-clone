@@ -70,7 +70,7 @@ class Icons extends Component {
               className="feedIcons float-right"
               onClick={() => this.handleDeletePost()}
             />
-            <Link to={`/edit/${this.props.postId}`}>
+            <Link to={`/edit/posts/${this.props.postId}`}>
               <Icon.Edit2 className="feedIcons text-dark float-right mr-2" />
             </Link>
           </span>

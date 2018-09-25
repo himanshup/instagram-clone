@@ -11,6 +11,7 @@ import NewPost from "../NewPost/NewPost";
 import UserProfile from "../UserProfile/UserProfile";
 import Post from "../Post/Post";
 import Edit from "../Edit/Edit";
+import EditComment from "../EditComment/EditComment";
 import ErrorPage from "../../components/ErrorPage/ErrorPage";
 
 const mapStateToProps = state => {
@@ -38,11 +39,16 @@ class App extends Component {
           <div className="mb-5">
             {localStorage.Auth ? (
               <Switch>
+                <Route exact path="/" render={() => <Redirect to="/posts" />} />
                 <Route exact path="/posts" component={Feed} />
                 <Route path="/posts/new" component={NewPost} />
                 <Route path="/users/:userId" component={UserProfile} />
                 <Route path="/posts/:postId" component={Post} />
-                <Route path="/edit/:postId" component={Edit} />
+                <Route
+                  path="/edit/posts/:postId/comments/:commentId"
+                  component={EditComment}
+                />
+                <Route path="/edit/posts/:postId" component={Edit} />
                 <Route component={ErrorPage} />
               </Switch>
             ) : (

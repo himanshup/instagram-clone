@@ -47,9 +47,6 @@ module.exports = router => {
 
   // create new post
   router.post("/posts", upload.single("file"), (req, res) => {
-    console.log(req.file);
-    console.log(req.body);
-
     cloudinary.v2.uploader.upload(
       req.file.path,
       { width: 1000, height: 1000, crop: "scale" },
@@ -92,53 +89,53 @@ module.exports = router => {
         }
       })
       .catch(err => {
-        res.json(err);
+        res.json({ message: "Post doesn't exist" });
       });
   });
 
   // update post
   router.put("/posts/:post_id", upload.single("file"), (req, res) => {
     const caption = req.body.caption ? req.body.caption : "";
-    Post.findByIdAndUpdate(req.params.post_id, { description: caption }).then(
-      async post => {
+    Post.findByIdAndUpdate(req.params.post_id, { description: caption })
+      .then(async post => {
         if (req.file) {
-          try {
-            await cloudinary.v2.uploader.destroy(post.imageId);
-            const result = await cloudinary.v2.uploader.upload(req.file.path, {
-              width: 1000,
-              height: 1000,
-              crop: "scale"
-            });
-            post.imageId = result.public_id;
-            post.image = result.secure_url;
-          } catch (err) {
-            return res.json(err);
-          }
+          await cloudinary.v2.uploader.destroy(post.imageId);
+          const result = await cloudinary.v2.uploader.upload(req.file.path, {
+            width: 1000,
+            height: 1000,
+            crop: "scale"
+          });
+          post.imageId = result.public_id;
+          post.image = result.secure_url;
         }
         post.save();
         res.json(post);
-      }
-    );
+      })
+      .catch(err => {
+        res.json({ message: "Error editing your post" });
+      });
   });
 
   // delete a post
   router.delete("/posts/:post_id", (req, res) => {
     Post.findById(req.params.post_id)
       .then(async post => {
-        await Comment.remove({ _id: { $in: post.comments } });
-        await Like.remove({ _id: { $in: post.likes } });
+        if (String(post.author.id) === String(req.user._id)) {
+          console.log("yep this is your post");
+          await Comment.deleteMany({ _id: { $in: post.comments } });
+          await Like.deleteMany({ _id: { $in: post.likes } });
+          return post;
+        }
+      })
+      .then(post => {
+        cloudinary.v2.uploader.destroy(post.imageId);
         return post;
       })
-      .then(async post => {
-        try {
-          await cloudinary.v2.uploader.destroy(post.imageId);
-          post.remove();
-          return res.json({ message: "Successfully deleted your post!" });
-        } catch (err) {
-          if (err) {
-            return res.json({ message: "Error deleting your post" });
-          }
-        }
+      .then(post => {
+        return Post.deleteOne({ _id: post._id });
+      })
+      .then(response => {
+        res.json(response);
       })
       .catch(err => {
         res.json(err);
@@ -149,7 +146,6 @@ module.exports = router => {
   router.post("/posts/:post_id/likes", (req, res) => {
     let newLike = {};
     Post.findById(req.params.post_id)
-      .exec()
       .then(post => {
         return User.findById(req.user._id);
       })
@@ -168,13 +164,12 @@ module.exports = router => {
       .then(result => {
         return Post.findById(req.params.post_id)
           .populate("likes")
-          .populate("comments")
-          .exec();
+          .populate("comments");
       })
       .then(post => {
         post.likes.push(newLike);
         post.save();
-        res.json(post);
+        res.json(newLike);
       })
       .catch(err => {
         res.json(err);

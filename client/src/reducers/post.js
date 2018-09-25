@@ -7,6 +7,7 @@ import {
   GET_POST,
   ADD_COMMENT,
   ADD_COMMENT_SINGLE,
+  GET_COMMENT,
   LIKE_POST,
   DISLIKE_POST,
   UPDATE_SINGLE_POST,
@@ -20,7 +21,8 @@ const initialState = {
   prevew: "",
   newPostError: "",
   editError: "",
-  deletePostMsg: ""
+  deletePostMsg: "",
+  comment: ""
 };
 
 export default function(state = initialState, action) {
@@ -45,55 +47,67 @@ export default function(state = initialState, action) {
         editError: action.payload
       };
     case DELETE_POST:
+      const newPostsDelete = state.posts.filter(
+        item => item._id !== action.payload
+      );
       return {
-        deletePostMsg: action.payload
+        posts: newPostsDelete
       };
     case GET_FEED:
       return {
         posts: action.payload
       };
     case GET_POST:
-      console.log(action.payload);
-      return {
-        post: action.payload
-      };
-    case ADD_COMMENT_SINGLE:
       return {
         post: action.payload
       };
     case ADD_COMMENT:
       const newPostsComment = state.posts.map(post => {
         if (post._id === action.payload.postId) {
-          post.comments.push(action.payload.comment);
+          post.comments = [...post.comments, action.payload.comment];
+          return post;
+        } else {
+          return post;
         }
-        return post;
       });
       return {
         posts: newPostsComment
       };
+    case ADD_COMMENT_SINGLE:
+      return {
+        post: action.payload
+      };
+    case GET_COMMENT:
+      return {
+        comment: action.payload
+      };
     case LIKE_POST:
       const newPostsLike = state.posts.map(post => {
-        if (post._id === action.payload._id) {
-          post.likes = action.payload.likes.slice(0);
+        if (post._id === action.payload.postId) {
+          post.likes = [...post.likes, action.payload.like];
+          return post;
+        } else {
+          return post;
         }
-        return post;
       });
       return {
         posts: newPostsLike
       };
     case DISLIKE_POST:
       const newPostsDislike = state.posts.map(post => {
-        if (post._id === action.payload._id) {
-          post.likes = action.payload.likes.slice(0);
+        if (post._id === action.payload.postId) {
+          post.likes = post.likes.filter(
+            item => item._id !== action.payload.likeId
+          );
+          return post;
+        } else {
+          return post;
         }
-        return post;
       });
       return {
         posts: newPostsDislike
       };
     case UPDATE_SINGLE_POST:
-      console.log(action.payload);
-      console.log(state.post);
       return {
         post: action.payload
       };

@@ -22,6 +22,9 @@ export const UPDATE_POSTS = "UPDATE_POSTS";
 // comments
 export const ADD_COMMENT = "ADD_COMMENT";
 export const ADD_COMMENT_SINGLE = "ADD_COMMENT_SINGLE";
+export const EDIT_COMMENT = "EDIT_COMMENT";
+export const DELETE_COMMENT = "DELETE_COMMENT";
+export const GET_COMMENT = "GET_COMMENT";
 
 // users
 export const USER_PROFILE = "USER_PROFILE";
