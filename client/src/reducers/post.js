@@ -8,7 +8,8 @@ import {
   LIKE_POST,
   DISLIKE_POST,
   DELETE_POST,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  DELETE_COMMENT_SINGLE
 } from "../constants/action-types";
 
 const initialState = {
@@ -71,6 +72,10 @@ export default function(state = initialState, action) {
       });
       return {
         posts: newPostsDeleteComment
+      };
+    case DELETE_COMMENT_SINGLE:
+      return {
+        post: action.payload
       };
     case LIKE_POST:
       const newPostsLike = state.posts.map(post => {

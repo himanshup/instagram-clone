@@ -32,9 +32,9 @@ CommentForm = reduxForm({ destroyOnUnmount: true })(CommentForm);
 class NewComment extends Component {
   handleSubmit = data => {
     if (Object.keys(data).length !== 0 && this.props.singlePost) {
-      this.props.comment(data, this.props.postId, true);
+      this.props.addComment(data, this.props.postId, true);
     } else if (Object.keys(data).length !== 0) {
-      this.props.comment(data, this.props.postId, false);
+      this.props.addComment(data, this.props.postId, false);
     }
   };
 

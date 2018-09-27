@@ -17,8 +17,10 @@ import {
   LIKE_POST,
   DISLIKE_POST,
   ADD_COMMENT_SINGLE,
+  DELETE_COMMENT_SINGLE,
   GET_COMMENT,
-  SUBMIT_NEW_POST
+  SUBMIT_NEW_POST,
+  LIKE_SINGLE_POST
 } from "../constants/action-types";
 import history from "../history";
 
@@ -187,14 +189,21 @@ export const deletePost = postId => dispatch => {
     });
 };
 
-export const likePost = postId => dispatch => {
+export const likePost = (postId, singlePost) => dispatch => {
   axios
     .post(`/api/posts/${postId}/likes`)
     .then(like => {
-      dispatch({
-        type: LIKE_POST,
-        payload: { postId: postId, like: like.data }
-      });
+      if (singlePost) {
+        dispatch({
+          type: LIKE_SINGLE_POST,
+          payload: { postId: postId, like: like.data }
+        });
+      } else {
+        dispatch({
+          type: LIKE_POST,
+          payload: { postId: postId, like: like.data }
+        });
+      }
     })
     .catch(error => {
       console.log(error);
@@ -226,12 +235,13 @@ export const getUserProfile = id => dispatch => {
     });
 };
 
-export const comment = (text, id, singlePost) => dispatch => {
+export const addComment = (text, id, singlePost) => dispatch => {
   axios
     .post(`/api/posts/${id}/comments`, {
       comment: text.comment
     })
     .then(response => {
+      // checks if function was called from a single post page instead of the feed
       if (singlePost) {
         return dispatch({
           type: ADD_COMMENT_SINGLE,
@@ -275,14 +285,22 @@ export const editComment = (postId, commentId, text) => dispatch => {
     });
 };
 
-export const deleteComment = (postId, commentId) => dispatch => {
+export const deleteComment = (postId, commentId, singlePost) => dispatch => {
   axios
     .delete(`/api/posts/${postId}/comments/${commentId}`)
     .then(response => {
-      dispatch({
-        type: DELETE_COMMENT,
-        payload: { postId: postId, commentId: commentId }
-      });
+      // checks if function was called from a single post page instead of the feed
+      if (singlePost) {
+        dispatch({
+          type: DELETE_COMMENT_SINGLE,
+          payload: response.data
+        });
+      } else {
+        dispatch({
+          type: DELETE_COMMENT,
+          payload: { postId: postId, commentId: commentId }
+        });
+      }
     })
     .catch(error => {
       console.log(error);

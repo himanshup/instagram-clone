@@ -72,6 +72,7 @@ const DisplayPost = props => {
                   <Comments
                     postId={props.post._id}
                     comments={props.post.comments}
+                    singlePost={true}
                   />
                 </div>
                 <div className="p-3">
@@ -79,6 +80,7 @@ const DisplayPost = props => {
                     authorId={props.post.author.id}
                     postId={props.post._id}
                     likes={props.post.likes}
+                    singlePost={true}
                   />
                   <div>
                     <Link to="/" className="feedLinks">
@@ -98,6 +100,7 @@ const DisplayPost = props => {
                     <Comments
                       postId={props.post._id}
                       comments={props.post.comments}
+                      singlePost={true}
                     />
                   </div>
                   <div>

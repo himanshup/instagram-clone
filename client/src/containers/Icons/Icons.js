@@ -6,15 +6,15 @@ import * as actions from "../../actions";
 
 class Icons extends Component {
   handleLike = () => {
-    this.props.likePost(this.props.postId);
+    this.props.likePost(this.props.postId, this.props.singlePost);
   };
 
   handleDislike = likeId => {
-    this.props.dislikePost(this.props.postId, likeId);
+    this.props.dislikePost(this.props.postId, likeId, this.props.singlePost);
   };
 
   handleDeletePost = () => {
-    this.props.deletePost(this.props.postId);
+    this.props.deletePost(this.props.postId, this.props.singlePost);
   };
 
   renderHeart = () => {

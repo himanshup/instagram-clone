@@ -7,7 +7,7 @@ import "./Comments.css";
 
 class Comments extends Component {
   handleDelete = (postId, commentId) => {
-    this.props.deleteComment(postId, commentId);
+    this.props.deleteComment(postId, commentId, this.props.singlePost);
   };
   render() {
     return (
@@ -23,15 +23,19 @@ class Comments extends Component {
                 JSON.parse(localStorage.getItem("Auth")).id && (
                 <span>
                   {" "}
-                  <Link to="/" className="float-right feedLinks">
+                  <span className="float-right feedLinks">
                     <Icon.Trash2
                       size={14}
-                      className="feedIcons"
+                      className="feedIcons "
                       onClick={() =>
-                        this.handleDelete(this.props.postId, comment._id)
+                        this.props.deleteComment(
+                          this.props.postId,
+                          comment._id,
+                          this.props.singlePost
+                        )
                       }
                     />
-                  </Link>
+                  </span>
                   <Link
                     to={`/edit/posts/${this.props.postId}/comments/${
                       comment._id
