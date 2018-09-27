@@ -13,7 +13,8 @@ import {
   UPDATE_SINGLE_POST,
   UPDATE_POSTS,
   DELETE_POST,
-  DELETE_COMMENT
+  DELETE_COMMENT,
+  SUBMIT_NEW_POST
 } from "../constants/action-types";
 
 const initialState = {
@@ -23,18 +24,28 @@ const initialState = {
   newPostError: "",
   editError: "",
   deletePostMsg: "",
-  comment: ""
+  comment: "",
+  submitted: false
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case GET_PREVIEW:
+      if (action.payload.message) {
+        return {
+          newPostError: action.payload.message
+        };
+      }
       return {
         preview: action.payload
       };
     case RESET_VALUE:
       return {
         preview: action.payload
+      };
+    case SUBMIT_NEW_POST:
+      return {
+        submitted: action.payload
       };
     case CREATE_POST:
       if (action.payload.error) {

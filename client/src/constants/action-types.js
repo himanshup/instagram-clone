@@ -20,6 +20,7 @@ export const DISLIKE_POST = "DISLIKE_POST";
 export const EDIT_POST_VALUES = "EDIT_POST_VALUES";
 export const UPDATE_SINGLE_POST = "UPDATE_SINGLE_POST";
 export const UPDATE_POSTS = "UPDATE_POSTS";
+export const SUBMIT_NEW_POST = "SUBMIT_NEW_POST";
 
 // comments
 export const ADD_COMMENT = "ADD_COMMENT";

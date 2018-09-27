@@ -9,7 +9,8 @@ import "./NewPost.css";
 const mapStateToProps = state => {
   return {
     imgPreview: state.post.preview,
-    newPostError: state.post.newPostError
+    newPostError: state.post.newPostError,
+    submitted: state.post.submitted
   };
 };
 
@@ -93,18 +94,22 @@ PostForm = reduxForm({
 
 class NewPost extends Component {
   handleSubmit = data => {
+    this.props.submitNewPost();
     this.props.createPost(data);
   };
 
-  onValues = image => {
-    this.props.getPreview(image[0].preview);
+  onValues = images => {
+    this.props.getPreview(images);
   };
 
   render() {
     return (
       <div>
         <div className="container d-flex justify-content-center mt-5">
-          <div className="card p-2 postCard rounded-0">
+          <div
+            className={`card p-2 postCard rounded-0 ${this.props.submitted &&
+              `d-none`}`}
+          >
             <div className="card-body">
               <h1 className="insta text-center">New Post</h1>
               {this.props.imgPreview && (

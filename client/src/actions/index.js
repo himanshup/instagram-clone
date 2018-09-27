@@ -19,7 +19,8 @@ import {
   UPDATE_SINGLE_POST,
   UPDATE_POSTS,
   ADD_COMMENT_SINGLE,
-  GET_COMMENT
+  GET_COMMENT,
+  SUBMIT_NEW_POST
 } from "../constants/action-types";
 import history from "../history";
 
@@ -77,8 +78,16 @@ export const logout = () => dispatch => {
 };
 
 // for image preview
-export const getPreview = image => dispatch => {
-  dispatch({ type: GET_PREVIEW, payload: image });
+export const getPreview = images => dispatch => {
+  if (images[1]) {
+    console.log("more than 1 image");
+    return dispatch({
+      type: GET_PREVIEW,
+      payload: { message: "Only 1 image allowed" }
+    });
+  } else {
+    dispatch({ type: GET_PREVIEW, payload: images[0].preview });
+  }
 };
 // resets image preview
 export const resetInput = () => dispatch => {
@@ -107,6 +116,10 @@ export const getPost = postId => dispatch => {
     .catch(error => {
       console.log(error);
     });
+};
+
+export const submitNewPost = () => dispatch => {
+  return dispatch({ type: SUBMIT_NEW_POST, payload: true });
 };
 
 export const createPost = data => dispatch => {
