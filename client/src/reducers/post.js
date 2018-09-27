@@ -3,13 +3,15 @@ import {
   GET_FEED,
   GET_POST,
   ADD_COMMENT,
-  ADD_COMMENT_SINGLE,
+  ADD_COMMENT_SINGLE_POST,
   GET_COMMENT,
   LIKE_POST,
   DISLIKE_POST,
   DELETE_POST,
   DELETE_COMMENT,
-  DELETE_COMMENT_SINGLE
+  DELETE_COMMENT_SINGLE_POST,
+  LIKE_SINGLE_POST,
+  DISLIKE_SINGLE_POST
 } from "../constants/action-types";
 
 const initialState = {
@@ -51,7 +53,7 @@ export default function(state = initialState, action) {
       return {
         posts: newPostsComment
       };
-    case ADD_COMMENT_SINGLE:
+    case ADD_COMMENT_SINGLE_POST:
       return {
         post: action.payload
       };
@@ -73,7 +75,7 @@ export default function(state = initialState, action) {
       return {
         posts: newPostsDeleteComment
       };
-    case DELETE_COMMENT_SINGLE:
+    case DELETE_COMMENT_SINGLE_POST:
       return {
         post: action.payload
       };
@@ -89,6 +91,10 @@ export default function(state = initialState, action) {
       return {
         posts: newPostsLike
       };
+    case LIKE_SINGLE_POST:
+      return {
+        post: action.payload
+      };
     case DISLIKE_POST:
       const newPostsDislike = state.posts.map(post => {
         if (post._id === action.payload.postId) {
@@ -102,6 +108,10 @@ export default function(state = initialState, action) {
       });
       return {
         posts: newPostsDislike
+      };
+    case DISLIKE_SINGLE_POST:
+      return {
+        post: action.payload
       };
     default:
       return state;

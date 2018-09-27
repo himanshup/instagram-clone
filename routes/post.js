@@ -79,7 +79,7 @@ module.exports = router => {
 
   // get post by id
   router.get("/posts/:post_id", (req, res) => {
-    Post.findById(req.params.post_id)
+    Post.findOne({ _id: req.params.post_id })
       .populate("comments")
       .populate("likes")
       .then(post => {
@@ -95,7 +95,7 @@ module.exports = router => {
   // update post
   router.put("/posts/:post_id", upload.single("file"), (req, res) => {
     const caption = req.body.caption ? req.body.caption : "";
-    Post.findByIdAndUpdate(req.params.post_id, { description: caption })
+    Post.findOne({ _id: req.params.post_id }, { description: caption })
       .then(async post => {
         if (req.file) {
           await cloudinary.v2.uploader.destroy(post.imageId);
@@ -117,7 +117,7 @@ module.exports = router => {
 
   // delete a post
   router.delete("/posts/:post_id", (req, res) => {
-    Post.findById(req.params.post_id)
+    Post.findOne({ _id: req.params.post_id })
       .then(async post => {
         if (String(post.author.id) === String(req.user._id)) {
           console.log("yep this is your post");
@@ -142,9 +142,13 @@ module.exports = router => {
 
   // like a post
   router.post("/posts/:post_id/likes", (req, res) => {
+    let newLike = {};
     Post.findOne({ _id: req.params.post_id })
+      .populate("comments")
+      .populate("likes")
       .then(async post => {
         const user = await User.findOne({ _id: req.user._id });
+
         let like = {
           userId: user._id,
           username: user.username,
@@ -152,7 +156,12 @@ module.exports = router => {
         };
         post.likes.push(like);
         post.save();
-        res.json(like);
+        console.log(post);
+        const data = {
+          post,
+          newLike
+        };
+        res.json(data);
       })
       .catch(err => {
         res.json(err);
