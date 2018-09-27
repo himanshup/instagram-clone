@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Comment from "../../containers/Comment/Comment";
+import NewComment from "../../containers/NewComment/NewComment";
 import Comments from "../../containers/Comments/Comments";
 import Icons from "../../containers/Icons/Icons";
 import moment from "moment";
@@ -66,7 +66,7 @@ const Posts = props => {
                     </Link>
                   </div>
                   <hr />
-                  <Comment postId={post._id} />
+                  <NewComment postId={post._id} />
                 </div>
               </div>
             </div>

@@ -10,7 +10,7 @@ import Feed from "../Feed/Feed";
 import NewPost from "../NewPost/NewPost";
 import UserProfile from "../UserProfile/UserProfile";
 import Post from "../Post/Post";
-import Edit from "../Edit/Edit";
+import EditPost from "../EditPost/EditPost";
 import EditComment from "../EditComment/EditComment";
 import ErrorPage from "../../components/ErrorPage/ErrorPage";
 
@@ -48,7 +48,7 @@ class App extends Component {
                   path="/edit/posts/:postId/comments/:commentId"
                   component={EditComment}
                 />
-                <Route path="/edit/posts/:postId" component={Edit} />
+                <Route path="/edit/posts/:postId" component={EditPost} />
                 <Route component={ErrorPage} />
               </Switch>
             ) : (

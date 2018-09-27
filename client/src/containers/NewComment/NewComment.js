@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { reduxForm, Field } from "redux-form";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import "./Comment.css";
+import "./NewComment.css";
 
 let CommentForm = props => {
   const { handleSubmit, pristine, submitting } = props;
@@ -29,7 +29,7 @@ let CommentForm = props => {
 
 CommentForm = reduxForm({ destroyOnUnmount: true })(CommentForm);
 
-class Comment extends Component {
+class NewComment extends Component {
   handleSubmit = data => {
     if (Object.keys(data).length !== 0 && this.props.singlePost) {
       this.props.comment(data, this.props.postId, true);
@@ -48,4 +48,4 @@ class Comment extends Component {
 export default connect(
   null,
   actions
-)(Comment);
+)(NewComment);

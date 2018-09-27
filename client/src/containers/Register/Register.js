@@ -9,24 +9,10 @@ import "./Register.css";
 
 const mapStateToProps = state => {
   return {
-    registerMsg: state.auth.registerMsg,
-    imgPreview: state.post.preview
+    registerMsg: state.auth.registerError,
+    imgPreview: state.common.preview,
+    imagePreviewError: state.common.imagePreviewError
   };
-};
-
-const validateImage = imageList => {
-  if (imageList) {
-    if (imageList.length > 1) {
-      return "You can upload one image at a time";
-    } else if (imageList.length === 1) {
-      let selectedImage = imageList[0];
-      if (!selectedImage.type.match("image.*")) {
-        return "Only image files are allowed";
-      } else if (selectedImage.size > 1048576) {
-        return "Maximum file size exceeded";
-      }
-    }
-  }
 };
 
 const renderDropzoneField = ({ input, name, meta: { dirty, error } }) => {
@@ -53,7 +39,7 @@ const renderDropzoneField = ({ input, name, meta: { dirty, error } }) => {
 };
 
 let RegisterForm = props => {
-  const { handleSubmit, onValues, submitting, pristine } = props;
+  const { handleSubmit, onValues, submitting, pristine, errorMsg } = props;
   return (
     <form onSubmit={handleSubmit} className="mt-4">
       <Field
@@ -70,13 +56,8 @@ let RegisterForm = props => {
         label="Password"
       />
 
-      <Field
-        name="image"
-        validate={validateImage}
-        component={renderDropzoneField}
-        onChange={onValues}
-      />
-
+      <Field name="image" component={renderDropzoneField} onChange={onValues} />
+      {errorMsg && <small className="text-danger">{errorMsg}</small>}
       <button
         className="btn btn-primary btn-sm btn-block mt-3"
         disabled={pristine || submitting}
@@ -129,8 +110,8 @@ class Register extends Component {
     this.props.registerUser(data);
   };
 
-  onValues = image => {
-    this.props.getPreview(image[0].preview);
+  onValues = images => {
+    this.props.getPreview(images);
   };
 
   render() {
@@ -153,6 +134,7 @@ class Register extends Component {
               onSubmit={this.handleSubmit}
               onValues={this.onValues}
               preview={this.props.imgPreview}
+              errorMsg={this.props.imagePreviewError}
             />
             <div className="text-center mt-3">
               <small className="text-danger">

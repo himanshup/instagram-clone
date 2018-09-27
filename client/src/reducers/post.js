@@ -1,8 +1,5 @@
 import {
-  GET_PREVIEW,
-  RESET_VALUE,
   CREATE_POST,
-  EDIT_POST,
   GET_FEED,
   GET_POST,
   ADD_COMMENT,
@@ -10,54 +7,22 @@ import {
   GET_COMMENT,
   LIKE_POST,
   DISLIKE_POST,
-  UPDATE_SINGLE_POST,
-  UPDATE_POSTS,
   DELETE_POST,
-  DELETE_COMMENT,
-  SUBMIT_NEW_POST
+  DELETE_COMMENT
 } from "../constants/action-types";
 
 const initialState = {
   posts: [],
   post: {},
-  prevew: "",
-  newPostError: "",
   editError: "",
   deletePostMsg: "",
-  comment: "",
-  submitted: false
+  comment: ""
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case GET_PREVIEW:
-      if (action.payload.message) {
-        return {
-          newPostError: action.payload.message
-        };
-      }
-      return {
-        preview: action.payload
-      };
-    case RESET_VALUE:
-      return {
-        preview: action.payload
-      };
-    case SUBMIT_NEW_POST:
-      return {
-        submitted: action.payload
-      };
     case CREATE_POST:
-      if (action.payload.error) {
-        return {
-          newPostError: action.payload.error
-        };
-      }
       return action.payload;
-    case EDIT_POST:
-      return {
-        editError: action.payload
-      };
     case DELETE_POST:
       const newPostsDelete = state.posts.filter(
         item => item._id !== action.payload
@@ -133,15 +98,6 @@ export default function(state = initialState, action) {
       return {
         posts: newPostsDislike
       };
-    case UPDATE_SINGLE_POST:
-      return {
-        post: action.payload
-      };
-    case UPDATE_POSTS:
-      return {
-        posts: action.payload
-      };
-
     default:
       return state;
   }

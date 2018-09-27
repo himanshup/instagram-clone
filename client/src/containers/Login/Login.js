@@ -78,7 +78,7 @@ SignInForm = reduxForm({
 
 class Login extends Component {
   componentWillUnmount() {
-    this.props.resetInput();
+    this.props.resetValue();
   }
 
   handleSubmit = data => {

@@ -8,9 +8,9 @@ import "./NewPost.css";
 
 const mapStateToProps = state => {
   return {
-    imgPreview: state.post.preview,
-    newPostError: state.post.newPostError,
-    submitted: state.post.submitted
+    imgPreview: state.common.preview,
+    imagePreviewError: state.common.imagePreviewError,
+    submitted: state.common.submitted
   };
 };
 
@@ -55,11 +55,7 @@ let PostForm = props => {
   const { handleSubmit, onValues, preview, errorMsg } = props;
   return (
     <form onSubmit={handleSubmit} className="mt-4">
-      {errorMsg && (
-        <div className="text-center mt-1">
-          <small className="text-danger">{errorMsg}</small>
-        </div>
-      )}
+      {errorMsg && <small className="text-danger">{errorMsg}</small>}
       <Field name="image" component={renderDropzoneField} onChange={onValues} />
       <Field
         name="caption"
@@ -102,6 +98,10 @@ class NewPost extends Component {
     this.props.getPreview(images);
   };
 
+  componentWillUnmount() {
+    this.props.resetValue();
+  }
+
   render() {
     return (
       <div>
@@ -126,7 +126,7 @@ class NewPost extends Component {
                 onSubmit={this.handleSubmit}
                 onValues={this.onValues}
                 preview={this.props.imgPreview}
-                errorMsg={this.props.newPostError}
+                errorMsg={this.props.imagePreviewError}
               />
             </div>
           </div>

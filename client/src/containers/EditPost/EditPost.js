@@ -7,9 +7,9 @@ import * as Icon from "react-feather";
 
 const mapStateToProps = state => {
   return {
-    imgPreview: state.post.preview,
+    imgPreview: state.common.preview,
     image: state.post.post && state.post.post.image,
-    error: state.post.editError
+    imagePreviewError: state.common.imagePreviewError
   };
 };
 
@@ -54,23 +54,25 @@ let EditPostForm = props => {
   const { handleSubmit, onValues, pristine, submitting, errorMsg } = props;
   return (
     <form onSubmit={handleSubmit} className="mt-4">
-      {errorMsg && (
-        <div className="text-center mt-1">
-          <small className="text-danger">{errorMsg}</small>
-        </div>
-      )}
+      {errorMsg && <small className="text-danger">{errorMsg}</small>}
       <Field name="image" component={renderDropzoneField} onChange={onValues} />
       <Field
         name="caption"
         className="form-control form-control-sm mt-1 inputBg"
         component="textarea"
       />
-      <button
-        className="btn btn-primary btn-sm btn-block mt-3"
-        disabled={pristine || submitting}
-      >
-        Post
-      </button>
+      {errorMsg ? (
+        <button className="btn btn-primary btn-sm btn-block mt-3" disabled>
+          Post
+        </button>
+      ) : (
+        <button
+          className="btn btn-primary btn-sm btn-block mt-3"
+          disabled={pristine || submitting}
+        >
+          Post
+        </button>
+      )}
     </form>
   );
 };
@@ -87,7 +89,7 @@ EditPostForm = connect(state => ({
   }
 }))(EditPostForm);
 
-class Edit extends Component {
+class EditPost extends Component {
   componentDidMount() {
     this.props.getPost(this.props.match.params.postId);
   }
@@ -95,9 +97,13 @@ class Edit extends Component {
     this.props.editPost(data, this.props.match.params.postId);
   };
 
-  onValues = image => {
-    this.props.getPreview(image[0].preview);
+  onValues = images => {
+    this.props.getPreview(images);
   };
+
+  componentWillUnmount() {
+    this.props.resetValue();
+  }
 
   render() {
     return (
@@ -128,7 +134,7 @@ class Edit extends Component {
               onSubmit={this.handleSubmit}
               onValues={this.onValues}
               preview={this.props.imgPreview}
-              errorMsg={this.props.editError}
+              errorMsg={this.props.imagePreviewError}
             />
           </div>
         </div>
@@ -139,4 +145,4 @@ class Edit extends Component {
 export default connect(
   mapStateToProps,
   actions
-)(Edit);
+)(EditPost);

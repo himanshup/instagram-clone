@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Comment from "../../containers/Comment/Comment";
+import NewComment from "../../containers/NewComment/NewComment";
 import Comments from "../../containers/Comments/Comments";
 import Icons from "../../containers/Icons/Icons";
 import moment from "moment";
@@ -109,7 +109,7 @@ const DisplayPost = props => {
                     </Link>
                   </div>
                   <hr />
-                  <Comment postId={props.post._id} singlePost={true} />
+                  <NewComment postId={props.post._id} singlePost={true} />
                 </div>
               </div>
             </div>

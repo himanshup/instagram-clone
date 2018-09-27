@@ -16,8 +16,6 @@ import {
   DELETE_COMMENT,
   LIKE_POST,
   DISLIKE_POST,
-  UPDATE_SINGLE_POST,
-  UPDATE_POSTS,
   ADD_COMMENT_SINGLE,
   GET_COMMENT,
   SUBMIT_NEW_POST
@@ -58,7 +56,9 @@ export const registerUser = data => dispatch => {
     .post("/api/register", formData)
     .then(response => {
       dispatch({ type: REGISTER_USER, payload: response.data });
-      history.push("/");
+      if (!response.data.error) {
+        history.push("/");
+      }
     })
     .catch(error => {
       console.log(error);
@@ -89,8 +89,9 @@ export const getPreview = images => dispatch => {
     dispatch({ type: GET_PREVIEW, payload: images[0].preview });
   }
 };
+
 // resets image preview
-export const resetInput = () => dispatch => {
+export const resetValue = () => dispatch => {
   dispatch({ type: RESET_VALUE, payload: "" });
 };
 
@@ -98,7 +99,6 @@ export const getFeed = () => dispatch => {
   axios
     .get("/api/posts")
     .then(posts => {
-      console.log(posts.data);
       dispatch({ type: GET_FEED, payload: posts.data });
     })
     .catch(error => {
@@ -124,12 +124,6 @@ export const submitNewPost = () => dispatch => {
 
 export const createPost = data => dispatch => {
   const user = JSON.parse(localStorage.getItem("Auth"));
-  if (typeof data.image === "object" && data.image.length > 1) {
-    return dispatch({
-      type: CREATE_POST,
-      payload: { error: "Only 1 image allowed" }
-    });
-  }
   const formData = new FormData();
   formData.append("file", data.image[0]);
   if (data.caption) {
@@ -285,7 +279,6 @@ export const deleteComment = (postId, commentId) => dispatch => {
   axios
     .delete(`/api/posts/${postId}/comments/${commentId}`)
     .then(response => {
-      console.log(response.data);
       dispatch({
         type: DELETE_COMMENT,
         payload: { postId: postId, commentId: commentId }
@@ -306,13 +299,4 @@ export const getUser = () => dispatch => {
     .catch(error => {
       console.log(error);
     });
-};
-
-export const updatePost = post => dispatch => {
-  console.log(post);
-  dispatch({ type: UPDATE_SINGLE_POST, payload: post });
-};
-
-export const updatePosts = posts => dispatch => {
-  dispatch({ type: UPDATE_POSTS, payload: posts });
 };
