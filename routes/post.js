@@ -142,7 +142,6 @@ module.exports = router => {
 
   // like a post
   router.post("/posts/:post_id/likes", (req, res) => {
-    let newLike = {};
     Post.findOne({ _id: req.params.post_id })
       .populate("comments")
       .populate("likes")
@@ -156,10 +155,9 @@ module.exports = router => {
         };
         post.likes.push(like);
         post.save();
-        console.log(post);
         const data = {
           post,
-          newLike
+          like
         };
         res.json(data);
       })

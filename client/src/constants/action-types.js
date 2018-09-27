@@ -16,6 +16,7 @@ export const CREATE_POST = "CREATE_POST";
 export const SUBMIT_NEW_POST = "SUBMIT_NEW_POST"; // hides form after successful submit to prevent duplicate post
 export const EDIT_POST = "EDIT_POST";
 export const DELETE_POST = "DELETE_POST";
+export const DELETE_SINGLE_POST = "DELETE_SINGLE_POST";
 
 // comments
 export const ADD_COMMENT = "ADD_COMMENT";

@@ -8,6 +8,7 @@ import {
   LIKE_POST,
   DISLIKE_POST,
   DELETE_POST,
+  DELETE_SINGLE_POST,
   DELETE_COMMENT,
   DELETE_COMMENT_SINGLE_POST,
   LIKE_SINGLE_POST,
@@ -33,6 +34,8 @@ export default function(state = initialState, action) {
       return {
         posts: newPostsDelete
       };
+    case DELETE_SINGLE_POST:
+      return action.payload;
     case GET_FEED:
       return {
         posts: action.payload

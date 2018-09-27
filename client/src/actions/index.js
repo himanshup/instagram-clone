@@ -9,6 +9,7 @@ import {
   CREATE_POST,
   EDIT_POST,
   DELETE_POST,
+  DELETE_SINGLE_POST,
   GET_FEED,
   GET_POST,
   ADD_COMMENT,
@@ -113,7 +114,6 @@ export const getPost = postId => dispatch => {
   axios
     .get(`/api/posts/${postId}`)
     .then(post => {
-      console.log(post);
       dispatch({ type: GET_POST, payload: post.data });
     })
     .catch(error => {
@@ -143,7 +143,6 @@ export const createPost = data => dispatch => {
       history.push("/posts");
     })
     .catch(error => {
-      console.log("error creating post");
       console.log(error);
     });
 };
@@ -169,20 +168,26 @@ export const editPost = (data, postId) => dispatch => {
       dispatch({ type: EDIT_POST, payload: post.data });
       history.push(`/posts/${post.data._id}`);
     })
-    .catch(err => {
-      console.log(err);
+    .catch(error => {
+      console.log(error);
     });
 };
 
-export const deletePost = postId => dispatch => {
+export const deletePost = (postId, singlePost) => dispatch => {
   axios
     .delete(`/api/posts/${postId}`)
     .then(response => {
-      console.log(response);
-      dispatch({
-        type: DELETE_POST,
-        payload: postId
-      });
+      if (singlePost) {
+        dispatch({
+          type: DELETE_SINGLE_POST,
+          payload: response
+        });
+      } else {
+        dispatch({
+          type: DELETE_POST,
+          payload: postId
+        });
+      }
       history.push("/posts");
     })
     .catch(error => {
@@ -202,7 +207,7 @@ export const likePost = (postId, singlePost) => dispatch => {
       } else {
         return dispatch({
           type: LIKE_POST,
-          payload: { postId: postId, like: response.data.newLike }
+          payload: { postId, like: response.data.like }
         });
       }
     })
@@ -223,7 +228,7 @@ export const dislikePost = (postId, likeId, singlePost) => dispatch => {
       } else {
         dispatch({
           type: DISLIKE_POST,
-          payload: { postId: postId, likeId: likeId }
+          payload: { postId, likeId }
         });
       }
     })
@@ -286,7 +291,7 @@ export const editComment = (postId, commentId, text) => dispatch => {
     .put(`/api/posts/${postId}/comments/${commentId}`, { comment: text })
     .then(response => {
       dispatch({ type: EDIT_COMMENT, payload: response.data.message });
-      history.push("/posts");
+      history.push(`/posts/${postId}`);
     })
     .catch(error => {
       console.log(error);
@@ -297,7 +302,6 @@ export const deleteComment = (postId, commentId, singlePost) => dispatch => {
   axios
     .delete(`/api/posts/${postId}/comments/${commentId}`)
     .then(response => {
-      // checks if function was called from a single post page instead of the feed
       if (singlePost) {
         dispatch({
           type: DELETE_COMMENT_SINGLE_POST,
@@ -306,7 +310,7 @@ export const deleteComment = (postId, commentId, singlePost) => dispatch => {
       } else {
         dispatch({
           type: DELETE_COMMENT,
-          payload: { postId: postId, commentId: commentId }
+          payload: { postId, commentId }
         });
       }
     })
