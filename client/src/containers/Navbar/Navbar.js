@@ -9,7 +9,7 @@ class Navbar extends Component {
   };
 
   render() {
-    return <DisplayNavbar logout={this.handleLogout} />;
+    return <DisplayNavbar logout={() => this.handleLogout()} />;
   }
 }
 

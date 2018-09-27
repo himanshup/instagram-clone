@@ -12,7 +12,8 @@ import {
   DISLIKE_POST,
   UPDATE_SINGLE_POST,
   UPDATE_POSTS,
-  DELETE_POST
+  DELETE_POST,
+  DELETE_COMMENT
 } from "../constants/action-types";
 
 const initialState = {
@@ -80,6 +81,20 @@ export default function(state = initialState, action) {
     case GET_COMMENT:
       return {
         comment: action.payload
+      };
+    case DELETE_COMMENT:
+      const newPostsDeleteComment = state.posts.map(post => {
+        if (post._id === action.payload.postId) {
+          post.comments = post.comments.filter(
+            item => item._id !== action.payload.commentId
+          );
+          return post;
+        } else {
+          return post;
+        }
+      });
+      return {
+        posts: newPostsDeleteComment
       };
     case LIKE_POST:
       const newPostsLike = state.posts.map(post => {

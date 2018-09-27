@@ -1,6 +1,5 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
-const Like = require("../models/like");
 const User = require("../models/user");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
@@ -123,7 +122,6 @@ module.exports = router => {
         if (String(post.author.id) === String(req.user._id)) {
           console.log("yep this is your post");
           await Comment.deleteMany({ _id: { $in: post.comments } });
-          await Like.deleteMany({ _id: { $in: post.likes } });
           return post;
         }
       })
@@ -144,32 +142,17 @@ module.exports = router => {
 
   // like a post
   router.post("/posts/:post_id/likes", (req, res) => {
-    let newLike = {};
-    Post.findById(req.params.post_id)
-      .then(post => {
-        return User.findById(req.user._id);
-      })
-      .then(user => {
-        return Like.create({
-          author: {
-            id: req.user._id,
-            username: req.user.username
-          },
+    Post.findOne({ _id: req.params.post_id })
+      .then(async post => {
+        const user = await User.findOne({ _id: req.user._id });
+        let like = {
+          userId: user._id,
+          username: user.username,
           avatar: user.avatar
-        });
-      })
-      .then(like => {
-        return (newLike = like);
-      })
-      .then(result => {
-        return Post.findById(req.params.post_id)
-          .populate("likes")
-          .populate("comments");
-      })
-      .then(post => {
-        post.likes.push(newLike);
+        };
+        post.likes.push(like);
         post.save();
-        res.json(newLike);
+        res.json(like);
       })
       .catch(err => {
         res.json(err);
@@ -178,14 +161,14 @@ module.exports = router => {
 
   // dislike a post
   router.delete("/posts/:post_id/likes/:like_id", (req, res) => {
-    Like.findByIdAndRemove(req.params.like_id)
-      .then(response => {
-        return Post.findByIdAndUpdate(req.params.post_id, {
-          $pull: { likes: { $in: [req.params.like_id] } }
-        });
-      })
+    Post.findOneAndUpdate(
+      { _id: req.params.post_id },
+      {
+        $pull: { likes: { $in: { $in: [req.params.like_id] } } }
+      }
+    )
       .then(post => {
-        return Post.findById(post._id)
+        return Post.findOne({ _id: post._id })
           .populate("comments")
           .populate("likes");
       })

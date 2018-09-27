@@ -64,10 +64,10 @@ module.exports = router => {
   });
 
   // delete comment
+  // rewrite to delete it from Post first then remove comment
   router.delete("/posts/:post_id/comments/:comment_id", (req, res) => {
     Comment.findOneAndRemove({ _id: req.params.comment_id })
       .then(comment => {
-        console.log(comment);
         return Post.findOneAndUpdate(
           { _id: req.params.post_id },
           { $pull: { comments: comment._id } }

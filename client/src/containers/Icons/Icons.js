@@ -22,7 +22,7 @@ class Icons extends Component {
 
     if (this.props.likes.length !== 0) {
       for (const like of this.props.likes) {
-        if (like.author.id === user.id) {
+        if (like.userId === user.id) {
           return (
             <span>
               <Icon.Heart
@@ -36,7 +36,7 @@ class Icons extends Component {
         }
       }
       for (const like of this.props.likes) {
-        if (like.author.id !== user.id) {
+        if (like.userId !== user.id) {
           return (
             <span>
               <Icon.Heart

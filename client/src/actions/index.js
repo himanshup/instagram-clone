@@ -42,7 +42,7 @@ export const loginUser = data => dispatch => {
     })
     .catch(error => {
       console.log(error);
-      dispatch({ type: LOGIN_USER, payload: error });
+      dispatch({ type: LOGIN_USER, payload: "error" });
     });
 };
 
@@ -89,6 +89,7 @@ export const getFeed = () => dispatch => {
   axios
     .get("/api/posts")
     .then(posts => {
+      console.log(posts.data);
       dispatch({ type: GET_FEED, payload: posts.data });
     })
     .catch(error => {
