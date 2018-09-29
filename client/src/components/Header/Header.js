@@ -5,6 +5,18 @@ import "./Header.css";
 
 const Header = props => {
   const user = JSON.parse(localStorage.getItem("Auth"));
+  const checkIfFollowing = (followers, id) => {
+    if (followers) {
+      for (const follower of followers) {
+        if (follower._id === id) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+  };
+
   return (
     <div className="container mt-5 d-flex justify-content-center">
       <div className="row">
@@ -18,6 +30,13 @@ const Header = props => {
               <button className="ml-2 btn btn-sm btn-outline-dark">
                 <span className="ml-3 mr-3">Edit Profile</span>
               </button>
+            ) : checkIfFollowing(props.user.followers, user.id) ? (
+              <button
+                className="ml-2 btn btn-sm btn-outline-dark"
+                onClick={() => props.unfollow(props.user._id)}
+              >
+                <span className="ml-3 mr-3">Unfollow</span>
+              </button>
             ) : (
               <button
                 className="ml-2 btn btn-sm btn-primary"
@@ -30,7 +49,7 @@ const Header = props => {
           <div className="d-flex mt-3">
             <div className="mr-4">
               <a href="/" className="headerLinks">
-                100
+                {props.user.posts && props.user.posts.length}{" "}
               </a>
               posts
             </div>
@@ -42,7 +61,7 @@ const Header = props => {
             </div>
             <div className="mr-4">
               <a href="/" className="headerLinks">
-                123
+                {props.user.following && props.user.following.length}{" "}
               </a>
               following
             </div>

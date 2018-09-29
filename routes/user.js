@@ -143,13 +143,20 @@ module.exports = router => {
   });
 
   // follow a user
-  router.post("/users/:user_id/follow", (req, res) => {
+  router.post("/users/follow/:user_id", (req, res) => {
     User.findOne({ _id: req.params.user_id })
-      .then(user => {
-        console.log(user);
+      .then(async user => {
+        let currentUser = await User.findOne({ _id: req.user._id });
         user.followers.push(req.user._id);
         user.save();
-        res.json({ message: `Followed ${user.username}` });
+        currentUser.following.push(user._id);
+        currentUser.save();
+        const data = {
+          _id: req.user._id,
+          username: req.user.username,
+          avatar: currentUser.avatar
+        };
+        res.json(data);
       })
       .catch(err => {
         res.json({ message: "Error occured" });
@@ -157,15 +164,29 @@ module.exports = router => {
   });
 
   // unfollow user
-  router.delete("/users/:user_id/follow/:follow_id", (req, res) => {
-    User.findOne(
+  router.delete("/users/follow/:user_id", (req, res) => {
+    User.findOneAndUpdate(
       { _id: req.params.user_id },
       {
-        $pull: { followers: { $in: [req.params.follow_id] } }
+        $pull: { followers: { $in: req.user._id } }
       }
     )
       .then(user => {
-        res.json({ message: `Unfollowed ${user.username}` });
+        return User.findOneAndUpdate(
+          { _id: req.user._id },
+          {
+            $pull: { following: { $in: [req.params.user_id] } }
+          }
+        );
+      })
+      .then(respone => {
+        return User.findOne({ _id: req.params.user_id })
+          .populate("followers")
+          .populate("following")
+          .populate("posts");
+      })
+      .then(user => {
+        res.json(user);
       })
       .catch(err => {
         res.json({ message: "Error occured" });

@@ -335,20 +335,20 @@ export const getUser = () => dispatch => {
 
 export const followUser = userId => dispatch => {
   axios
-    .post(`/api/users/${userId}/follow`)
+    .post(`/api/users/follow/${userId}`)
     .then(response => {
-      console.log(response.data);
+      dispatch({ type: FOLLOW_USER, payload: response.data });
     })
     .catch(error => {
       console.log(error);
     });
 };
 
-export const unfollowUser = (userId, followId) => dispatch => {
+export const unfollowUser = userId => dispatch => {
   axios
-    .delete(`/api/users/${userId}/follow/${followId}`)
+    .delete(`/api/users/follow/${userId}`)
     .then(response => {
-      console.log(response.data);
+      dispatch({ type: UNFOLLOW_USER, payload: response.data });
     })
     .catch(error => {
       console.log(error);
