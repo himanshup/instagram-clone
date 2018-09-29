@@ -9,8 +9,8 @@ class Icons extends Component {
     this.props.likePost(this.props.postId, this.props.singlePost);
   };
 
-  handleDislike = likeId => {
-    this.props.dislikePost(this.props.postId, likeId, this.props.singlePost);
+  handleDislike = like => {
+    this.props.dislikePost(this.props.postId, like, this.props.singlePost);
   };
 
   handleDeletePost = () => {
@@ -22,21 +22,21 @@ class Icons extends Component {
 
     if (this.props.likes.length !== 0) {
       for (const like of this.props.likes) {
-        if (like.userId === user.id) {
+        if (like._id === user.id) {
           return (
             <span>
               <Icon.Heart
                 className="mr-2 feedIcons"
                 color="red"
                 fill="red"
-                onClick={() => this.handleDislike(like._id)}
+                onClick={() => this.handleDislike(like)}
               />
             </span>
           );
         }
       }
       for (const like of this.props.likes) {
-        if (like.userId !== user.id) {
+        if (like._id !== user.id) {
           return (
             <span>
               <Icon.Heart

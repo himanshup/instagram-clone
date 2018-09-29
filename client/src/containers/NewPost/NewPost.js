@@ -111,7 +111,7 @@ class NewPost extends Component {
               `d-none`}`}
           >
             <div className="card-body">
-              <h1 className="insta text-center">New Post</h1>
+              <h1 className="display-4 text-center">New Post</h1>
               {this.props.imgPreview && (
                 <div className="text-center mt-4">
                   <img

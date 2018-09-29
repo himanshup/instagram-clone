@@ -57,7 +57,7 @@ class EditComment extends Component {
       <div className="container d-flex justify-content-center mt-5">
         <div className="card p-2 postCard rounded-0">
           <div className="card-body">
-            <h1 className="insta text-center">Edit Comment</h1>
+            <h1 className="display-4 text-center">Edit Comment</h1>
 
             <EditCommentForm
               form={`${this.props.match.params.commentId}`}

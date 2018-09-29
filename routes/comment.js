@@ -27,8 +27,7 @@ module.exports = router => {
         post.save();
         const data = {
           postId: post._id,
-          comment: newComment,
-          post: post
+          comment: newComment
         };
         return res.json(data);
       })
@@ -64,7 +63,6 @@ module.exports = router => {
   });
 
   // delete comment
-  // rewrite to delete it from Post first then remove comment
   router.delete("/posts/:post_id/comments/:comment_id", (req, res) => {
     Post.findOneAndUpdate(
       { _id: req.params.post_id },
@@ -74,12 +72,7 @@ module.exports = router => {
         return Comment.findOneAndRemove({ _id: req.params.comment_id });
       })
       .then(comment => {
-        return Post.findOne({ _id: req.params.post_id })
-          .populate("comments")
-          .populate("likes");
-      })
-      .then(post => {
-        res.json(post);
+        res.json({ message: "Deleted your comment" });
       })
       .catch(err => {
         res.json({ message: "Error deleting your comment" });

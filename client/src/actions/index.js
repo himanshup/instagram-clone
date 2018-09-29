@@ -22,7 +22,9 @@ import {
   GET_COMMENT,
   SUBMIT_NEW_POST,
   LIKE_SINGLE_POST,
-  DISLIKE_SINGLE_POST
+  DISLIKE_SINGLE_POST,
+  FOLLOW_USER,
+  UNFOLLOW_USER
 } from "../constants/action-types";
 import history from "../history";
 
@@ -202,7 +204,7 @@ export const likePost = (postId, singlePost) => dispatch => {
       if (singlePost) {
         return dispatch({
           type: LIKE_SINGLE_POST,
-          payload: response.data.post
+          payload: response.data.like
         });
       } else {
         return dispatch({
@@ -216,19 +218,19 @@ export const likePost = (postId, singlePost) => dispatch => {
     });
 };
 
-export const dislikePost = (postId, likeId, singlePost) => dispatch => {
+export const dislikePost = (postId, like, singlePost) => dispatch => {
   axios
-    .delete(`/api/posts/${postId}/likes/${likeId}`)
+    .delete(`/api/posts/${postId}/likes/${like._id}`)
     .then(post => {
       if (singlePost) {
         return dispatch({
           type: DISLIKE_SINGLE_POST,
-          payload: post.data
+          payload: like
         });
       } else {
         dispatch({
           type: DISLIKE_POST,
-          payload: { postId, likeId }
+          payload: { postId, likeId: like._id }
         });
       }
     })
@@ -258,7 +260,7 @@ export const addComment = (text, id, singlePost) => dispatch => {
       if (singlePost) {
         return dispatch({
           type: ADD_COMMENT_SINGLE_POST,
-          payload: response.data.post
+          payload: response.data.comment
         });
       } else {
         return dispatch({
@@ -298,19 +300,19 @@ export const editComment = (postId, commentId, text) => dispatch => {
     });
 };
 
-export const deleteComment = (postId, commentId, singlePost) => dispatch => {
+export const deleteComment = (postId, comment, singlePost) => dispatch => {
   axios
-    .delete(`/api/posts/${postId}/comments/${commentId}`)
+    .delete(`/api/posts/${postId}/comments/${comment._id}`)
     .then(response => {
       if (singlePost) {
         dispatch({
           type: DELETE_COMMENT_SINGLE_POST,
-          payload: response.data
+          payload: comment
         });
       } else {
         dispatch({
           type: DELETE_COMMENT,
-          payload: { postId, commentId }
+          payload: { postId, commentId: comment._id }
         });
       }
     })
@@ -325,6 +327,28 @@ export const getUser = () => dispatch => {
     .then(response => {
       console.log(response.data);
       dispatch({ type: "GET_USERINFO", payload: response.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const followUser = userId => dispatch => {
+  axios
+    .post(`/api/users/${userId}/follow`)
+    .then(response => {
+      console.log(response.data);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const unfollowUser = (userId, followId) => dispatch => {
+  axios
+    .delete(`/api/users/${userId}/follow/${followId}`)
+    .then(response => {
+      console.log(response.data);
     })
     .catch(error => {
       console.log(error);

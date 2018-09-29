@@ -31,8 +31,6 @@ cloudinary.config({
 module.exports = router => {
   router.post("/register", upload.single("file"), (req, res) => {
     const { username, password } = req.body;
-
-    console.log("user signup");
     if (req.file) {
       const file = req.file.path;
 
@@ -127,22 +125,16 @@ module.exports = router => {
     })(req, res, next);
   });
 
+  // get user for user profile
   router.get("/users/:user_id", (req, res) => {
     User.findOne({ _id: req.params.user_id })
+      .populate("followers")
+      .populate("following")
+      .populate("bookmarks")
+      .populate("posts")
       .then(user => {
         if (user) {
-          const userInfo = {
-            id: user._id,
-            avatar: user.avatar,
-            avatarId: user.avatarId,
-            name: user.name,
-            bio: user.bio,
-            bookmarks: user.bookmarks,
-            followers: user.followers,
-            following: user.following,
-            username: user.username
-          };
-          res.json(userInfo);
+          res.json(user);
         }
       })
       .catch(err => {
@@ -150,8 +142,40 @@ module.exports = router => {
       });
   });
 
+  // follow a user
+  router.post("/users/:user_id/follow", (req, res) => {
+    User.findOne({ _id: req.params.user_id })
+      .then(user => {
+        console.log(user);
+        user.followers.push(req.user._id);
+        user.save();
+        res.json({ message: `Followed ${user.username}` });
+      })
+      .catch(err => {
+        res.json({ message: "Error occured" });
+      });
+  });
+
+  // unfollow user
+  router.delete("/users/:user_id/follow/:follow_id", (req, res) => {
+    User.findOne(
+      { _id: req.params.user_id },
+      {
+        $pull: { followers: { $in: [req.params.follow_id] } }
+      }
+    )
+      .then(user => {
+        res.json({ message: `Unfollowed ${user.username}` });
+      })
+      .catch(err => {
+        res.json({ message: "Error occured" });
+      });
+  });
+
   router.post("/logout", (req, res) => {
-    req.logout();
-    res.json({ msg: "logging out" });
+    if (req.user) {
+      req.logout();
+      res.json({ message: "logging out" });
+    }
   });
 };

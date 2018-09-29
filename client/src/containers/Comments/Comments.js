@@ -6,9 +6,6 @@ import * as actions from "../../actions";
 import "./Comments.css";
 
 class Comments extends Component {
-  handleDelete = (postId, commentId) => {
-    this.props.deleteComment(postId, commentId, this.props.singlePost);
-  };
   render() {
     return (
       <div>
@@ -30,7 +27,7 @@ class Comments extends Component {
                       onClick={() =>
                         this.props.deleteComment(
                           this.props.postId,
-                          comment._id,
+                          comment,
                           this.props.singlePost
                         )
                       }

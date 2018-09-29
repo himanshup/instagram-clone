@@ -14,14 +14,14 @@ class UserProfile extends Component {
     this.props.getUserProfile(this.props.match.params.userId);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.match.params.userId !== prevProps.match.params.userId) {
-      this.props.getUserProfile(this.props.match.params.userId);
-    }
-  }
-
   render() {
-    return <Header user={this.props.user} />;
+    return (
+      <Header
+        user={this.props.user}
+        follow={this.props.followUser}
+        unfollow={this.props.unfollowUser}
+      />
+    );
   }
 }
 

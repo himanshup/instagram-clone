@@ -22,6 +22,15 @@ const initialState = {
   deletePostMsg: "",
   comment: ""
 };
+const updatePost = (state, like) => {
+  return {
+    ...state,
+    post: {
+      ...state.post,
+      likes: [...state.post.likes, like]
+    }
+  };
+};
 
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -57,8 +66,13 @@ export default function(state = initialState, action) {
         posts: newPostsComment
       };
     case ADD_COMMENT_SINGLE_POST:
+      const commentSinglePost = state;
       return {
-        post: action.payload
+        ...commentSinglePost,
+        post: {
+          ...commentSinglePost.post,
+          comments: [...commentSinglePost.post.comments, action.payload]
+        }
       };
     case GET_COMMENT:
       return {
@@ -79,8 +93,15 @@ export default function(state = initialState, action) {
         posts: newPostsDeleteComment
       };
     case DELETE_COMMENT_SINGLE_POST:
+      const deleteCommentSinglePost = state;
       return {
-        post: action.payload
+        ...deleteCommentSinglePost,
+        post: {
+          ...deleteCommentSinglePost.post,
+          comments: deleteCommentSinglePost.post.comments.filter(
+            comment => comment._id !== action.payload._id
+          )
+        }
       };
     case LIKE_POST:
       const newPostsLike = state.posts.map(post => {
@@ -95,8 +116,13 @@ export default function(state = initialState, action) {
         posts: newPostsLike
       };
     case LIKE_SINGLE_POST:
+      const likeSinglePost = state;
       return {
-        post: action.payload
+        ...likeSinglePost,
+        post: {
+          ...likeSinglePost.post,
+          likes: [...likeSinglePost.post.likes, action.payload]
+        }
       };
     case DISLIKE_POST:
       const newPostsDislike = state.posts.map(post => {
@@ -113,8 +139,15 @@ export default function(state = initialState, action) {
         posts: newPostsDislike
       };
     case DISLIKE_SINGLE_POST:
+      const dislikeSinglePost = state;
       return {
-        post: action.payload
+        ...dislikeSinglePost,
+        post: {
+          ...dislikeSinglePost.post,
+          likes: dislikeSinglePost.post.likes.filter(
+            like => like._id !== action.payload._id
+          )
+        }
       };
     default:
       return state;

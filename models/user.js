@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 
 let userSchema = new mongoose.Schema({
   username: String,
-  password: String,
+  password: { type: String, select: false },
   avatar: String,
   avatarId: String,
   name: String,
@@ -21,6 +21,12 @@ let userSchema = new mongoose.Schema({
     }
   ],
   bookmarks: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post"
+    }
+  ],
+  posts: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Post"

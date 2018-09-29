@@ -67,7 +67,9 @@ module.exports = router => {
           }
         };
         Post.create(newPost)
-          .then(post => {
+          .then(async post => {
+            let user = await User.findOne({ _id: req.user._id });
+            user.posts.push(post._id);
             res.json(post);
           })
           .catch(err => {
@@ -141,23 +143,22 @@ module.exports = router => {
   });
 
   // like a post
+  // FIX
   router.post("/posts/:post_id/likes", (req, res) => {
     Post.findOne({ _id: req.params.post_id })
       .populate("comments")
       .populate("likes")
       .then(async post => {
-        const user = await User.findOne({ _id: req.user._id });
-
-        let like = {
-          userId: user._id,
-          username: user.username,
-          avatar: user.avatar
-        };
-        post.likes.push(like);
+        let user = await User.findOne({ _id: req.user._id });
+        post.likes.push(req.user._id);
         post.save();
         const data = {
-          post,
-          like
+          postId: post._id,
+          like: {
+            _id: user._id,
+            username: user.username,
+            avatar: user.avatar
+          }
         };
         res.json(data);
       })
@@ -171,16 +172,11 @@ module.exports = router => {
     Post.findOneAndUpdate(
       { _id: req.params.post_id },
       {
-        $pull: { likes: { $in: { $in: [req.params.like_id] } } }
+        $pull: { likes: { $in: [req.params.like_id] } }
       }
     )
       .then(post => {
-        return Post.findOne({ _id: post._id })
-          .populate("comments")
-          .populate("likes");
-      })
-      .then(newPost => {
-        res.json(newPost);
+        res.json({ message: "Unliked!" });
       })
       .catch(err => {
         res.json(err);

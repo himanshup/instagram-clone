@@ -34,3 +34,5 @@ export const DISLIKE_SINGLE_POST = "DISLIKE_SINGLE_POST";
 
 // users
 export const USER_PROFILE = "USER_PROFILE";
+export const FOLLOW_USER = "FOLLOW_USER";
+export const UNFOLLOW_USER = "UNFOLLOW_USER";
