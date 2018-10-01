@@ -104,10 +104,10 @@ module.exports = router => {
       });
   });
 
-  // update post
+  // edit post
   router.put("/posts/:post_id", upload.single("file"), (req, res) => {
     const caption = req.body.caption ? req.body.caption : "";
-    Post.findOne({ _id: req.params.post_id }, { description: caption })
+    Post.findOneAndUpdate({ _id: req.params.post_id }, { description: caption })
       .then(async post => {
         if (req.file) {
           await cloudinary.v2.uploader.destroy(post.imageId);

@@ -29,7 +29,7 @@ import {
   HOVER_POST,
   UNHOVER_POST,
   CHECK_IF_FOLLOWING,
-  TYPING_VALUE
+  EDIT_PROFILE
 } from "../constants/action-types";
 import history from "../history";
 
@@ -178,8 +178,42 @@ export const editPost = (data, postId) => dispatch => {
   axios
     .put(`/api/posts/${postId}`, formData)
     .then(post => {
-      dispatch({ type: EDIT_POST, payload: post.data });
+      dispatch({ type: EDIT_POST, payload: "Updated Post" });
       history.push(`/posts/${post.data._id}`);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const editProfile = (data, userId) => dispatch => {
+  console.log(data);
+  if (typeof data.avatar === "object" && data.avatar.length > 1) {
+    console.log("more than 1 image");
+    return dispatch({
+      type: EDIT_PROFILE,
+      payload: "only 1 image allowed"
+    });
+  }
+  const formData = new FormData();
+  if (typeof data.avatar === "object") {
+    console.log("there is an image");
+    formData.append("file", data.avatar[0]);
+  }
+  if (data.name !== "" && data.name !== undefined) {
+    console.log("there is a name");
+    formData.append("name", data.name);
+  }
+  if (data.bio !== "" && data.bio !== undefined) {
+    console.log("there is a bio");
+    formData.append("bio", data.bio);
+  }
+
+  axios
+    .put(`/api/users/${userId}`, formData)
+    .then(response => {
+      dispatch({ type: EDIT_PROFILE, payload: response.data.message });
+      history.push(`/users/${userId}`);
     })
     .catch(error => {
       console.log(error);
@@ -380,8 +414,4 @@ export const getFollowing = id => dispatch => {
     .catch(error => {
       console.log(error);
     });
-};
-
-export const setTypingValue = value => dispatch => {
-  dispatch({ type: TYPING_VALUE, payload: value });
 };

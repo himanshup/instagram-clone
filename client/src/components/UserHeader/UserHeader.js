@@ -77,14 +77,9 @@ const UserHeader = props => {
                 </div>
               </div>
               <div className="mt-3">
-                <strong>Full Name</strong>
+                <strong>{props.user.name}</strong>
               </div>
-              <div>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et
-                exercitationem praesentium ad, facere atque voluptas quam
-                ducimus mollitia similique voluptate ex tempore eaque doloribus
-                aspernatur officiis, voluptatibus magnam! Natus, earum!
-              </div>
+              <p>{props.user.bio}</p>
             </div>
           </div>
           <hr />

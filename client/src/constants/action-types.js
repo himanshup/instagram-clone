@@ -28,7 +28,6 @@ export const EDIT_COMMENT = "EDIT_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 export const DELETE_COMMENT_SINGLE_POST = "DELETE_COMMENT_SINGLE_POST";
 export const GET_COMMENT = "GET_COMMENT";
-export const TYPING_VALUE = "TYPING_VALUE";
 
 // likes
 export const LIKE_SINGLE_POST = "LIKE_SINGLE_POST";
@@ -38,5 +37,6 @@ export const DISLIKE_SINGLE_POST = "DISLIKE_SINGLE_POST";
 
 // users
 export const USER_PROFILE = "USER_PROFILE";
+export const EDIT_PROFILE = "EDIT_PROFILE";
 export const FOLLOW_USER = "FOLLOW_USER";
 export const UNFOLLOW_USER = "UNFOLLOW_USER";

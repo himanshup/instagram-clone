@@ -1,8 +1,7 @@
 import {
   USER_PROFILE,
   FOLLOW_USER,
-  UNFOLLOW_USER,
-  CHECK_IF_FOLLOWING
+  UNFOLLOW_USER
 } from "../constants/action-types";
 
 const initialState = {
@@ -31,7 +30,6 @@ export default function(state = initialState, action) {
         user: action.payload,
         posts: state.posts
       };
-
     default:
       return state;
   }

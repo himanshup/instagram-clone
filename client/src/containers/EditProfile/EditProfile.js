@@ -3,7 +3,6 @@ import { reduxForm, Field } from "redux-form";
 import Dropzone from "react-dropzone";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
-import * as Icon from "react-feather";
 import "./EditProfile.css";
 
 const mapStateToProps = state => {
@@ -54,85 +53,84 @@ let EditProfileForm = props => {
     preview
   } = props;
   return (
-    <React.Fragment>
-      <form onSubmit={handleSubmit} className="">
-        <div className="form-group row mb-3">
-          <div className="col-2">
-            {preview ? (
-              <img
-                src={preview}
-                className="imgPreview mr-3 rounded-circle align-self-center "
-                alt=""
-                width="65"
-                height="65"
-              />
-            ) : (
-              <img
-                src={info.avatar}
-                className="imgPreview mr-3 rounded-circle align-self-center "
-                alt=""
-                width="65"
-                height="65"
-              />
-            )}
-          </div>
-          <div className="col-10">
-            <h5>{info.username}</h5>
-            <Field
-              name="avatar"
-              component={renderDropzoneField}
-              onChange={onValues}
+    <form onSubmit={handleSubmit}>
+      <div className="row mb-3">
+        <div className="col-4 col-md-2">
+          {preview ? (
+            <img
+              src={preview}
+              className="mr-3 rounded-circle align-self-center"
+              alt=""
+              width="65"
+              height="65"
             />
-          </div>
+          ) : (
+            <img
+              src={info.avatar}
+              className="mr-3 rounded-circle align-self-center"
+              alt=""
+              width="65"
+              height="65"
+            />
+          )}
         </div>
-        {errorMsg && <small className="text-danger">{errorMsg}</small>}
+        <div className="col-8 col-md-10">
+          <h5>{info.username}</h5>
+          <Field
+            name="avatar"
+            component={renderDropzoneField}
+            onChange={onValues}
+          />
+          {errorMsg && <small className="text-danger">{errorMsg}</small>}
+        </div>
+      </div>
 
-        <div className="form-group row">
-          <label className="col-sm-2 col-form-label">Name</label>
-          <div className="col-sm-10">
-            <Field
-              name="name"
-              className="form-control form-control-sm"
-              component="input"
-            />
-          </div>
+      <div className="form-group row">
+        <label className="col-sm-2 col-form-label">Name</label>
+        <div className="col-sm-10">
+          <Field
+            name="name"
+            className="form-control form-control-sm"
+            component="input"
+          />
         </div>
-        <div className="form-group row">
-          <lable className="col-sm-2 col-form-label">Username</lable>
-          <div className="col-sm-10">
-            <Field
-              name="username"
-              className="form-control form-control-sm"
-              placeholder="Username"
-              component="input"
-            />
-          </div>
+      </div>
+      <div className="form-group row">
+        <label className="col-sm-2 col-form-label">Username</label>
+        <div className="col-sm-10">
+          <Field
+            name="username"
+            className="form-control form-control-sm"
+            placeholder="Username"
+            component="input"
+            disabled
+          />
         </div>
-        <div className="form-group row">
-          <label className="col-sm-2 col-form-label">Bio</label>
-          <div className="col-sm-10">
-            <Field
-              name="bio"
-              className="form-control form-control-sm"
-              placeholder="Bio"
-              component="textarea"
-            />
-          </div>
+      </div>
+      <div className="form-group row">
+        <label className="col-sm-2 col-form-label">Bio</label>
+        <div className="col-sm-10">
+          <Field
+            name="bio"
+            className="form-control form-control-sm"
+            placeholder="Bio"
+            component="textarea"
+          />
         </div>
-        {errorMsg ? (
-          <button className="btn btn-primary btn-sm btn-block mt-3" disabled>
-            Post
-          </button>
-        ) : (
-          <button
-            className="btn btn-primary btn-sm btn-block mt-3"
-            disabled={pristine || submitting}
-          >
-            Submit
-          </button>
-        )}
-      </form>
-    </React.Fragment>
+      </div>
+      {errorMsg ? (
+        <button className="btn btn-primary btn-sm btn-block mt-3" disabled>
+          Post
+        </button>
+      ) : (
+        <button
+          className="btn btn-primary btn-sm btn-block mt-3"
+          disabled={pristine || submitting}
+        >
+          Submit
+        </button>
+      )}
+    </form>
   );
 };
 
@@ -155,7 +153,7 @@ class EditProfile extends Component {
     this.props.getUserProfile(this.props.match.params.userId);
   }
   handleSubmit = data => {
-    console.log(data);
+    this.props.editProfile(data, this.props.match.params.userId);
   };
 
   onValues = images => {
