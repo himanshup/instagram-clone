@@ -1,11 +1,13 @@
 import React, { Component } from "react";
-import Header from "../../components/Header/Header";
+import UserHeader from "../../components/UserHeader/UserHeader";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 const mapStateToProps = state => {
   return {
-    user: state.user.user
+    user: state.user.user,
+    posts: state.user.posts,
+    visible: state.common.visible
   };
 };
 
@@ -22,8 +24,12 @@ class UserProfile extends Component {
 
   render() {
     return (
-      <Header
+      <UserHeader
         user={this.props.user}
+        posts={this.props.posts}
+        visible={this.props.visible}
+        hoverPost={this.props.hoverPost}
+        unhoverPost={this.props.unhoverPost}
         follow={this.props.followUser}
         unfollow={this.props.unfollowUser}
       />

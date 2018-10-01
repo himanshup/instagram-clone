@@ -2,13 +2,20 @@ import {
   GET_PREVIEW,
   RESET_VALUE,
   SUBMIT_NEW_POST,
-  EDIT_POST
+  EDIT_POST,
+  HOVER_POST,
+  UNHOVER_POST,
+  CHECK_IF_FOLLOWING,
+  TYPING_VALUE
 } from "../constants/action-types";
 
 const initialState = {
   prevew: "",
   imagePreviewError: "",
-  submitted: false
+  submitted: false,
+  visible: null,
+  following: [],
+  typing: ""
 };
 
 export default function(state = initialState, action) {
@@ -34,6 +41,22 @@ export default function(state = initialState, action) {
     case EDIT_POST:
       return {
         imagePreviewError: action.payload
+      };
+    case HOVER_POST:
+      return {
+        visible: action.payload
+      };
+    case UNHOVER_POST:
+      return {
+        visible: action.payload
+      };
+    case CHECK_IF_FOLLOWING:
+      return {
+        following: action.payload
+      };
+    case TYPING_VALUE:
+      return {
+        typing: action.payload
       };
     default:
       return state;

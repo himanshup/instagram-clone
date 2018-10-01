@@ -17,6 +17,9 @@ export const SUBMIT_NEW_POST = "SUBMIT_NEW_POST"; // hides form after successful
 export const EDIT_POST = "EDIT_POST";
 export const DELETE_POST = "DELETE_POST";
 export const DELETE_SINGLE_POST = "DELETE_SINGLE_POST";
+export const HOVER_POST = "HOVER_POST";
+export const UNHOVER_POST = " UNHOVER_POST";
+export const CHECK_IF_FOLLOWING = "CHECK_IF_FOLLOWING";
 
 // comments
 export const ADD_COMMENT = "ADD_COMMENT";
@@ -25,6 +28,7 @@ export const EDIT_COMMENT = "EDIT_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 export const DELETE_COMMENT_SINGLE_POST = "DELETE_COMMENT_SINGLE_POST";
 export const GET_COMMENT = "GET_COMMENT";
+export const TYPING_VALUE = "TYPING_VALUE";
 
 // likes
 export const LIKE_SINGLE_POST = "LIKE_SINGLE_POST";

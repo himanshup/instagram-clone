@@ -4,9 +4,9 @@ import NewComment from "../../containers/NewComment/NewComment";
 import Comments from "../../containers/Comments/Comments";
 import Icons from "../../containers/Icons/Icons";
 import moment from "moment";
-import "./Posts.css";
+import "./DisplayPosts.css";
 
-const Posts = props => {
+const DisplayPosts = props => {
   return (
     <div className="container">
       <div className="row">
@@ -26,7 +26,7 @@ const Posts = props => {
                     height="30px"
                   />
                   <Link to={`/users/${post.author.id}`} className="feedLinks">
-                    {post.author.username}
+                    {post.author.username}{" "}
                   </Link>
                 </div>
                 <img
@@ -76,4 +76,4 @@ const Posts = props => {
   );
 };
 
-export default Posts;
+export default DisplayPosts;

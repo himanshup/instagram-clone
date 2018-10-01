@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Posts from "../../components/Posts/Posts";
+import DisplayPosts from "../../components/DisplayPosts/DisplayPosts";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 
@@ -15,7 +15,7 @@ class Feed extends Component {
   }
 
   render() {
-    return <Posts posts={this.props.posts} />;
+    return <DisplayPosts posts={this.props.posts} />;
   }
 }
 

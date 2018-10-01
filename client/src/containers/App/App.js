@@ -13,6 +13,7 @@ import Post from "../Post/Post";
 import EditPost from "../EditPost/EditPost";
 import EditComment from "../EditComment/EditComment";
 import ErrorPage from "../../components/ErrorPage/ErrorPage";
+import EditProfile from "../../containers/EditProfile/EditProfile";
 
 const mapStateToProps = state => {
   return {
@@ -49,6 +50,7 @@ class App extends Component {
                   component={EditComment}
                 />
                 <Route path="/edit/posts/:postId" component={EditPost} />
+                <Route path="/accounts/:userId/edit" component={EditProfile} />
                 <Route component={ErrorPage} />
               </Switch>
             ) : (

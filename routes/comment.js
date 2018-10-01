@@ -18,9 +18,7 @@ module.exports = router => {
         return (newComment = comment);
       })
       .then(result => {
-        return Post.findById(req.params.post_id)
-          .populate("comments")
-          .populate("likes");
+        return Post.findById(req.params.post_id).populate("comments likes");
       })
       .then(post => {
         post.comments.push(newComment);

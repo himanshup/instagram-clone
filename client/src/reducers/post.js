@@ -22,15 +22,6 @@ const initialState = {
   deletePostMsg: "",
   comment: ""
 };
-const updatePost = (state, like) => {
-  return {
-    ...state,
-    post: {
-      ...state.post,
-      likes: [...state.post.likes, like]
-    }
-  };
-};
 
 export default function(state = initialState, action) {
   switch (action.type) {

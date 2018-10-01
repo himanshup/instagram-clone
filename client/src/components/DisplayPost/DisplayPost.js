@@ -7,6 +7,15 @@ import moment from "moment";
 import "./DisplayPost.css";
 
 const DisplayPost = props => {
+  // const check = id => {
+  //   if (props.following) {
+  //     for (const user of props.following) {
+  //       if (user._id === id) {
+  //         return true;
+  //       }
+  //     }
+  //   }
+  // };
   return (
     <div className="container mt-5">
       {props.post &&
@@ -57,6 +66,21 @@ const DisplayPost = props => {
                   >
                     {props.post.author.username}
                   </Link>
+                  {/* {check(props.post.author.id) ? (
+                    <button
+                      className="ml-2 btn btn-sm btn-outline-dark"
+                      onClick={() => props.unfollow(props.post.author.id)}
+                    >
+                      <span className="">Unfollow</span>
+                    </button>
+                  ) : (
+                    <button
+                      className="ml-2 btn btn-sm btn-primary"
+                      onClick={() => props.follow(props.post.author.id)}
+                    >
+                      <span className="">Follow</span>
+                    </button>
+                  )} */}
                   <hr />
                   {props.post.description && (
                     <div className="mt-1">
@@ -69,13 +93,16 @@ const DisplayPost = props => {
                       {props.post.description}
                     </div>
                   )}
-                  <Comments
-                    postId={props.post._id}
-                    comments={props.post.comments}
-                    singlePost={true}
-                  />
+                  <div className="commentSection">
+                    <Comments
+                      postId={props.post._id}
+                      comments={props.post.comments}
+                      singlePost={true}
+                    />
+                  </div>
                 </div>
-                <div className="p-3">
+                <div className="p-3 mt-auto">
+                  <hr />
                   <Icons
                     authorId={props.post.author.id}
                     postId={props.post._id}

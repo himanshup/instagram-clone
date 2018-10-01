@@ -32,12 +32,23 @@ cloudinary.config({
 module.exports = router => {
   // get all posts
   router.get("/posts", (req, res) => {
+    let newPosts = {};
     Post.find({})
       .sort({ timePosted: -1 })
       .populate("comments")
       .populate("likes")
       .then(posts => {
-        res.json(posts);
+        return (newPosts = posts);
+      })
+      .then(posts => {
+        return User.findOne({ _id: req.user._id });
+      })
+      .then(user => {
+        const data = {
+          posts: newPosts,
+          user: user
+        };
+        res.json(data);
       })
       .catch(err => {
         res.json(err);
@@ -48,12 +59,13 @@ module.exports = router => {
   router.post("/posts", upload.single("file"), (req, res) => {
     cloudinary.v2.uploader.upload(
       req.file.path,
-      { width: 1000, height: 1000, crop: "scale" },
-      (err, result) => {
+      { width: 1000, height: 1000, gravity: "center", crop: "fill" },
+      async (err, result) => {
+        let user = await User.findOne({ _id: req.user._id });
         if (err) {
           return res.json(err);
         }
-        const { caption, authorId, username, avatar } = req.body;
+        const { caption } = req.body;
         const public_id = result.public_id;
         const secure_url = result.secure_url;
         const newPost = {
@@ -61,15 +73,13 @@ module.exports = router => {
           imageId: public_id,
           description: caption ? caption : "",
           author: {
-            id: authorId,
-            username: username,
-            avatar: avatar
+            id: user._id,
+            username: user.username,
+            avatar: user.avatar
           }
         };
         Post.create(newPost)
-          .then(async post => {
-            let user = await User.findOne({ _id: req.user._id });
-            user.posts.push(post._id);
+          .then(post => {
             res.json(post);
           })
           .catch(err => {
@@ -104,7 +114,8 @@ module.exports = router => {
           const result = await cloudinary.v2.uploader.upload(req.file.path, {
             width: 1000,
             height: 1000,
-            crop: "scale"
+            gravity: "center",
+            crop: "fill"
           });
           post.imageId = result.public_id;
           post.image = result.secure_url;
@@ -143,7 +154,6 @@ module.exports = router => {
   });
 
   // like a post
-  // FIX
   router.post("/posts/:post_id/likes", (req, res) => {
     Post.findOne({ _id: req.params.post_id })
       .populate("comments")

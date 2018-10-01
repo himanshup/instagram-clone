@@ -2,6 +2,7 @@ const User = require("../models/user");
 const passport = require("../passport");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
+const Post = require("../models/post");
 
 const storage = multer.diskStorage({
   filename: function(req, file, callback) {
@@ -40,7 +41,7 @@ module.exports = router => {
           width: 150,
           height: 150,
           gravity: "center",
-          crop: "scale"
+          crop: "fill"
         },
         (error, result) => {
           if (error) {
@@ -127,15 +128,24 @@ module.exports = router => {
 
   // get user for user profile
   router.get("/users/:user_id", (req, res) => {
+    let newUser = {};
     User.findOne({ _id: req.params.user_id })
       .populate("followers")
       .populate("following")
       .populate("bookmarks")
-      .populate("posts")
       .then(user => {
-        if (user) {
-          res.json(user);
-        }
+        return (newUser = user);
+      })
+      .then(user => {
+        return Post.find()
+          .sort({ timePosted: -1 })
+          .populate("comments")
+          .populate("likes")
+          .where("author.id")
+          .equals(req.params.user_id);
+      })
+      .then(posts => {
+        res.json({ posts: posts, user: newUser });
       })
       .catch(err => {
         res.json(err);
@@ -179,7 +189,7 @@ module.exports = router => {
           }
         );
       })
-      .then(respone => {
+      .then(response => {
         return User.findOne({ _id: req.params.user_id })
           .populate("followers")
           .populate("following")

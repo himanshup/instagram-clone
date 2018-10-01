@@ -23,7 +23,7 @@ class Comments extends Component {
                   <span className="float-right feedLinks">
                     <Icon.Trash2
                       size={14}
-                      className="feedIcons "
+                      className="feedIcons mr-2"
                       onClick={() =>
                         this.props.deleteComment(
                           this.props.postId,

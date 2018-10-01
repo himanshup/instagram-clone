@@ -1,18 +1,21 @@
 import {
   USER_PROFILE,
   FOLLOW_USER,
-  UNFOLLOW_USER
+  UNFOLLOW_USER,
+  CHECK_IF_FOLLOWING
 } from "../constants/action-types";
 
 const initialState = {
-  user: {}
+  user: {},
+  posts: []
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case USER_PROFILE:
       return {
-        user: action.payload
+        user: action.payload.user,
+        posts: action.payload.posts
       };
     case FOLLOW_USER:
       const newStateFollow = state;
@@ -25,8 +28,10 @@ export default function(state = initialState, action) {
       };
     case UNFOLLOW_USER:
       return {
-        user: action.payload
+        user: action.payload,
+        posts: state.posts
       };
+
     default:
       return state;
   }

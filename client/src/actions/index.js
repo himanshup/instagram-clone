@@ -1,4 +1,5 @@
 import axios from "axios";
+import { reset } from "redux-form";
 import {
   LOGIN_USER,
   REGISTER_USER,
@@ -24,7 +25,11 @@ import {
   LIKE_SINGLE_POST,
   DISLIKE_SINGLE_POST,
   FOLLOW_USER,
-  UNFOLLOW_USER
+  UNFOLLOW_USER,
+  HOVER_POST,
+  UNHOVER_POST,
+  CHECK_IF_FOLLOWING,
+  TYPING_VALUE
 } from "../constants/action-types";
 import history from "../history";
 
@@ -104,8 +109,17 @@ export const resetValue = () => dispatch => {
 export const getFeed = () => dispatch => {
   axios
     .get("/api/posts")
-    .then(posts => {
-      dispatch({ type: GET_FEED, payload: posts.data });
+    .then(response => {
+      const newPosts = [];
+      for (const post of response.data.posts) {
+        if (
+          response.data.user.following.includes(post.author.id) ||
+          post.author.id === response.data.user._id
+        ) {
+          newPosts.push(post);
+        }
+      }
+      dispatch({ type: GET_FEED, payload: newPosts });
     })
     .catch(error => {
       console.log(error);
@@ -128,19 +142,16 @@ export const submitNewPost = () => dispatch => {
 };
 
 export const createPost = data => dispatch => {
-  const user = JSON.parse(localStorage.getItem("Auth"));
   const formData = new FormData();
   formData.append("file", data.image[0]);
   if (data.caption) {
     formData.append("caption", data.caption);
   }
-  formData.append("authorId", user.id);
-  formData.append("username", user.username);
-  formData.append("avatar", user.avatar);
 
   axios
     .post("/api/posts", formData)
     .then(post => {
+      console.log(post.data);
       dispatch({ type: CREATE_POST, payload: post.data });
       history.push("/posts");
     })
@@ -242,27 +253,32 @@ export const dislikePost = (postId, like, singlePost) => dispatch => {
 export const getUserProfile = id => dispatch => {
   axios
     .get(`/api/users/${id}`)
-    .then(user => {
-      dispatch({ type: USER_PROFILE, payload: user.data });
+    .then(response => {
+      dispatch({
+        type: USER_PROFILE,
+        payload: { posts: response.data.posts, user: response.data.user }
+      });
     })
     .catch(error => {
       console.log(error);
     });
 };
 
-export const addComment = (text, id, singlePost) => dispatch => {
+export const addComment = (text, postId, singlePost) => dispatch => {
   axios
-    .post(`/api/posts/${id}/comments`, {
+    .post(`/api/posts/${postId}/comments`, {
       comment: text.comment
     })
     .then(response => {
       // checks if function was called from a single post page instead of the feed
       if (singlePost) {
+        dispatch(reset(postId));
         return dispatch({
           type: ADD_COMMENT_SINGLE_POST,
           payload: response.data.comment
         });
       } else {
+        dispatch(reset(postId));
         return dispatch({
           type: ADD_COMMENT,
           payload: {
@@ -321,18 +337,6 @@ export const deleteComment = (postId, comment, singlePost) => dispatch => {
     });
 };
 
-export const getUser = () => dispatch => {
-  axios
-    .get("/api/user")
-    .then(response => {
-      console.log(response.data);
-      dispatch({ type: "GET_USERINFO", payload: response.data });
-    })
-    .catch(error => {
-      console.log(error);
-    });
-};
-
 export const followUser = userId => dispatch => {
   axios
     .post(`/api/users/follow/${userId}`)
@@ -353,4 +357,31 @@ export const unfollowUser = userId => dispatch => {
     .catch(error => {
       console.log(error);
     });
+};
+
+export const hoverPost = postId => dispatch => {
+  dispatch({ type: HOVER_POST, payload: postId });
+};
+
+export const unhoverPost = () => dispatch => {
+  dispatch({ type: UNHOVER_POST, payload: null });
+};
+
+export const getFollowing = id => dispatch => {
+  const user = JSON.parse(localStorage.getItem("Auth"));
+  axios
+    .get(`/api/users/${user.id}`)
+    .then(response => {
+      dispatch({
+        type: CHECK_IF_FOLLOWING,
+        payload: response.data.user.following
+      });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const setTypingValue = value => dispatch => {
+  dispatch({ type: TYPING_VALUE, payload: value });
 };

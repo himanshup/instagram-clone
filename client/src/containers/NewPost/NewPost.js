@@ -31,23 +31,21 @@ const mapStateToProps = state => {
 
 const renderDropzoneField = ({ input, name }) => {
   return (
-    <div>
-      <Dropzone
-        name={name}
-        className="drop mt-1 rounded"
-        accept="image/jpeg, image/jpg, image/png"
-        onDrop={filesToUpload => input.onChange(filesToUpload)}
-      >
-        <div className="d-flex justify-content-center h-100">
-          <div className="text-center align-self-center">
-            <div>
-              <Icon.Plus className="text-muted camera" />
-            </div>
-            <span className="text-muted avatarText">Upload Image</span>
+    <Dropzone
+      name={name}
+      className="drop mt-1 rounded"
+      accept="image/jpeg, image/jpg, image/png"
+      onDrop={filesToUpload => input.onChange(filesToUpload)}
+    >
+      <div className="d-flex justify-content-center h-100">
+        <div className="text-center align-self-center">
+          <div>
+            <Icon.Plus className="text-muted camera" />
           </div>
+          <span className="text-muted avatarText">Upload Image</span>
         </div>
-      </Dropzone>
-    </div>
+      </div>
+    </Dropzone>
   );
 };
 
