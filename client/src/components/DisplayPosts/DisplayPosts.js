@@ -41,7 +41,10 @@ const DisplayPosts = props => {
                     likes={post.likes}
                   />
                   <div className="mt-2">
-                    <Link to="/" className="feedLinks">
+                    <Link
+                      to={`/posts/${post._id}/liked_by`}
+                      className="feedLinks"
+                    >
                       {post.likes.length} likes
                     </Link>
                   </div>

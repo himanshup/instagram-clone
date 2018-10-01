@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { reduxForm, Field } from "redux-form";
 import Dropzone from "react-dropzone";
+import Loader from "../../components/Loader/Loader";
 import { connect } from "react-redux";
 import * as actions from "../../actions/post";
 import * as Icon from "react-feather";
@@ -9,7 +10,8 @@ const mapStateToProps = state => {
   return {
     imgPreview: state.common.preview,
     image: state.post.post && state.post.post.image,
-    imagePreviewError: state.common.imagePreviewError
+    imagePreviewError: state.common.imagePreviewError,
+    submitLoading: state.common.submitLoading
   };
 };
 
@@ -92,6 +94,7 @@ class EditPost extends Component {
     this.props.getPostForEdit(this.props.match.params.postId);
   }
   handleSubmit = data => {
+    this.props.submitNewPost();
     this.props.editPost(data, this.props.match.params.postId);
   };
 
@@ -106,36 +109,40 @@ class EditPost extends Component {
   render() {
     return (
       <div className="container d-flex justify-content-center component">
-        <div className="card p-2 postCard rounded-0">
-          <div className="card-body">
-            <h1 className="text-center">Edit Post</h1>
-            {this.props.imgPreview ? (
-              <div className="text-center mt-4">
-                <img
-                  src={this.props.imgPreview}
-                  className="imgPreview"
-                  alt=""
-                  width="100%"
-                />
-              </div>
-            ) : (
-              <div className="text-center mt-4">
-                <img
-                  src={this.props.image}
-                  className="imgPreview"
-                  alt=""
-                  width="100%"
-                />
-              </div>
-            )}
-            <EditPostForm
-              onSubmit={this.handleSubmit}
-              onValues={this.onValues}
-              preview={this.props.imgPreview}
-              errorMsg={this.props.imagePreviewError}
-            />
+        {this.props.submitLoading ? (
+          <Loader />
+        ) : (
+          <div className="card p-2 postCard rounded-0">
+            <div className="card-body">
+              <h1 className="text-center">Edit Post</h1>
+              {this.props.imgPreview ? (
+                <div className="text-center mt-4">
+                  <img
+                    src={this.props.imgPreview}
+                    className="imgPreview"
+                    alt=""
+                    width="100%"
+                  />
+                </div>
+              ) : (
+                <div className="text-center mt-4">
+                  <img
+                    src={this.props.image}
+                    className="imgPreview"
+                    alt=""
+                    width="100%"
+                  />
+                </div>
+              )}
+              <EditPostForm
+                onSubmit={this.handleSubmit}
+                onValues={this.onValues}
+                preview={this.props.imgPreview}
+                errorMsg={this.props.imagePreviewError}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
