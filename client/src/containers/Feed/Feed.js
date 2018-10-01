@@ -15,7 +15,7 @@ class Feed extends Component {
   }
 
   render() {
-    if (!this.props.post) {
+    if (this.props.posts && this.props.posts.length === 0) {
       return (
         <div className="container">
           <div className="text-center component">

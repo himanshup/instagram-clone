@@ -30,7 +30,7 @@ passport.use(
         .select("+password")
         .exec((err, user) => {
           if (err) {
-            console.log;
+            console.log(err);
           }
           if (!user) {
             return done(null, false, {

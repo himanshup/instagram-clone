@@ -3,6 +3,9 @@ const Comment = require("../models/comment");
 const User = require("../models/user");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
+const middleware = require("../middleware");
+
+const { checkPostOwnership } = middleware;
 
 const storage = multer.diskStorage({
   filename: function(req, file, callback) {
@@ -90,39 +93,66 @@ module.exports = router => {
       .then(post => {
         if (post) {
           res.json(post);
+        } else {
+          res.json({ error: "Sorry, that post doesn't exist." });
         }
       })
       .catch(err => {
-        res.json({ message: "Post doesn't exist" });
+        res.json({ error: "Something went wrong," });
+      });
+  });
+
+  // edit post route
+  router.get("/posts/:post_id/edit", checkPostOwnership, (req, res) => {
+    Post.findOne({ _id: req.params.post_id })
+      .populate("comments")
+      .populate("likes")
+      .then(post => {
+        if (post) {
+          res.json(post);
+        } else {
+          res.json({ error: "Sorry, that post doesn't exist." });
+        }
+      })
+      .catch(err => {
+        res.json({ error: "Something went wrong," });
       });
   });
 
   // edit post
-  router.put("/posts/:post_id", upload.single("file"), (req, res) => {
-    const caption = req.body.caption ? req.body.caption : "";
-    Post.findOneAndUpdate({ _id: req.params.post_id }, { description: caption })
-      .then(async post => {
-        if (req.file) {
-          await cloudinary.v2.uploader.destroy(post.imageId);
-          const result = await cloudinary.v2.uploader.upload(req.file.path, {
-            width: 1000,
-            height: 1000,
-            gravity: "center",
-            crop: "fill"
-          });
-          post.imageId = result.public_id;
-          post.image = result.secure_url;
-        }
-        post.save();
-        res.json(post);
-      })
-      .catch(err => {
-        res.json({ message: "Error editing your post" });
-      });
-  });
+  router.put(
+    "/posts/:post_id",
+    upload.single("file"),
+    checkPostOwnership,
+    (req, res) => {
+      const caption = req.body.caption ? req.body.caption : "";
+      Post.findOneAndUpdate(
+        { _id: req.params.post_id },
+        { description: caption }
+      )
+        .then(async post => {
+          if (req.file) {
+            await cloudinary.v2.uploader.destroy(post.imageId);
+            const result = await cloudinary.v2.uploader.upload(req.file.path, {
+              width: 1000,
+              height: 1000,
+              gravity: "center",
+              crop: "fill"
+            });
+            post.imageId = result.public_id;
+            post.image = result.secure_url;
+          }
+          post.save();
+          res.json(post);
+        })
+        .catch(err => {
+          res.json({ message: "Error editing your post" });
+        });
+    }
+  );
 
   // delete a post
-  router.delete("/posts/:post_id", (req, res) => {
+  router.delete("/posts/:post_id", checkPostOwnership, (req, res) => {
     Post.findOne({ _id: req.params.post_id })
       .then(async post => {
         if (String(post.author.id) === String(req.user._id)) {

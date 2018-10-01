@@ -89,7 +89,7 @@ EditPostForm = connect(state => ({
 
 class EditPost extends Component {
   componentDidMount() {
-    this.props.getPost(this.props.match.params.postId);
+    this.props.getPostForEdit(this.props.match.params.postId);
   }
   handleSubmit = data => {
     this.props.editPost(data, this.props.match.params.postId);

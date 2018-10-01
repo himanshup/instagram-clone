@@ -12,7 +12,8 @@ import {
   DELETE_COMMENT,
   DELETE_COMMENT_SINGLE_POST,
   LIKE_SINGLE_POST,
-  DISLIKE_SINGLE_POST
+  DISLIKE_SINGLE_POST,
+  GET_POST_FOR_EDIT
 } from "../constants/action-types";
 
 const initialState = {
@@ -39,6 +40,10 @@ export default function(state = initialState, action) {
     case GET_FEED:
       return {
         posts: action.payload
+      };
+    case GET_POST_FOR_EDIT:
+      return {
+        post: action.payload
       };
     case GET_POST:
       return {

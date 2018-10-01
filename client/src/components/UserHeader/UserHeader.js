@@ -5,10 +5,10 @@ import "./UserHeader.css";
 
 const UserHeader = props => {
   const user = JSON.parse(localStorage.getItem("Auth"));
-  const checkIfFollowing = (followers, id) => {
+  const checkIfFollowing = followers => {
     if (followers) {
       for (const follower of followers) {
-        if (follower._id === id) {
+        if (follower._id === user.id) {
           return true;
         } else {
           return false;
@@ -41,7 +41,7 @@ const UserHeader = props => {
                     >
                       <span className="ml-3 mr-3">Edit Profile</span>
                     </Link>
-                  ) : checkIfFollowing(props.user.followers, user.id) ? (
+                  ) : checkIfFollowing(props.user.followers) ? (
                     <button
                       className="ml-2 btn btn-sm btn-outline-dark"
                       onClick={() => props.unfollow(props.user._id)}

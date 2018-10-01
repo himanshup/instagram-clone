@@ -94,6 +94,7 @@ module.exports = router => {
           username: req.user.username,
           avatar: currentUser.avatar
         };
+        console.log(data);
         res.json(data);
       })
       .catch(err => {
@@ -124,6 +125,7 @@ module.exports = router => {
           .populate("posts");
       })
       .then(user => {
+        console.log(user);
         res.json(user);
       })
       .catch(err => {

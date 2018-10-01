@@ -32,7 +32,7 @@ if (process.env.MONGO_URI) {
 
 const db = mongoose.connection;
 db.on("error", err => {
-  console.log("couldn't connect to db");
+  console.log("Couldn't connect to db");
   console.log(err);
 });
 db.once("open", () => {

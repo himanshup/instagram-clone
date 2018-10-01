@@ -1,7 +1,7 @@
 const Post = require("../models/post");
 const Comment = require("../models/comment");
-const mongoose = require("mongoose");
-mongoose.Promise = Promise;
+const middleware = require("../middleware");
+const { checkCommentOwnership } = middleware;
 
 module.exports = router => {
   // create comment
@@ -35,45 +35,57 @@ module.exports = router => {
   });
 
   // comment edit route
-  router.get("/posts/:post_id/comments/:comment_id/edit", (req, res) => {
-    Comment.findOne({ _id: req.params.comment_id })
-      .then(comment => {
-        res.json(comment.text);
-      })
-      .catch(err => {
-        res.json(err.message);
-      });
-  });
+  router.get(
+    "/posts/:post_id/comments/:comment_id/edit",
+    checkCommentOwnership,
+    (req, res) => {
+      Comment.findOne({ _id: req.params.comment_id })
+        .then(comment => {
+          res.json(comment.text);
+        })
+        .catch(err => {
+          res.json(err.message);
+        });
+    }
+  );
 
   // edit comment
-  router.put("/posts/:post_id/comments/:comment_id", (req, res) => {
-    Comment.findOneAndUpdate(
-      { _id: req.params.comment_id },
-      { text: req.body.comment }
-    )
-      .then(response => {
-        console.log(response);
-        res.json({ message: "Successfully edited your comment!" });
-      })
-      .catch(err => {
-        res.json({ message: "Error editing your comment" });
-      });
-  });
+  router.put(
+    "/posts/:post_id/comments/:comment_id",
+    checkCommentOwnership,
+    (req, res) => {
+      Comment.findOneAndUpdate(
+        { _id: req.params.comment_id },
+        { text: req.body.comment }
+      )
+        .then(response => {
+          console.log(response);
+          res.json({ message: "Successfully edited your comment!" });
+        })
+        .catch(err => {
+          res.json({ message: "Error editing your comment" });
+        });
+    }
+  );
 
   // delete comment
-  router.delete("/posts/:post_id/comments/:comment_id", (req, res) => {
-    Post.findOneAndUpdate(
-      { _id: req.params.post_id },
-      { $pull: { comments: req.params.comment_id } }
-    )
-      .then(post => {
-        return Comment.findOneAndRemove({ _id: req.params.comment_id });
-      })
-      .then(comment => {
-        res.json({ message: "Deleted your comment" });
-      })
-      .catch(err => {
-        res.json({ message: "Error deleting your comment" });
-      });
-  });
+  router.delete(
+    "/posts/:post_id/comments/:comment_id",
+    checkCommentOwnership,
+    (req, res) => {
+      Post.findOneAndUpdate(
+        { _id: req.params.post_id },
+        { $pull: { comments: req.params.comment_id } }
+      )
+        .then(post => {
+          return Comment.findOneAndRemove({ _id: req.params.comment_id });
+        })
+        .then(comment => {
+          res.json({ message: "Deleted your comment" });
+        })
+        .catch(err => {
+          res.json({ message: "Error deleting your comment" });
+        });
+    }
+  );
 };

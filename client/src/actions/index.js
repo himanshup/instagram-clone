@@ -29,7 +29,8 @@ import {
   HOVER_POST,
   UNHOVER_POST,
   CHECK_IF_FOLLOWING,
-  EDIT_PROFILE
+  EDIT_PROFILE,
+  GET_POST_FOR_EDIT
 } from "../constants/action-types";
 import history from "../history";
 
@@ -84,7 +85,6 @@ export const registerUser = data => dispatch => {
 };
 
 export const editProfile = (data, userId) => dispatch => {
-  console.log(data);
   if (typeof data.avatar === "object" && data.avatar.length > 1) {
     return dispatch({
       type: EDIT_PROFILE,
@@ -177,9 +177,20 @@ export const getAllPosts = () => dispatch => {
 
 export const getPost = postId => dispatch => {
   axios
-    .get(`/api/posts/${postId}`)
+    .get(`/api/posts/${postId}/edit`)
     .then(post => {
       dispatch({ type: GET_POST, payload: post.data });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
+export const getPostForEdit = postId => dispatch => {
+  axios
+    .get(`/api/posts/${postId}/edit`)
+    .then(post => {
+      dispatch({ type: GET_POST_FOR_EDIT, payload: post.data });
     })
     .catch(error => {
       console.log(error);
