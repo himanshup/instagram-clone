@@ -126,6 +126,17 @@ export const getFeed = () => dispatch => {
     });
 };
 
+export const getAllPosts = () => dispatch => {
+  axios
+    .get("/api/posts")
+    .then(response => {
+      dispatch({ type: GET_FEED, payload: response.data.posts });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 export const getPost = postId => dispatch => {
   axios
     .get(`/api/posts/${postId}`)

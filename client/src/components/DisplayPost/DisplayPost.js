@@ -18,7 +18,7 @@ const DisplayPost = props => {
   //   }
   // };
   return (
-    <div className="container mt-5">
+    <div className="container component">
       {props.post &&
         props.post.author && (
           <div className="row no-gutters d-flex justify-content-center">

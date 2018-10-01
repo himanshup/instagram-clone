@@ -90,8 +90,16 @@ class Login extends Component {
       <div>
         <div className="container d-flex justify-content-center mt-5">
           <div className="card p-5 infoCards rounded-0">
-            <h1 className="insta text-center">Instagram</h1>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/2000px-Instagram_logo.svg.png"
+              alt=""
+              className="mx-auto"
+              width="150"
+            />
             <SignInForm onSubmit={this.handleSubmit} />
+            <button className="btn btn-primary btn-sm btn-block mt-1">
+              Demo Login
+            </button>
             {this.props.loginError && (
               <small className="text-danger text-center mt-3">
                 {this.props.loginError}

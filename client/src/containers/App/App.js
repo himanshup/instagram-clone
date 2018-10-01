@@ -14,6 +14,8 @@ import EditPost from "../EditPost/EditPost";
 import EditComment from "../EditComment/EditComment";
 import ErrorPage from "../../components/ErrorPage/ErrorPage";
 import EditProfile from "../../containers/EditProfile/EditProfile";
+import Explore from "../../containers/Explore/Explore";
+import "./App.css";
 
 const mapStateToProps = state => {
   return {
@@ -37,11 +39,12 @@ class App extends Component {
       <Router history={history}>
         <div>
           <Route path="/" component={Navbar} />
-          <div className="mb-5">
+          <div className="mb-5 app">
             {localStorage.Auth ? (
               <Switch>
                 <Route exact path="/" render={() => <Redirect to="/posts" />} />
                 <Route exact path="/posts" component={Feed} />
+                <Route path="/explore" component={Explore} />
                 <Route path="/posts/new" component={NewPost} />
                 <Route path="/users/:userId" component={UserProfile} />
                 <Route path="/posts/:postId" component={Post} />

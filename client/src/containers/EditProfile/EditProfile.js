@@ -164,7 +164,7 @@ class EditProfile extends Component {
 
   render() {
     return (
-      <div className="container d-flex justify-content-center mt-5">
+      <div className="container d-flex justify-content-center component">
         <div className="card p-2 editProfileCard rounded-0">
           <div className="card-body">
             <EditProfileForm

@@ -17,11 +17,11 @@ const UserHeader = props => {
     }
   };
   return (
-    <div className="container mt-5">
+    <div className="container component">
       {props.user && (
         <div>
           <div className="d-flex justify-content-center">
-            <div className="row mb-4">
+            <div className="row">
               <div className="col-sm-12 col-md-4 d-flex justify-content-center">
                 <img
                   src={props.user.avatar}

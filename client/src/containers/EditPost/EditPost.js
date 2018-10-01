@@ -105,10 +105,10 @@ class EditPost extends Component {
 
   render() {
     return (
-      <div className="container d-flex justify-content-center mt-5">
+      <div className="container d-flex justify-content-center component">
         <div className="card p-2 postCard rounded-0">
           <div className="card-body">
-            <h1 className="display-4 text-center">Edit Post</h1>
+            <h1 className="text-center">Edit Post</h1>
             {this.props.imgPreview ? (
               <div className="text-center mt-4">
                 <img

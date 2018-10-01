@@ -5,3 +5,7 @@ body {
   background: #fafafa !important;
   color: #262626 !important;
 }
+
+.component {
+  margin-top: 100px;
+}

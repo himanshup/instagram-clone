@@ -5,17 +5,32 @@ import "./DisplayNavbar.css";
 
 const DisplayNavbar = props => {
   return (
-    <nav className="navbar navbar-expand-sm navbar-light bg-white border-bottom">
+    <nav className="navbar navbar-expand navbar-light bg-white border-bottom fixed-top">
       <div className="container d-flex justify-content-start">
         <Link to={localStorage.Auth ? "/posts" : "/"}>
-          <Icon.Instagram className="logo" size={34} />
+          <Icon.Instagram className="logo" size={25} />
         </Link>
-        <div className="ml-4 mr-4 verticalLine" />
-        <Link className="navbar-brand" to={localStorage.Auth ? "/posts" : "/"}>
-          Instagram
+        <div className="ml-3 mr-3 verticalLine d-none d-sm-block" />
+        <Link
+          className="navbar-brand d-none d-sm-block"
+          to={localStorage.Auth ? "/posts" : "/"}
+        >
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/2000px-Instagram_logo.svg.png"
+            alt=""
+            width="120"
+          />
         </Link>
+
         {localStorage.Auth && (
           <div className="collapse navbar-collapse" id="navbarNav">
+            {/* <form className="form-inline ml-auto">
+              <input
+                type="text"
+                className="form-control form-control-sm bg-light text-center"
+                placeholder="Search"
+              />
+            </form> */}
             <ul className="navbar-nav ml-auto">
               <li className="nav-item active">
                 <Link className="nav-link" to="/posts/new">
@@ -23,10 +38,15 @@ const DisplayNavbar = props => {
                 </Link>
               </li>
               <li className="nav-item active ml-3 mr-3">
+                <Link className="nav-link" to="/explore">
+                  <Icon.Compass className="navIcons" size={25} />
+                </Link>
+              </li>
+              {/* <li className="nav-item active ml-3 mr-3">
                 <span className="nav-link" href="#">
                   <Icon.Heart className="navIcons" size={25} />
                 </span>
-              </li>
+              </li> */}
               <li className="nav-item active mr-3">
                 <Link
                   className="nav-link"
