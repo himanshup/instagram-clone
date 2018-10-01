@@ -97,9 +97,9 @@ class Login extends Component {
               width="150"
             />
             <SignInForm onSubmit={this.handleSubmit} />
-            <button className="btn btn-primary btn-sm btn-block mt-1">
+            {/* <button className="btn btn-primary btn-sm btn-block mt-1">
               Demo Login
-            </button>
+            </button> */}
             {this.props.loginError && (
               <small className="error text-center mt-3">
                 {this.props.loginError}

@@ -8,7 +8,7 @@
     "client": "cd client && npm start",
     "server": "nodemon app.js",
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
-    "start": "node server.js",
+    "start": "node app.js",
     "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "dependencies": {
