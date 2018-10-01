@@ -31,6 +31,7 @@ const redirectIfNotLoggedIn = () => {
 class App extends Component {
   componentDidMount() {
     console.log(JSON.parse(localStorage.getItem("Auth")));
+    console.log(localStorage.token);
     console.log("from App", this.props);
   }
 
@@ -42,6 +43,7 @@ class App extends Component {
           <div className="mb-5 app">
             {localStorage.Auth ? (
               <Switch>
+                {/* {this.props.isAuth && <Redirect to="/posts" />} */}
                 <Route exact path="/" render={() => <Redirect to="/posts" />} />
                 <Route exact path="/posts" component={Feed} />
                 <Route path="/explore" component={Explore} />

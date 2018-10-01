@@ -22,15 +22,15 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(helmet());
 
 // passport
-app.use(
-  session({
-    secret: "shibas",
-    resave: false,
-    saveUninitialized: false
-  })
-);
+// app.use(
+//   session({
+//     secret: "shibas",
+//     resave: false,
+//     saveUninitialized: false
+//   })
+// );
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 app.use("/api/auth", auth);
 app.use("/api", passport.authenticate("jwt", { session: false }), router);

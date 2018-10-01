@@ -121,10 +121,8 @@ router.post("/login", (req, res, next) => {
 });
 
 router.post("/logout", (req, res) => {
-  if (req.user) {
-    req.logout();
-    res.json({ message: "logging out" });
-  }
+  req.logout();
+  res.json({ message: "logging out" });
 });
 
 module.exports = router;

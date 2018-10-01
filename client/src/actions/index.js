@@ -50,6 +50,9 @@ export const loginUser = data => dispatch => {
       } else if (!response.data.message && response.data.token) {
         localStorage.setItem("Auth", JSON.stringify(response.data.userInfo));
         localStorage.setItem("token", response.data.token);
+        axios.defaults.headers.common["Authorization"] = `bearer ${
+          response.data.token
+        }`;
         dispatch({ type: LOGIN_USER, payload: response.data.userInfo });
         history.push("/posts");
       }
