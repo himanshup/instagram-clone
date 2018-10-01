@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import NewComment from "../../containers/NewComment/NewComment";
 import Comments from "../../containers/Comments/Comments";
+import PostAuthor from "../../containers/PostAuthor/PostAuthor";
 import Icons from "../../containers/Icons/Icons";
 import moment from "moment";
 import "./DisplayPosts.css";
@@ -18,16 +19,7 @@ const DisplayPosts = props => {
             >
               <div className="card feedCard mt-5">
                 <div className="card-header bg-white p-3">
-                  <img
-                    src={post.author.avatar}
-                    alt=""
-                    className="rounded-circle mr-2"
-                    width="30px"
-                    height="30px"
-                  />
-                  <Link to={`/users/${post.author.id}`} className="feedLinks">
-                    {post.author.username}{" "}
-                  </Link>
+                  <PostAuthor userId={post.author.id} />
                 </div>
                 <img
                   src={post.image}

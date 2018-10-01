@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import NewComment from "../../containers/NewComment/NewComment";
 import Comments from "../../containers/Comments/Comments";
 import Icons from "../../containers/Icons/Icons";
+import PostAuthor from "../../containers/PostAuthor/PostAuthor";
 import moment from "moment";
 import "./DisplayPost.css";
 
@@ -33,19 +34,7 @@ const DisplayPost = props => {
             <div className="col-12 col-sm-4">
               <div className="card rounded-0 displayCard h-100">
                 <div className="card-header bg-white p-3 d-block d-sm-none">
-                  <img
-                    src={props.post.author.avatar}
-                    alt=""
-                    className="rounded-circle mr-2"
-                    width="30px"
-                    height="30px"
-                  />
-                  <Link
-                    to={`/users/${props.post.author.id}`}
-                    className="feedLinks"
-                  >
-                    {props.post.author.username}
-                  </Link>
+                  <PostAuthor userId={props.post.author.id} />
                 </div>
                 <img
                   src={props.post.image}
@@ -53,19 +42,7 @@ const DisplayPost = props => {
                   className="rounded-0 card-img-top d-block d-sm-none"
                 />
                 <div className="p-3 d-none d-sm-block">
-                  <img
-                    src={props.post.author.avatar}
-                    alt=""
-                    className="rounded-circle mr-2"
-                    width="30px"
-                    height="30px"
-                  />
-                  <Link
-                    to={`/users/${props.post.author.id}`}
-                    className="feedLinks"
-                  >
-                    {props.post.author.username}
-                  </Link>
+                  <PostAuthor userId={props.post.author.id} />
                   {/* {check(props.post.author.id) ? (
                     <button
                       className="ml-2 btn btn-sm btn-outline-dark"
@@ -102,7 +79,7 @@ const DisplayPost = props => {
                   </div>
                 </div>
                 <div className="p-3 mt-auto">
-                  <hr />
+                  <hr className="d-none d-sm-block" />
                   <Icons
                     authorId={props.post.author.id}
                     postId={props.post._id}

@@ -20,66 +20,74 @@ const UserHeader = props => {
     <div className="container mt-5">
       {props.user && (
         <div>
-          <div className="row mb-4">
-            <div className="col-sm-12 col-md-4 d-flex justify-content-center">
-              <img
-                src={props.user.avatar}
-                alt=""
-                className="mr-5 rounded-circle mx-auto"
-                width="150"
-                height="150"
-              />
-            </div>
-            <div className="col-sm-12 col-md-8">
-              <div className="lead username">
-                {props.user.username}{" "}
-                {props.user._id === user.id ? (
-                  <Link
-                    to={`/accounts/${props.user._id}/edit`}
-                    className="ml-2 btn btn-sm btn-outline-dark"
-                  >
-                    <span className="ml-3 mr-3">Edit Profile</span>
-                  </Link>
-                ) : checkIfFollowing(props.user.followers, user.id) ? (
-                  <button
-                    className="ml-2 btn btn-sm btn-outline-dark"
-                    onClick={() => props.unfollow(props.user._id)}
-                  >
-                    <span className="ml-3 mr-3">Unfollow</span>
-                  </button>
-                ) : (
-                  <button
-                    className="ml-2 btn btn-sm btn-primary"
-                    onClick={() => props.follow(props.user._id)}
-                  >
-                    <span className="ml-3 mr-3">Follow</span>
-                  </button>
-                )}
+          <div className="d-flex justify-content-center">
+            <div className="row mb-4">
+              <div className="col-sm-12 col-md-4 d-flex justify-content-center">
+                <img
+                  src={props.user.avatar}
+                  alt=""
+                  className="mr-5 rounded-circle mx-auto"
+                  width="150"
+                  height="150"
+                />
               </div>
-              <div className="d-flex mt-3">
-                <div className="mr-4">
-                  <a href="/" className="headerLinks">
-                    {props.posts && props.posts.length}{" "}
-                  </a>
-                  posts
+              <div className="col-sm-12 col-md-8">
+                <div className="lead username">
+                  {props.user.username}{" "}
+                  {props.user._id === user.id ? (
+                    <Link
+                      to={`/accounts/${props.user._id}/edit`}
+                      className="ml-2 btn btn-sm btn-outline-dark"
+                    >
+                      <span className="ml-3 mr-3">Edit Profile</span>
+                    </Link>
+                  ) : checkIfFollowing(props.user.followers, user.id) ? (
+                    <button
+                      className="ml-2 btn btn-sm btn-outline-dark"
+                      onClick={() => props.unfollow(props.user._id)}
+                    >
+                      <span className="ml-3 mr-3">Unfollow</span>
+                    </button>
+                  ) : (
+                    <button
+                      className="ml-2 btn btn-sm btn-primary"
+                      onClick={() => props.follow(props.user._id)}
+                    >
+                      <span className="ml-3 mr-3">Follow</span>
+                    </button>
+                  )}
                 </div>
-                <div className="mr-4">
-                  <a href="/" className="headerLinks">
-                    {props.user.followers && props.user.followers.length}{" "}
-                  </a>
-                  followers
+                <div className="d-flex mt-3">
+                  <div className="mr-4">
+                    <span className="headerLinks">
+                      {props.posts && props.posts.length}{" "}
+                    </span>
+                    posts
+                  </div>
+                  <div className="mr-4">
+                    <Link
+                      to={`/users/${props.user._id}/followers`}
+                      className="headerLinks"
+                    >
+                      {props.user.followers && props.user.followers.length}{" "}
+                    </Link>
+                    followers
+                  </div>
+                  <div className="mr-4">
+                    <Link
+                      to={`/users/${props.user._id}/following`}
+                      className="headerLinks"
+                    >
+                      {props.user.following && props.user.following.length}{" "}
+                    </Link>
+                    following
+                  </div>
                 </div>
-                <div className="mr-4">
-                  <a href="/" className="headerLinks">
-                    {props.user.following && props.user.following.length}{" "}
-                  </a>
-                  following
+                <div className="mt-3">
+                  <strong>{props.user.name}</strong>
                 </div>
+                <p>{props.user.bio}</p>
               </div>
-              <div className="mt-3">
-                <strong>{props.user.name}</strong>
-              </div>
-              <p>{props.user.bio}</p>
             </div>
           </div>
           <hr />

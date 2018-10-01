@@ -101,7 +101,6 @@ let EditProfileForm = props => {
           <Field
             name="username"
             className="form-control form-control-sm"
-            placeholder="Username"
             component="input"
             disabled
           />
@@ -113,7 +112,6 @@ let EditProfileForm = props => {
           <Field
             name="bio"
             className="form-control form-control-sm"
-            placeholder="Bio"
             component="textarea"
           />
         </div>
