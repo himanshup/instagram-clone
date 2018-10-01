@@ -21,6 +21,7 @@ export const DELETE_SINGLE_POST = "DELETE_SINGLE_POST";
 export const HOVER_POST = "HOVER_POST";
 export const UNHOVER_POST = " UNHOVER_POST";
 export const CHECK_IF_FOLLOWING = "CHECK_IF_FOLLOWING";
+export const POST_ERROR = "POST_ERROR";
 
 // comments
 export const ADD_COMMENT = "ADD_COMMENT";
@@ -29,6 +30,7 @@ export const EDIT_COMMENT = "EDIT_COMMENT";
 export const DELETE_COMMENT = "DELETE_COMMENT";
 export const DELETE_COMMENT_SINGLE_POST = "DELETE_COMMENT_SINGLE_POST";
 export const GET_COMMENT = "GET_COMMENT";
+export const COMMENT_ERROR = "COMMENT_ERROR";
 
 // likes
 export const LIKE_SINGLE_POST = "LIKE_SINGLE_POST";

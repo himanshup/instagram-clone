@@ -7,6 +7,7 @@ import * as actions from "../../actions/post";
 const mapStateToProps = state => {
   return {
     post: state.post.post,
+    postError: state.post.postError,
     loading: state.common.loading
     // following: state.common.following
   };
@@ -24,7 +25,15 @@ class Post extends Component {
         {this.props.loading ? (
           <Loader />
         ) : (
-          <DisplayPost post={this.props.post} />
+          <div>
+            {this.props.postError ? (
+              <div className="container component">
+                <h4 className="text-center">{this.props.postError}</h4>
+              </div>
+            ) : (
+              <DisplayPost post={this.props.post} />
+            )}
+          </div>
         )}
       </div>
     );

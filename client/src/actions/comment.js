@@ -8,7 +8,8 @@ import {
   ADD_COMMENT_SINGLE_POST,
   DELETE_COMMENT_SINGLE_POST,
   GET_COMMENT,
-  CHECK_IF_FOLLOWING
+  CHECK_IF_FOLLOWING,
+  COMMENT_ERROR
 } from "../constants/action-types";
 import history from "../history";
 
@@ -52,7 +53,12 @@ export const getComment = (postId, commentId) => dispatch => {
   axios
     .get(`/api/posts/${postId}/comments/${commentId}/edit`)
     .then(comment => {
-      dispatch({ type: GET_COMMENT, payload: comment.data });
+      console.log(comment);
+      if (comment.data.error) {
+        dispatch({ type: COMMENT_ERROR, payload: comment.data.error });
+      } else {
+        dispatch({ type: GET_COMMENT, payload: comment.data });
+      }
     })
     .catch(error => {
       console.log(error);

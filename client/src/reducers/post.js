@@ -13,7 +13,9 @@ import {
   DELETE_COMMENT_SINGLE_POST,
   LIKE_SINGLE_POST,
   DISLIKE_SINGLE_POST,
-  GET_POST_FOR_EDIT
+  GET_POST_FOR_EDIT,
+  POST_ERROR,
+  COMMENT_ERROR
 } from "../constants/action-types";
 
 const initialState = {
@@ -21,7 +23,9 @@ const initialState = {
   post: {},
   editError: "",
   deletePostMsg: "",
-  comment: ""
+  comment: "",
+  postError: "",
+  commentError: ""
 };
 
 export default function(state = initialState, action) {
@@ -49,6 +53,10 @@ export default function(state = initialState, action) {
       return {
         post: action.payload
       };
+    case POST_ERROR:
+      return {
+        postError: action.payload
+      };
     case ADD_COMMENT:
       const newPostsComment = state.posts.map(post => {
         if (post._id === action.payload.postId) {
@@ -73,6 +81,10 @@ export default function(state = initialState, action) {
     case GET_COMMENT:
       return {
         comment: action.payload
+      };
+    case COMMENT_ERROR:
+      return {
+        commentError: action.payload
       };
     case DELETE_COMMENT:
       const newPostsDeleteComment = state.posts.map(post => {

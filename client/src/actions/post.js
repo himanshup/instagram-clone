@@ -15,7 +15,8 @@ import {
   DISLIKE_SINGLE_POST,
   GET_POST_FOR_EDIT,
   LOADING,
-  SUBMIT_LOADING
+  SUBMIT_LOADING,
+  POST_ERROR
 } from "../constants/action-types";
 import history from "../history";
 
@@ -62,7 +63,11 @@ export const getPost = postId => dispatch => {
   axios
     .get(`/api/posts/${postId}`)
     .then(post => {
-      dispatch({ type: GET_POST, payload: post.data });
+      if (post.data.error) {
+        dispatch({ type: POST_ERROR, payload: post.data.error });
+      } else {
+        dispatch({ type: GET_POST, payload: post.data });
+      }
     })
     .then(response => {
       dispatch({ type: LOADING, payload: false });

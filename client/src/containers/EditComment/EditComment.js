@@ -3,6 +3,12 @@ import { reduxForm, Field } from "redux-form";
 import { connect } from "react-redux";
 import * as actions from "../../actions/comment";
 
+const mapStateToProps = state => {
+  return {
+    commentError: state.post.commentError
+  };
+};
+
 let EditCommentForm = props => {
   const { handleSubmit, pristine, submitting } = props;
   return (
@@ -55,22 +61,26 @@ class EditComment extends Component {
   render() {
     return (
       <div className="container d-flex justify-content-center component">
-        <div className="card p-2 postCard rounded-0">
-          <div className="card-body">
-            <h1 className="text-center">Edit Comment</h1>
+        {this.props.commentError ? (
+          <h4>{this.props.commentError}</h4>
+        ) : (
+          <div className="card p-2 postCard rounded-0">
+            <div className="card-body">
+              <h1 className="text-center">Edit Comment</h1>
 
-            <EditCommentForm
-              form={`${this.props.match.params.commentId}`}
-              onSubmit={this.handleSubmit}
-            />
+              <EditCommentForm
+                form={`${this.props.match.params.commentId}`}
+                onSubmit={this.handleSubmit}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </div>
     );
   }
 }
 
 export default connect(
-  null,
+  mapStateToProps,
   actions
 )(EditComment);

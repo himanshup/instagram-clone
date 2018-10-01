@@ -2,6 +2,9 @@ const User = require("../models/user");
 const Post = require("../models/post");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
+const middleware = require("../middleware");
+
+const { checkProfileOwnership } = middleware;
 
 const storage = multer.diskStorage({
   filename: function(req, file, callback) {
@@ -56,29 +59,37 @@ module.exports = router => {
   });
 
   // update user profile
-  router.put("/users/:user_id", upload.single("file"), (req, res) => {
-    const name = req.body.name ? req.body.name : "";
-    const bio = req.body.bio ? req.body.bio : "";
-    User.findOneAndUpdate({ _id: req.params.user_id }, { name: name, bio: bio })
-      .then(async user => {
-        if (req.file) {
-          await cloudinary.v2.uploader.destroy(user.avatarId);
-          const result = await cloudinary.v2.uploader.upload(req.file.path, {
-            width: 150,
-            height: 150,
-            gravity: "center",
-            crop: "fill"
-          });
-          user.avatarId = result.public_id;
-          user.avatar = result.secure_url;
-        }
-        user.save();
-        res.json({ message: "Updated your profile" });
-      })
-      .catch(err => {
-        res.json({ message: "Error updating your profile" });
-      });
-  });
+  router.put(
+    "/users/:user_id",
+    upload.single("file"),
+    checkProfileOwnership,
+    (req, res) => {
+      const name = req.body.name ? req.body.name : "";
+      const bio = req.body.bio ? req.body.bio : "";
+      User.findOneAndUpdate(
+        { _id: req.params.user_id },
+        { name: name, bio: bio }
+      )
+        .then(async user => {
+          if (req.file) {
+            await cloudinary.v2.uploader.destroy(user.avatarId);
+            const result = await cloudinary.v2.uploader.upload(req.file.path, {
+              width: 150,
+              height: 150,
+              gravity: "center",
+              crop: "fill"
+            });
+            user.avatarId = result.public_id;
+            user.avatar = result.secure_url;
+          }
+          user.save();
+          res.json({ message: "Updated your profile" });
+        })
+        .catch(err => {
+          res.json({ message: "Error updating your profile" });
+        });
+    }
+  );
 
   // follow a user
   router.post("/users/follow/:user_id", (req, res) => {

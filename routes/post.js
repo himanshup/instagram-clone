@@ -98,7 +98,7 @@ module.exports = router => {
         }
       })
       .catch(err => {
-        res.json({ error: "Something went wrong," });
+        res.json({ error: "Sorry, that post doesn't exist." });
       });
   });
 
@@ -108,14 +108,10 @@ module.exports = router => {
       .populate("comments")
       .populate("likes")
       .then(post => {
-        if (post) {
-          res.json(post);
-        } else {
-          res.json({ error: "Sorry, that post doesn't exist." });
-        }
+        res.json(post);
       })
       .catch(err => {
-        res.json({ error: "Something went wrong," });
+        res.json({ error: "Sorry, that post doesn't exist." });
       });
   });
 
