@@ -7,7 +7,7 @@ module.exports = router => {
   // create comment
   router.post("/posts/:post_id/comments", (req, res) => {
     let newComment = {};
-    Post.findById(req.params.post_id)
+    Post.findOne({ _id: req.params.post_id })
       .then(post => {
         return Comment.create({ text: req.body.comment });
       })
@@ -18,7 +18,9 @@ module.exports = router => {
         return (newComment = comment);
       })
       .then(result => {
-        return Post.findById(req.params.post_id).populate("comments likes");
+        return Post.findOne({ _id: req.params.post_id })
+          .populate("comments")
+          .populate("likes");
       })
       .then(post => {
         post.comments.push(newComment);
@@ -59,7 +61,6 @@ module.exports = router => {
         { text: req.body.comment }
       )
         .then(response => {
-          console.log(response);
           res.json({ message: "Successfully edited your comment!" });
         })
         .catch(err => {
