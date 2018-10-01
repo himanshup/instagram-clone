@@ -88,7 +88,7 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <div className="container d-flex justify-content-center mt-5">
+        <div className="container d-flex justify-content-center component">
           <div className="card p-5 infoCards rounded-0">
             <img
               src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Instagram_logo.svg/2000px-Instagram_logo.svg.png"

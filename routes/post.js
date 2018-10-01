@@ -1,6 +1,6 @@
-const Post = require("../models/post");
-const Comment = require("../models/comment");
-const User = require("../models/user");
+const Post = require("../db/models/post");
+const Comment = require("../db/models/comment");
+const User = require("../db/models/user");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
 
@@ -32,21 +32,14 @@ cloudinary.config({
 module.exports = router => {
   // get all posts
   router.get("/posts", (req, res) => {
-    let newPosts = {};
     Post.find({})
       .sort({ timePosted: -1 })
       .populate("comments")
       .populate("likes")
       .then(posts => {
-        return (newPosts = posts);
-      })
-      .then(posts => {
-        return User.findOne({ _id: req.user._id });
-      })
-      .then(user => {
         const data = {
-          posts: newPosts,
-          user: user
+          posts: posts,
+          user: req.user
         };
         res.json(data);
       })

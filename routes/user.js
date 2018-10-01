@@ -1,8 +1,7 @@
-const User = require("../models/user");
-const passport = require("../passport");
+const User = require("../db/models/user");
+const Post = require("../db/models/post");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
-const Post = require("../models/post");
 
 const storage = multer.diskStorage({
   filename: function(req, file, callback) {
@@ -30,94 +29,6 @@ cloudinary.config({
 });
 
 module.exports = router => {
-  router.post("/register", upload.single("file"), (req, res) => {
-    const { username, password } = req.body;
-    if (req.file) {
-      const file = req.file.path;
-
-      cloudinary.v2.uploader.upload(
-        file,
-        {
-          width: 150,
-          height: 150,
-          gravity: "center",
-          crop: "fill"
-        },
-        (error, result) => {
-          if (error) {
-            res.json(error);
-          } else {
-            const public_id = result.public_id;
-            const secure_url = result.secure_url;
-            User.findOne({ username: username })
-              .then(user => {
-                if (user) {
-                  return res.json({
-                    error: "Username taken"
-                  });
-                }
-                const newUser = new User({
-                  username: username,
-                  password: password,
-                  avatar: secure_url,
-                  avatarId: public_id
-                });
-                newUser.save((err, savedUser) => {
-                  if (err) return res.json(err);
-                  res.json({ success: "Successfully registered" });
-                });
-              })
-              .catch(err => {
-                res.json(err);
-              });
-          }
-        }
-      );
-    } else {
-      User.findOne({ username: username })
-        .then(user => {
-          if (user) {
-            return res.json({ error: "Username taken" });
-          }
-          const newUser = new User({
-            username: username,
-            password: password,
-            avatar:
-              "https://scontent-lax3-1.cdninstagram.com/vp/74d4a001973ffb1c519909dc584b0316/5C328D7A/t51.2885-19/11906329_960233084022564_1448528159_a.jpg"
-          });
-          newUser.save((err, savedUser) => {
-            if (err) return res.json(err);
-            res.json({ success: "Successfully registered" });
-          });
-        })
-        .catch(err => {
-          res.json(err);
-        });
-    }
-  });
-
-  router.post("/login", (req, res, next) => {
-    passport.authenticate("local", (err, user, info) => {
-      if (err) {
-        return next(err);
-      }
-      if (!user) {
-        return res.json({ message: info.message });
-      }
-      req.login(user, loginErr => {
-        if (loginErr) {
-          return next(loginErr);
-        }
-        const userInfo = {
-          id: req.user._id,
-          username: req.user.username,
-          avatar: req.user.avatar
-        };
-        return res.json(userInfo);
-      });
-    })(req, res, next);
-  });
-
   // get user for user profile
   router.get("/users/:user_id", (req, res) => {
     let newUser = {};
@@ -218,12 +129,5 @@ module.exports = router => {
       .catch(err => {
         res.json({ message: "Error occured" });
       });
-  });
-
-  router.post("/logout", (req, res) => {
-    if (req.user) {
-      req.logout();
-      res.json({ message: "logging out" });
-    }
   });
 };

@@ -33,20 +33,24 @@ import {
 } from "../constants/action-types";
 import history from "../history";
 
+axios.defaults.headers.common["Authorization"] = `bearer ${localStorage.token}`;
+
 export const loginUser = data => dispatch => {
   const { username, password } = data;
 
   axios
-    .post("/api/login", {
+    .post("/api/auth/login", {
       username: username,
       password: password
     })
     .then(response => {
+      console.log(response);
       if (response.data.message) {
         dispatch({ type: LOGIN_USER, payload: response.data.message });
-      } else if (!response.data.message && response.data.id) {
-        localStorage.setItem("Auth", JSON.stringify(response.data));
-        dispatch({ type: LOGIN_USER, payload: response.data });
+      } else if (!response.data.message && response.data.token) {
+        localStorage.setItem("Auth", JSON.stringify(response.data.userInfo));
+        localStorage.setItem("token", response.data.token);
+        dispatch({ type: LOGIN_USER, payload: response.data.userInfo });
         history.push("/posts");
       }
     })
@@ -64,7 +68,7 @@ export const registerUser = data => dispatch => {
   formData.append("username", data.username);
   formData.append("password", data.password);
   axios
-    .post("/api/register", formData)
+    .post("/api/auth/register", formData)
     .then(response => {
       dispatch({ type: REGISTER_USER, payload: response.data });
       if (!response.data.error) {
@@ -76,11 +80,43 @@ export const registerUser = data => dispatch => {
     });
 };
 
+export const editProfile = (data, userId) => dispatch => {
+  console.log(data);
+  if (typeof data.avatar === "object" && data.avatar.length > 1) {
+    return dispatch({
+      type: EDIT_PROFILE,
+      payload: "only 1 image allowed"
+    });
+  }
+  const formData = new FormData();
+  if (typeof data.avatar === "object") {
+    formData.append("file", data.avatar[0]);
+  }
+  if (data.name !== "" && data.name !== undefined) {
+    formData.append("name", data.name);
+  }
+  if (data.bio !== "" && data.bio !== undefined) {
+    formData.append("bio", data.bio);
+  }
+
+  axios
+    .put(`/api/users/${userId}`, formData)
+    .then(response => {
+      dispatch({ type: EDIT_PROFILE, payload: response.data.message });
+      history.push(`/users/${userId}`);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 export const logout = () => dispatch => {
   axios
-    .post("/api/logout")
+    .post("/api/auth/logout")
     .then(response => {
+      console.log(response);
       localStorage.removeItem("Auth");
+      localStorage.removeItem("token");
       dispatch({ type: LOGOUT_USER, payload: response.data });
     })
     .catch(error => {
@@ -91,7 +127,6 @@ export const logout = () => dispatch => {
 // for image preview
 export const getPreview = images => dispatch => {
   if (images[1]) {
-    console.log("more than 1 image");
     return dispatch({
       type: GET_PREVIEW,
       payload: { message: "Only 1 image allowed" }
@@ -191,40 +226,6 @@ export const editPost = (data, postId) => dispatch => {
     .then(post => {
       dispatch({ type: EDIT_POST, payload: "Updated Post" });
       history.push(`/posts/${post.data._id}`);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-};
-
-export const editProfile = (data, userId) => dispatch => {
-  console.log(data);
-  if (typeof data.avatar === "object" && data.avatar.length > 1) {
-    console.log("more than 1 image");
-    return dispatch({
-      type: EDIT_PROFILE,
-      payload: "only 1 image allowed"
-    });
-  }
-  const formData = new FormData();
-  if (typeof data.avatar === "object") {
-    console.log("there is an image");
-    formData.append("file", data.avatar[0]);
-  }
-  if (data.name !== "" && data.name !== undefined) {
-    console.log("there is a name");
-    formData.append("name", data.name);
-  }
-  if (data.bio !== "" && data.bio !== undefined) {
-    console.log("there is a bio");
-    formData.append("bio", data.bio);
-  }
-
-  axios
-    .put(`/api/users/${userId}`, formData)
-    .then(response => {
-      dispatch({ type: EDIT_PROFILE, payload: response.data.message });
-      history.push(`/users/${userId}`);
     })
     .catch(error => {
       console.log(error);
