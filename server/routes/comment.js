@@ -1,5 +1,5 @@
-const Post = require("../db/models/post");
-const Comment = require("../db/models/comment");
+const Post = require("../models/post");
+const Comment = require("../models/comment");
 const mongoose = require("mongoose");
 mongoose.Promise = Promise;
 

@@ -1,16 +1,14 @@
-const User = require("../db/models/user");
+const User = require("../models/user");
 const passport = require("passport");
 const passportJWT = require("passport-jwt");
 const ExtractJWT = passportJWT.ExtractJwt;
 const LocalStrategy = require("passport-local").Strategy;
 const JWTStrategy = passportJWT.Strategy;
 
-// called on login, saves the id to session req.session.passport.user = {id:'..'}
 passport.serializeUser((user, done) => {
   done(null, { _id: user._id });
 });
 
-// user object attaches to the request as req.user
 passport.deserializeUser((id, done) => {
   User.findOne({ _id: id }, "username")
     .select("+password")

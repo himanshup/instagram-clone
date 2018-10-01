@@ -35,3 +35,12 @@
   -webkit-transform: scaleX(-1);
   -ms-transform: scaleX(-1);
 }
+
+.instaLinks {
+  color: #003569;
+}
+
+.instaLinks:hover {
+  text-decoration: none;
+  color: #003569;
+}

@@ -1,5 +1,5 @@
-const User = require("../db/models/user");
-const Post = require("../db/models/post");
+const User = require("../models/user");
+const Post = require("../models/post");
 const multer = require("multer");
 const cloudinary = require("cloudinary");
 
