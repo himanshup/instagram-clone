@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { reduxForm, Field } from "redux-form";
 import Dropzone from "react-dropzone";
+import Loader from "../../components/Loader/Loader";
 import { connect } from "react-redux";
-import * as actions from "../../actions";
+import * as actions from "../../actions/post";
 import * as Icon from "react-feather";
 import "./NewPost.css";
 
@@ -10,7 +11,8 @@ const mapStateToProps = state => {
   return {
     imgPreview: state.common.preview,
     imagePreviewError: state.common.imagePreviewError,
-    submitted: state.common.submitted
+    submitted: state.common.submitted,
+    submitLoading: state.common.submitLoading
   };
 };
 
@@ -53,7 +55,7 @@ let PostForm = props => {
   const { handleSubmit, onValues, preview, errorMsg } = props;
   return (
     <form onSubmit={handleSubmit} className="mt-4">
-      {errorMsg && <small className="text-danger">{errorMsg}</small>}
+      {errorMsg && <small className="error">{errorMsg}</small>}
       <Field name="image" component={renderDropzoneField} onChange={onValues} />
       <Field
         name="caption"
@@ -104,30 +106,34 @@ class NewPost extends Component {
     return (
       <div>
         <div className="container d-flex justify-content-center component">
-          <div
-            className={`card p-2 postCard rounded-0 ${this.props.submitted &&
-              `d-none`}`}
-          >
-            <div className="card-body">
-              <h1 className="text-center">New Post</h1>
-              {this.props.imgPreview && (
-                <div className="text-center mt-4">
-                  <img
-                    src={this.props.imgPreview}
-                    className="imgPreview"
-                    alt=""
-                    width="100%"
-                  />
-                </div>
-              )}
-              <PostForm
-                onSubmit={this.handleSubmit}
-                onValues={this.onValues}
-                preview={this.props.imgPreview}
-                errorMsg={this.props.imagePreviewError}
-              />
+          {this.props.submitLoading ? (
+            <Loader />
+          ) : (
+            <div
+              className={`card p-2 postCard rounded-0 ${this.props.submitted &&
+                `d-none`}`}
+            >
+              <div className="card-body">
+                <h1 className="text-center">New Post</h1>
+                {this.props.imgPreview && (
+                  <div className="text-center mt-4">
+                    <img
+                      src={this.props.imgPreview}
+                      className="imgPreview"
+                      alt=""
+                      width="100%"
+                    />
+                  </div>
+                )}
+                <PostForm
+                  onSubmit={this.handleSubmit}
+                  onValues={this.onValues}
+                  preview={this.props.imgPreview}
+                  errorMsg={this.props.imagePreviewError}
+                />
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     );

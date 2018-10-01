@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import DisplayNavbar from "../../components/DisplayNavbar/DisplayNavbar";
 import { connect } from "react-redux";
-import * as actions from "../../actions";
+import * as actions from "../../actions/auth";
 
 class Navbar extends Component {
   handleLogout = () => {

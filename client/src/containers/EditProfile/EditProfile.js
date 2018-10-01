@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { reduxForm, Field } from "redux-form";
 import Dropzone from "react-dropzone";
 import { connect } from "react-redux";
-import * as actions from "../../actions";
+import * as actions from "../../actions/user";
 import "./EditProfile.css";
 
 const mapStateToProps = state => {
@@ -81,7 +81,7 @@ let EditProfileForm = props => {
             component={renderDropzoneField}
             onChange={onValues}
           />
-          {errorMsg && <small className="text-danger">{errorMsg}</small>}
+          {errorMsg && <small className="error">{errorMsg}</small>}
         </div>
       </div>
 

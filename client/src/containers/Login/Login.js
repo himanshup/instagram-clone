@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { reduxForm, Field } from "redux-form";
 import { connect } from "react-redux";
-import * as actions from "../../actions";
+import * as actions from "../../actions/auth";
 import "./Login.css";
 
 const mapStateToProps = state => {
@@ -66,8 +66,8 @@ const renderField = ({
       type={type}
     />
     {touched &&
-      ((error && <small className="text-danger">{error}</small>) ||
-        (warning && <small className="text-danger">{warning}</small>))}
+      ((error && <small className="error">{error}</small>) ||
+        (warning && <small className="error">{warning}</small>))}
   </div>
 );
 
@@ -101,12 +101,12 @@ class Login extends Component {
               Demo Login
             </button>
             {this.props.loginError && (
-              <small className="text-danger text-center mt-3">
+              <small className="error text-center mt-3">
                 {this.props.loginError}
               </small>
             )}
             {this.props.registerSuccess && (
-              <small className="text-success text-center mt-3">
+              <small className="success text-center mt-3">
                 {this.props.registerSuccess}
               </small>
             )}

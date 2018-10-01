@@ -1,3 +1,11 @@
 .component {
   margin-top: 100px;
 }
+
+.error {
+  color: #ff4136;
+}
+
+.success {
+  color: #2ecc40;
+}

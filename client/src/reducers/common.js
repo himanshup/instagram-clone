@@ -5,7 +5,9 @@ import {
   EDIT_POST,
   HOVER_POST,
   UNHOVER_POST,
-  CHECK_IF_FOLLOWING
+  CHECK_IF_FOLLOWING,
+  LOADING,
+  SUBMIT_LOADING
 } from "../constants/action-types";
 
 const initialState = {
@@ -13,6 +15,8 @@ const initialState = {
   imagePreviewError: "",
   submitted: false,
   visible: null,
+  loading: true,
+  submitLoading: false,
   following: []
 };
 
@@ -51,6 +55,14 @@ export default function(state = initialState, action) {
     case CHECK_IF_FOLLOWING:
       return {
         following: action.payload
+      };
+    case LOADING:
+      return {
+        loading: false
+      };
+    case SUBMIT_LOADING:
+      return {
+        submitLoading: true
       };
     default:
       return state;

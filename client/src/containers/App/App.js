@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Router, Route, Redirect, Switch } from "react-router-dom";
 import { connect } from "react-redux";
-import * as actions from "../../actions";
 import history from "../../history";
 import Navbar from "../Navbar/Navbar";
 import Login from "../Login/Login";
@@ -74,5 +73,5 @@ class App extends Component {
 
 export default connect(
   mapStateToProps,
-  actions
+  null
 )(App);

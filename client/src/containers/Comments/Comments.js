@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as Icon from "react-feather";
 import { connect } from "react-redux";
-import * as actions from "../../actions";
+import * as actions from "../../actions/comment";
 import "./Comments.css";
 
 class Comments extends Component {

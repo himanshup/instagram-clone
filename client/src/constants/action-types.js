@@ -41,3 +41,7 @@ export const USER_PROFILE = "USER_PROFILE";
 export const EDIT_PROFILE = "EDIT_PROFILE";
 export const FOLLOW_USER = "FOLLOW_USER";
 export const UNFOLLOW_USER = "UNFOLLOW_USER";
+
+// loading
+export const LOADING = "LOADING";
+export const SUBMIT_LOADING = "SUBMIT_LOADING";

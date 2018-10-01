@@ -1,11 +1,13 @@
 import React, { Component } from "react";
 import DisplayPost from "../../components/DisplayPost/DisplayPost";
+import Loader from "../../components/Loader/Loader";
 import { connect } from "react-redux";
-import * as actions from "../../actions";
+import * as actions from "../../actions/post";
 
 const mapStateToProps = state => {
   return {
-    post: state.post.post
+    post: state.post.post,
+    loading: state.common.loading
     // following: state.common.following
   };
 };
@@ -18,12 +20,13 @@ class Post extends Component {
 
   render() {
     return (
-      <DisplayPost
-        post={this.props.post}
-        following={this.props.following}
-        follow={this.props.followUser}
-        unfollow={this.props.unfollowUser}
-      />
+      <div>
+        {this.props.loading ? (
+          <Loader />
+        ) : (
+          <DisplayPost post={this.props.post} />
+        )}
+      </div>
     );
   }
 }

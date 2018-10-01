@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { reduxForm, Field } from "redux-form";
 import Dropzone from "react-dropzone";
 import { connect } from "react-redux";
-import * as actions from "../../actions";
+import * as actions from "../../actions/post";
 import * as Icon from "react-feather";
 
 const mapStateToProps = state => {
@@ -52,7 +52,7 @@ let EditPostForm = props => {
   const { handleSubmit, onValues, pristine, submitting, errorMsg } = props;
   return (
     <form onSubmit={handleSubmit} className="mt-4">
-      {errorMsg && <small className="text-danger">{errorMsg}</small>}
+      {errorMsg && <small className="error">{errorMsg}</small>}
       <Field name="image" component={renderDropzoneField} onChange={onValues} />
       <Field
         name="caption"

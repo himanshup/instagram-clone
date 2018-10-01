@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { reduxForm, Field } from "redux-form";
 import Dropzone from "react-dropzone";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
 import * as Icon from "react-feather";
+import { connect } from "react-redux";
+import * as actions from "../../actions/auth";
 import "./Register.css";
 
 const mapStateToProps = state => {
@@ -33,7 +33,7 @@ const renderDropzoneField = ({ input, name, meta: { dirty, error } }) => {
           </div>
         </div>
       </Dropzone>
-      {dirty && (error && <small className="text-danger">{error}</small>)}
+      {dirty && (error && <small className="error">{error}</small>)}
     </div>
   );
 };
@@ -57,7 +57,7 @@ let RegisterForm = props => {
       />
 
       <Field name="image" component={renderDropzoneField} onChange={onValues} />
-      {errorMsg && <small className="text-danger">{errorMsg}</small>}
+      {errorMsg && <small className="error">{errorMsg}</small>}
       <button
         className="btn btn-primary btn-sm btn-block mt-3"
         disabled={pristine || submitting}
@@ -94,8 +94,8 @@ const renderField = ({
       type={type}
     />
     {touched &&
-      ((error && <small className="text-danger">{error}</small>) ||
-        (warning && <small className="text-danger">{warning}</small>))}
+      ((error && <small className="error">{error}</small>) ||
+        (warning && <small className="error">{warning}</small>))}
   </div>
 );
 
@@ -142,7 +142,7 @@ class Register extends Component {
               errorMsg={this.props.imagePreviewError}
             />
             <div className="text-center mt-3">
-              <small className="text-danger">
+              <small className="error">
                 {this.props.registerMsg && this.props.registerMsg}
               </small>
             </div>
