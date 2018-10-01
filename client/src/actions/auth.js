@@ -65,6 +65,7 @@ export const logout = () => dispatch => {
       localStorage.removeItem("Auth");
       localStorage.removeItem("token");
       dispatch({ type: LOGOUT_USER, payload: response.data });
+      history.push("/");
     })
     .catch(error => {
       console.log(error);

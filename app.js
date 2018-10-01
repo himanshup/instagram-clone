@@ -14,21 +14,11 @@ const router = express.Router();
 const port = process.env.PORT || 5000;
 
 mongoose.Promise = global.Promise;
-let MONGO_URL;
 
-if (process.env.MONGO_URI) {
-  mongoose.connect(
-    process.env.MONGO_URI,
-    { useNewUrlParser: true }
-  );
-  MONGO_URL = process.env.MONGO_URI;
-} else {
-  mongoose.connect(
-    process.env.MONGO_LOCAL_URL,
-    { useNewUrlParser: true }
-  );
-  MONGO_URL = process.env.MONGO_LOCAL_URL;
-}
+mongoose.connect(
+  process.env.DATABASEURL,
+  { useNewUrlParser: true }
+);
 
 const db = mongoose.connection;
 db.on("error", err => {
@@ -58,5 +48,14 @@ app.use(passport.initialize());
 
 app.use("/api/auth", auth);
 app.use("/api", passport.authenticate("jwt", { session: false }), router);
+
+if (process.env.NODE_ENV === "production") {
+  // Serve any static files
+  app.use(express.static(path.join(__dirname, "client/build")));
+  // Handle React routing, return all requests to React app
+  app.get("*", function(req, res) {
+    res.sendFile(path.join(__dirname, "client/build", "index.html"));
+  });
+}
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
