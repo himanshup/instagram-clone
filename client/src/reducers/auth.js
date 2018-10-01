@@ -8,7 +8,6 @@ import {
 const initialState = {
   user: {},
   isAuth: false,
-  redirectTo: "",
   loginError: "",
   registerError: "",
   registerSuccess: ""
@@ -20,8 +19,7 @@ export default function(state = initialState, action) {
       if (action.payload.id) {
         return {
           user: action.payload,
-          isAuth: true,
-          redirectTo: "/"
+          isAuth: true
         };
       } else {
         return {
@@ -41,8 +39,7 @@ export default function(state = initialState, action) {
       }
     case LOGOUT_USER:
       return {
-        isAuth: false,
-        redirectTo: "/"
+        isAuth: false
       };
     case RESET_VALUE:
       return {

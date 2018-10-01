@@ -18,8 +18,7 @@ import "./App.css";
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.auth.isAuth,
-    redirect: state.auth.redirectTo
+    isAuth: state.auth.isAuth
   };
 };
 
@@ -28,19 +27,13 @@ const redirectIfNotLoggedIn = () => {
 };
 
 class App extends Component {
-  componentDidMount() {
-    console.log(JSON.parse(localStorage.getItem("Auth")));
-    console.log(localStorage.token);
-    console.log("from App", this.props);
-  }
-
   render() {
     return (
       <Router history={history}>
         <div>
           <Route path="/" component={Navbar} />
           <div className="mb-5 app">
-            {localStorage.Auth ? (
+            {localStorage.token ? (
               <Switch>
                 {/* {this.props.isAuth && <Redirect to="/posts" />} */}
                 <Route exact path="/" render={() => <Redirect to="/posts" />} />
