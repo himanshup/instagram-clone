@@ -92,7 +92,7 @@ module.exports = router => {
   );
 
   // follow a user
-  router.post("/users/follow/:user_id", (req, res) => {
+  router.post("/users/:user_id/follow", (req, res) => {
     User.findOne({ _id: req.params.user_id })
       .then(async user => {
         let currentUser = await User.findOne({ _id: req.user._id });
@@ -114,7 +114,7 @@ module.exports = router => {
   });
 
   // unfollow user
-  router.delete("/users/follow/:user_id", (req, res) => {
+  router.delete("/users/:user_id/follow", (req, res) => {
     User.findOneAndUpdate(
       { _id: req.params.user_id },
       {

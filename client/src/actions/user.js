@@ -80,7 +80,7 @@ export const getUserProfile = id => dispatch => {
 
 export const followUser = userId => dispatch => {
   axios
-    .post(`/api/users/follow/${userId}`)
+    .post(`/api/users/${userId}/follow`)
     .then(response => {
       dispatch({ type: FOLLOW_USER, payload: response.data });
     })
@@ -91,7 +91,7 @@ export const followUser = userId => dispatch => {
 
 export const unfollowUser = userId => dispatch => {
   axios
-    .delete(`/api/users/follow/${userId}`)
+    .delete(`/api/users/${userId}/follow`)
     .then(response => {
       dispatch({ type: UNFOLLOW_USER, payload: response.data });
     })
