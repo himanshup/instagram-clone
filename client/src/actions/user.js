@@ -9,7 +9,8 @@ import {
   UNHOVER_POST,
   CHECK_IF_FOLLOWING,
   EDIT_PROFILE,
-  LOADING
+  LOADING,
+  SET_LOADING
 } from "../constants/action-types";
 import history from "../history";
 
@@ -121,4 +122,8 @@ export const getFollowing = id => dispatch => {
     .catch(error => {
       console.log(error);
     });
+};
+
+export const setLoading = () => dispatch => {
+  dispatch({ type: SET_LOADING, payload: true });
 };

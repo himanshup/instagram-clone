@@ -20,6 +20,17 @@ class Icons extends Component {
   renderHeart = () => {
     const user = JSON.parse(localStorage.getItem("Auth"));
 
+    if (this.props.likes.length === 0) {
+      return (
+        <span>
+          <Icon.Heart
+            className="mr-2 feedIcons"
+            onClick={() => this.handleLike()}
+          />
+        </span>
+      );
+    }
+
     if (this.props.likes.length !== 0) {
       for (const like of this.props.likes) {
         if (like._id === user.id) {
@@ -47,15 +58,6 @@ class Icons extends Component {
           );
         }
       }
-    } else if (this.props.likes.length === 0) {
-      return (
-        <span>
-          <Icon.Heart
-            className="mr-2 feedIcons"
-            onClick={() => this.handleLike()}
-          />
-        </span>
-      );
     }
   };
 

@@ -15,6 +15,7 @@ const mapStateToProps = state => {
 
 class UserProfile extends Component {
   componentDidMount() {
+    this.props.setLoading();
     this.props.getUserProfile(this.props.match.params.userId);
   }
 

@@ -47,3 +47,4 @@ export const UNFOLLOW_USER = "UNFOLLOW_USER";
 // loading
 export const LOADING = "LOADING";
 export const SUBMIT_LOADING = "SUBMIT_LOADING";
+export const SET_LOADING = "RESET_LOADING";

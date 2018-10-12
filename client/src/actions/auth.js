@@ -28,7 +28,6 @@ export const loginUser = data => dispatch => {
           response.data.token
         }`;
         dispatch({ type: LOGIN_USER, payload: response.data.userInfo });
-        history.push("/posts");
       }
     })
     .catch(error => {
@@ -61,11 +60,9 @@ export const logout = () => dispatch => {
   axios
     .post("/api/auth/logout")
     .then(response => {
-      console.log(response);
       localStorage.removeItem("Auth");
       localStorage.removeItem("token");
-      dispatch({ type: LOGOUT_USER, payload: response.data });
-      history.push("/");
+      dispatch({ type: LOGOUT_USER, payload: "/" });
     })
     .catch(error => {
       console.log(error);

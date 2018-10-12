@@ -18,7 +18,8 @@ import "./App.css";
 
 const mapStateToProps = state => {
   return {
-    isAuth: state.auth.isAuth
+    isAuth: state.auth.isAuth,
+    redirect: state.auth.redirect
   };
 };
 

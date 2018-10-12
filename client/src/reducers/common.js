@@ -7,7 +7,8 @@ import {
   UNHOVER_POST,
   CHECK_IF_FOLLOWING,
   LOADING,
-  SUBMIT_LOADING
+  SUBMIT_LOADING,
+  SET_LOADING
 } from "../constants/action-types";
 
 const initialState = {
@@ -63,6 +64,10 @@ export default function(state = initialState, action) {
     case SUBMIT_LOADING:
       return {
         submitLoading: true
+      };
+    case SET_LOADING:
+      return {
+        loading: action.payload
       };
     default:
       return state;

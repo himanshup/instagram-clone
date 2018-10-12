@@ -10,8 +10,6 @@ const UserHeader = props => {
       for (const follower of followers) {
         if (follower._id === user.id) {
           return true;
-        } else {
-          return false;
         }
       }
     }
@@ -26,37 +24,35 @@ const UserHeader = props => {
                 <img
                   src={props.user.avatar}
                   alt=""
-                  className="mr-5 rounded-circle mx-auto"
+                  className="mr-5 rounded-circle mx-auto mb-3"
                   width="150"
                   height="150"
                 />
               </div>
               <div className="col-sm-12 col-md-8">
-                <div className="lead username">
-                  {props.user.username}{" "}
-                  {props.user._id === user.id ? (
-                    <Link
-                      to={`/accounts/${props.user._id}/edit`}
-                      className="ml-2 btn btn-sm btn-outline-dark"
-                    >
-                      <span className="ml-3 mr-3">Edit Profile</span>
-                    </Link>
-                  ) : checkIfFollowing(props.user.followers) ? (
-                    <button
-                      className="ml-2 btn btn-sm btn-outline-dark"
-                      onClick={() => props.unfollow(props.user._id)}
-                    >
-                      <span className="ml-3 mr-3">Unfollow</span>
-                    </button>
-                  ) : (
-                    <button
-                      className="ml-2 btn btn-sm btn-primary"
-                      onClick={() => props.follow(props.user._id)}
-                    >
-                      <span className="ml-3 mr-3">Follow</span>
-                    </button>
-                  )}
-                </div>
+                <span className="lead username">{props.user.username} </span>
+                {props.user._id === user.id ? (
+                  <Link
+                    to={`/accounts/${props.user._id}/edit`}
+                    className="ml-2 btn btn-sm btn-outline-dark"
+                  >
+                    <span className="ml-3 mr-3">Edit Profile</span>
+                  </Link>
+                ) : checkIfFollowing(props.user.followers) ? (
+                  <button
+                    className="ml-2 btn btn-sm btn-outline-dark"
+                    onClick={() => props.unfollow(props.user._id)}
+                  >
+                    <span className="ml-3 mr-3">Unfollow</span>
+                  </button>
+                ) : (
+                  <button
+                    className="ml-2 btn btn-sm btn-primary"
+                    onClick={() => props.follow(props.user._id)}
+                  >
+                    <span className="ml-3 mr-3">Follow</span>
+                  </button>
+                )}
                 <div className="d-flex mt-3">
                   <div className="mr-4">
                     <span className="headerLinks">
@@ -83,10 +79,7 @@ const UserHeader = props => {
                     following
                   </div>
                 </div>
-                <div className="mt-3">
-                  <strong>{props.user.name}</strong>
-                </div>
-                <p>{props.user.bio}</p>
+                <p className="mt-3">{props.user.bio}</p>
               </div>
             </div>
           </div>
@@ -94,7 +87,7 @@ const UserHeader = props => {
           <div className="row">
             {props.posts &&
               props.posts.map(post => (
-                <div className="col-12 col-sm-6 col-md-4" key={post._id}>
+                <div className="col-6 col-sm-6 col-md-4" key={post._id}>
                   <Link to={`/posts/${post._id}`}>
                     <div
                       className="card border-0 rounded-0 mt-4 mb-2"
