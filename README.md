@@ -25,7 +25,7 @@ Instagram clone built with React, Redux, Node.js, Express, Passport.js & MongoDB
 
 ## Development
 
-To get this working on your machine, you will need to install MongoDB and export a database url as an env variable (`export DATABASEURL='<url>`).
+To get this working on your machine, you will need to install MongoDB and export a database url as an env variable (`export DATABASEURL='<url>`). You also need to create a cloudinary account and export the api key and api secret as env variables.
 
 ```
 git clone https://github.com/himanshup/instagram-clone.git
@@ -38,8 +38,6 @@ npm run dev
 ```
 
 ## Tests
-
-To test the api, you need to provide a token since the routes a protected. Just set an environment variable with a token (`export JWT_TOKEN='<token>'`).
 
 ```
 npm test
