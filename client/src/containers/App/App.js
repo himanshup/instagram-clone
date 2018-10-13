@@ -28,9 +28,6 @@ const redirectIfNotLoggedIn = () => {
 };
 
 class App extends Component {
-  componentDidMount() {
-    console.log(localStorage.token);
-  }
   render() {
     return (
       <Router history={history}>
