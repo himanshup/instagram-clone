@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const Post = require("../models/post");
 const app = require("../app");
 const chai = require("chai");

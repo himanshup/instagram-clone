@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const Post = require("../models/post");
 const app = require("../app");
 const chai = require("chai");
 const chaiHttp = require("chai-http");
