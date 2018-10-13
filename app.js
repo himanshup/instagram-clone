@@ -16,19 +16,10 @@ const port = process.env.PORT || 5000;
 
 mongoose.Promise = global.Promise;
 
-if (process.env.NODE_ENV) {
-  console.log("Testing.");
-  mongoose.connect(
-    `mongodb://localhost:27017/${process.env.TEST_DB_NAME}`,
-    { useNewUrlParser: true }
-  );
-} else {
-  console.log("Not testing.");
-  mongoose.connect(
-    process.env.DATABASEURL,
-    { useNewUrlParser: true }
-  );
-}
+mongoose.connect(
+  process.env.DATABASEURL,
+  { useNewUrlParser: true }
+);
 
 const db = mongoose.connection;
 db.on("error", err => {
@@ -40,7 +31,7 @@ db.once("open", () => {
 });
 
 routes(router);
-// app.use(morgan("dev"));
+app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(helmet());
