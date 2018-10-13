@@ -7,26 +7,6 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-const newPost = {
-  image:
-    "https://happytoutou.wamiz.com/wp-content/uploads/2017/04/voici-ryuji-le-shiba-inu-06.jpg",
-  description: "this is a caption",
-  author: {
-    id: "5bb1dc87e6e8262e68bf770c",
-    username: "bob",
-    avatar:
-      "https://res.cloudinary.com/dmrien29n/image/upload/v1538382982/gbeob3s16h6pttixyecf.jpg"
-  }
-};
-
-const newComment = {
-  text: "this is a test comment",
-  author: {
-    id: "5bb1dc87e6e8262e68bf770c",
-    username: "bob"
-  }
-};
-
 deletePost = (id, done) => {
   Post.findOne({ _id: id })
     .then(async post => {
@@ -56,11 +36,22 @@ deleteComment = (id, done) => {
 
 // test create comment route
 describe("Add a comment to a post", () => {
+  let postId = "";
+
+  after(done => {
+    deletePost(postId, done);
+  });
+
   it("it should add a comment to a post given the post id", done => {
-    let postId = "";
-    afterEach(done => {
-      deletePost(postId, done);
-    });
+    const newPost = {
+      image:
+        "https://happytoutou.wamiz.com/wp-content/uploads/2017/04/voici-ryuji-le-shiba-inu-06.jpg",
+      description: "this is a caption",
+      author: {
+        id: process.env.USER_ID,
+        username: process.env.USERNAME
+      }
+    };
     Post.create(newPost)
       .then(post => {
         chai
@@ -88,102 +79,106 @@ describe("Add a comment to a post", () => {
   });
 });
 
-// test get comment for edit route
-describe("Get a comment", () => {
-  it("it should get a comment given a post and comment id", done => {
-    let commentId = "";
+describe("STARTING GET/EDIT/DELETE COMMENT TESTS...", () => {
+  let testComment = {};
+  let postId = "";
 
-    afterEach(done => {
-      deleteComment(commentId, done);
-    });
-
-    Comment.create(newComment)
-      .then(comment => {
-        chai
-          .request(app)
-          .get(`/api/posts/1/comments/${comment._id}/edit`)
-          .set("Authorization", `bearer ${process.env.JWT_TOKEN}`)
-          .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a("object");
-            res.body.should.have
-              .property("comment")
-              .eql("this is a test comment");
-            done();
-          });
-        return (commentId = comment._id);
-      })
-      .catch(err => {
-        console.log("Error creating post");
-      });
-  });
-});
-
-// test edit comment route
-describe("Edit a comment", () => {
-  it("it should edit a comment given a post and comment id", done => {
-    let commentId = "";
-
-    afterEach(done => {
-      deleteComment(commentId, done);
-    });
-
-    Comment.create(newComment)
-      .then(comment => {
-        chai
-          .request(app)
-          .put(`/api/posts/1/comments/${comment._id}`)
-          .set("Authorization", `bearer ${process.env.JWT_TOKEN}`)
-          .send({ comment: "edited comment" })
-          .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a("object");
-            res.body.should.have
-              .property("message")
-              .eql("Successfully edited your comment!");
-            res.body.should.have.property("comment").eql("edited comment");
-            done();
-          });
-        return (commentId = comment._id);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  });
-});
-
-// test delete comment route
-describe("Delete a comment", () => {
-  it("it should delete a comment given a post and comment id", done => {
-    let postId = "";
-
-    afterEach(done => {
-      deletePost(postId, done);
-    });
+  before(done => {
+    const newPost = {
+      image:
+        "https://happytoutou.wamiz.com/wp-content/uploads/2017/04/voici-ryuji-le-shiba-inu-06.jpg",
+      description: "this is a caption",
+      author: {
+        id: process.env.USER_ID,
+        username: process.env.USERNAME
+      }
+    };
 
     Post.create(newPost)
       .then(post => {
         return (postId = post._id);
       })
       .then(res => {
-        return Comment.create(newComment);
+        return Comment.create({
+          text: "this is a test comment",
+          author: {
+            id: process.env.USER_ID,
+            username: process.env.USERNAME
+          }
+        });
       })
       .then(comment => {
-        chai
-          .request(app)
-          .delete(`/api/posts/${postId}/comments/${comment._id}`)
-          .set("Authorization", `bearer ${process.env.JWT_TOKEN}`)
-          .end((err, res) => {
-            res.should.have.status(200);
-            res.body.should.be.a("object");
-            res.body.should.have
-              .property("message")
-              .eql("Deleted your comment");
-            done();
-          });
+        return (testComment = comment);
+      })
+      .then(res => {
+        done();
       })
       .catch(err => {
         console.log(err);
       });
+  });
+
+  after(done => {
+    Comment.deleteOne({ _id: testComment._id })
+      .then(res => {
+        deletePost(postId, done);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
+  // test get comment for edit route
+  describe("Get a comment", () => {
+    it("it should get a comment given a post and comment id", done => {
+      chai
+        .request(app)
+        .get(`/api/posts/1/comments/${testComment._id}/edit`)
+        .set("Authorization", `bearer ${process.env.JWT_TOKEN}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("comment")
+            .eql("this is a test comment");
+          done();
+        });
+    });
+  });
+
+  // test edit comment route
+  describe("Edit a comment", () => {
+    it("it should edit a comment given a post and comment id", done => {
+      chai
+        .request(app)
+        .put(`/api/posts/1/comments/${testComment._id}`)
+        .set("Authorization", `bearer ${process.env.JWT_TOKEN}`)
+        .send({ comment: "edited comment" })
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.body.should.have
+            .property("message")
+            .eql("Successfully edited your comment!");
+          res.body.should.have.property("comment").eql("edited comment");
+          done();
+        });
+    });
+  });
+
+  // test delete comment route
+  describe("Delete a comment", () => {
+    it("it should delete a comment given a post and comment id", done => {
+      chai
+        .request(app)
+        .delete(`/api/posts/${postId}/comments/${testComment._id}`)
+        .set("Authorization", `bearer ${process.env.JWT_TOKEN}`)
+        .end((err, res) => {
+          res.should.have.status(200);
+          res.body.should.be.a("object");
+          res.body.should.have.property("message").eql("Deleted your comment");
+          done();
+        });
+    });
   });
 });

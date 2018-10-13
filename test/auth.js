@@ -8,19 +8,19 @@ const should = chai.should();
 
 chai.use(chaiHttp);
 
-describe("Register", () => {
+describe("Register a user", () => {
+  after(done => {
+    User.deleteOne({ username: "registerTest" })
+      .then(res => {
+        done();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
   it("it should register a user and return a 200 response", done => {
-    afterEach(done => {
-      User.deleteOne({ username: "test123" })
-        .then(res => {
-          done();
-        })
-        .catch(err => {
-          console.log(err);
-        });
-    });
     const credentials = {
-      username: "test123",
+      username: "registerTest",
       password: "password"
     };
     chai
@@ -36,11 +36,26 @@ describe("Register", () => {
   });
 });
 
-describe("Login", () => {
+describe("Login a user", () => {
+  before(done => {
+    User.create({
+      username: "testAPI",
+      password: "password"
+    })
+      .then(user => {
+        process.env.USER_ID = user._id;
+        process.env.USERNAME = user.username;
+        done();
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
+
   it("it should log in and return a 200 response", done => {
     const credentials = {
-      username: "bob",
-      password: "1"
+      username: "testAPI",
+      password: "password"
     };
     chai
       .request(app)
@@ -51,6 +66,7 @@ describe("Login", () => {
         res.body.should.be.a("object");
         res.body.should.have.property("userInfo");
         res.body.should.have.property("token");
+        process.env.JWT_TOKEN = res.body.token;
         done();
       });
   });
