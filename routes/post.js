@@ -79,7 +79,7 @@ module.exports = router => {
             res.json(post);
           })
           .catch(err => {
-            res.json(err);
+            res.json({ message: "An error occured when creating your post." });
           });
       }
     );
@@ -139,7 +139,7 @@ module.exports = router => {
             post.image = result.secure_url;
           }
           post.save();
-          res.json(post);
+          res.json({ message: "Updated post" });
         })
         .catch(err => {
           res.json({ message: "Error editing your post" });
@@ -151,11 +151,8 @@ module.exports = router => {
   router.delete("/posts/:post_id", checkPostOwnership, (req, res) => {
     Post.findOne({ _id: req.params.post_id })
       .then(async post => {
-        if (String(post.author.id) === String(req.user._id)) {
-          console.log("yep this is your post");
-          await Comment.deleteMany({ _id: { $in: post.comments } });
-          return post;
-        }
+        await Comment.deleteMany({ _id: { $in: post.comments } });
+        return post;
       })
       .then(post => {
         cloudinary.v2.uploader.destroy(post.imageId);
@@ -165,7 +162,7 @@ module.exports = router => {
         return Post.deleteOne({ _id: post._id });
       })
       .then(response => {
-        res.json(response);
+        res.json({ message: "Deleted post" });
       })
       .catch(err => {
         res.json(err);

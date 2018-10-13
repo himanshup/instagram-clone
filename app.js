@@ -16,6 +16,12 @@ const port = process.env.PORT || 5000;
 
 mongoose.Promise = global.Promise;
 
+if (process.env.NODE_ENV) {
+  console.log("Testing.");
+} else {
+  console.log("Not testing.");
+}
+
 mongoose.connect(
   process.env.DATABASEURL,
   { useNewUrlParser: true }
@@ -51,12 +57,12 @@ app.use("/api/auth", auth);
 app.use("/api", passport.authenticate("jwt", { session: false }), router);
 
 if (process.env.NODE_ENV === "production") {
-  // Serve any static files
   app.use(express.static(path.join(__dirname, "client/build")));
-  // Handle React routing, return all requests to React app
   app.get("*", function(req, res) {
     res.sendFile(path.join(__dirname, "client/build", "index.html"));
   });
 }
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+module.exports = app.listen(port, () =>
+  console.log(`Listening on port ${port}`)
+);

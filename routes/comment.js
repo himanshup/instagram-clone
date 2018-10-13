@@ -43,10 +43,10 @@ module.exports = router => {
     (req, res) => {
       Comment.findOne({ _id: req.params.comment_id })
         .then(comment => {
-          res.json(comment.text);
+          res.json({ comment: comment.text });
         })
         .catch(err => {
-          res.json(err.message);
+          res.json({ message: "You don't have permission to do that!" });
         });
     }
   );
@@ -60,8 +60,14 @@ module.exports = router => {
         { _id: req.params.comment_id },
         { text: req.body.comment }
       )
-        .then(response => {
-          res.json({ message: "Successfully edited your comment!" });
+        .then(comment => {
+          return Comment.findOne({ _id: req.params.comment_id });
+        })
+        .then(comment => {
+          res.json({
+            comment: comment.text,
+            message: "Successfully edited your comment!"
+          });
         })
         .catch(err => {
           res.json({ message: "Error editing your comment" });

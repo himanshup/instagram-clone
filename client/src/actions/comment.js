@@ -57,7 +57,7 @@ export const getComment = (postId, commentId) => dispatch => {
       if (comment.data.error) {
         dispatch({ type: COMMENT_ERROR, payload: comment.data.error });
       } else {
-        dispatch({ type: GET_COMMENT, payload: comment.data });
+        dispatch({ type: GET_COMMENT, payload: comment.data.comment });
       }
     })
     .catch(error => {
