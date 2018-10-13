@@ -16,6 +16,23 @@ import history from "../history";
 
 axios.defaults.headers.common["Authorization"] = `bearer ${localStorage.token}`;
 
+export const getUserProfile = id => dispatch => {
+  axios
+    .get(`/api/users/${id}`)
+    .then(response => {
+      dispatch({
+        type: USER_PROFILE,
+        payload: { posts: response.data.posts, user: response.data.user }
+      });
+    })
+    .then(response => {
+      dispatch({ type: LOADING, payload: false });
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 export const editProfile = (data, userId) => dispatch => {
   if (typeof data.avatar === "object" && data.avatar.length > 1) {
     return dispatch({
@@ -60,23 +77,6 @@ export const getPreview = images => dispatch => {
 // resets image preview
 export const resetValue = () => dispatch => {
   dispatch({ type: RESET_VALUE, payload: "" });
-};
-
-export const getUserProfile = id => dispatch => {
-  axios
-    .get(`/api/users/${id}`)
-    .then(response => {
-      dispatch({
-        type: USER_PROFILE,
-        payload: { posts: response.data.posts, user: response.data.user }
-      });
-    })
-    .then(response => {
-      dispatch({ type: LOADING, payload: false });
-    })
-    .catch(error => {
-      console.log(error);
-    });
 };
 
 export const followUser = userId => dispatch => {
