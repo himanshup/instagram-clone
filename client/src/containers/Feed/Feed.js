@@ -13,6 +13,7 @@ const mapStateToProps = state => {
 
 class Feed extends Component {
   componentDidMount() {
+    this.props.setLoading();
     this.props.getFeed();
   }
 

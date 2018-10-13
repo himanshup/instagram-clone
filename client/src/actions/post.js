@@ -16,7 +16,8 @@ import {
   GET_POST_FOR_EDIT,
   LOADING,
   SUBMIT_LOADING,
-  POST_ERROR
+  POST_ERROR,
+  SET_LOADING
 } from "../constants/action-types";
 import history from "../history";
 
@@ -218,4 +219,8 @@ export const getPreview = images => dispatch => {
 // resets image preview
 export const resetValue = () => dispatch => {
   dispatch({ type: RESET_VALUE, payload: "" });
+};
+
+export const setLoading = () => dispatch => {
+  dispatch({ type: SET_LOADING, payload: true });
 };
