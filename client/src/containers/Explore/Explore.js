@@ -11,7 +11,7 @@ const mapStateToProps = state => {
   };
 };
 
-class Feed extends Component {
+class Explore extends Component {
   componentDidMount() {
     this.props.getAllPosts();
   }
@@ -32,4 +32,4 @@ class Feed extends Component {
 export default connect(
   mapStateToProps,
   actions
-)(Feed);
+)(Explore);
