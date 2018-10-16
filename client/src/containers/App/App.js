@@ -7,7 +7,7 @@ import Login from "../Login/Login";
 import Register from "../Register/Register";
 import Feed from "../Feed/Feed";
 import NewPost from "../NewPost/NewPost";
-import UserProfile from "../UserProfile/UserProfile";
+import Profile from "../Profile/Profile";
 import Post from "../Post/Post";
 import EditPost from "../EditPost/EditPost";
 import EditComment from "../EditComment/EditComment";
@@ -41,14 +41,14 @@ class App extends Component {
                 <Route exact path="/posts" component={Feed} />
                 <Route path="/explore" component={Explore} />
                 <Route path="/posts/new" component={NewPost} />
-                <Route path="/users/:userId" component={UserProfile} />
+                <Route path="/edit/posts/:postId" component={EditPost} />
                 <Route path="/posts/:postId" component={Post} />
+                <Route path="/users/:userId" component={Profile} />
+                <Route path="/accounts/:userId/edit" component={EditProfile} />
                 <Route
                   path="/edit/posts/:postId/comments/:commentId"
                   component={EditComment}
                 />
-                <Route path="/edit/posts/:postId" component={EditPost} />
-                <Route path="/accounts/:userId/edit" component={EditProfile} />
                 <Route component={ErrorPage} />
               </Switch>
             ) : (

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import UserHeader from "../../components/UserHeader/UserHeader";
+import UserPosts from "../../components/UserPosts/UserPosts";
 import Loader from "../../components/Loader/Loader";
 import { connect } from "react-redux";
 import * as actions from "../../actions/user";
@@ -13,7 +14,7 @@ const mapStateToProps = state => {
   };
 };
 
-class UserProfile extends Component {
+class Profile extends Component {
   componentDidMount() {
     this.props.setLoading();
     this.props.getUserProfile(this.props.match.params.userId);
@@ -31,15 +32,19 @@ class UserProfile extends Component {
         {this.props.loading ? (
           <Loader />
         ) : (
-          <UserHeader
-            user={this.props.user}
-            posts={this.props.posts}
-            visible={this.props.visible}
-            hoverPost={this.props.hoverPost}
-            unhoverPost={this.props.unhoverPost}
-            follow={this.props.followUser}
-            unfollow={this.props.unfollowUser}
-          />
+          <div>
+            <UserHeader
+              user={this.props.user}
+              follow={this.props.followUser}
+              unfollow={this.props.unfollowUser}
+            />
+            <UserPosts
+              posts={this.props.posts}
+              visible={this.props.visible}
+              hoverPost={this.props.hoverPost}
+              unhoverPost={this.props.unhoverPost}
+            />
+          </div>
         )}
       </div>
     );
@@ -49,4 +54,4 @@ class UserProfile extends Component {
 export default connect(
   mapStateToProps,
   actions
-)(UserProfile);
+)(Profile);

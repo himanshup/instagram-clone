@@ -9,7 +9,7 @@ const mapStateToProps = state => {
   };
 };
 
-class Post extends Component {
+class PostAuthor extends Component {
   componentDidMount() {
     this.props.getUserProfile(this.props.userId);
   }
@@ -35,4 +35,4 @@ class Post extends Component {
 export default connect(
   mapStateToProps,
   actions
-)(Post);
+)(PostAuthor);
