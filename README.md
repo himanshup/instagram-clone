@@ -34,6 +34,7 @@ npm install
 cd client
 npm install
 cd..
+mongod
 npm run dev
 ```
 
