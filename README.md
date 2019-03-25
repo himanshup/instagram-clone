@@ -26,8 +26,8 @@ Instagram clone built with React, Redux, Node.js, Express, Passport.js & MongoDB
 ## Running Locally
 
 ```
-git clone https://github.com/himanshup/instagram-clone.git
-cd instagram-clone
+git clone https://github.com/himanshup/reactgram.git
+cd reactgram
 npm install
 cd client
 npm install
