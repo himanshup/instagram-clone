@@ -25,6 +25,13 @@ Instagram clone built with React, Redux, Node.js, Express, Passport.js & MongoDB
 
 ## Running Locally
 
+The following instruction should get this project running on your machine.  
+
+### Prerequisites
+1. Install [MongoDB](https://www.mongodb.com/)  
+2. Create a [Cloudinary](https://cloudinary.com/) account (need an API key and secret)
+
+### Installing
 ```
 git clone https://github.com/himanshup/reactgram.git
 cd reactgram
@@ -34,14 +41,11 @@ npm install
 cd..
 ```
 
-1. Install [MongoDB](https://www.mongodb.com/)
-2. Create a [Cloudinary](https://cloudinary.com/) account (need an API key and secret)
-
 Create a .env file in the root of the project and add the following:
 
 ```
 DATABASEURL='mongodb://localhost:27017/<dbname>'
-API_KEY=''<key>
+API_KEY='<key>'
 API_SECRET='<secret>'
 ```
 
