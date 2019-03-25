@@ -25,7 +25,7 @@ Instagram clone built with React, Redux, Node.js, Express, Passport.js & MongoDB
 
 ## Running Locally
 
-The following instruction should get this project running on your machine.  
+The following instructions should get this project running on your machine.  
 
 ### Prerequisites
 1. Install [MongoDB](https://www.mongodb.com/)  
