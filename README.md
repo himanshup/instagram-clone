@@ -38,15 +38,14 @@ cd reactgram
 npm install
 cd client
 npm install
-cd..
 ```
 
 Create a .env file in the root of the project and add the following:
 
 ```
-DATABASEURL='mongodb://localhost:27017/<dbname>'
-API_KEY='<key>'
-API_SECRET='<secret>'
+DATABASEURL=mongodb://localhost:27017/<dbname>
+API_KEY=<key>
+API_SECRET=<secret>
 ```
 
 Run `mongod` in another terminal and `npm run dev` in the terminal with the project.
